@@ -18,13 +18,15 @@
 接到任务时，按下列顺序拉齐上下文：
 
 1. 仓库根 `AGENTS.md`：协作红线、Rust 工程实践、DDD 分层、安全边界、注释规范。
-2. `docs/architecture/overview.md`：系统全局视图（如已建立）。
-3. `docs/architecture/<相关组件>/架构设计.md`：组件边界与契约。
-4. `docs/development/<相关功能>/功能设计.md` → `接口设计.md` → `数据设计.md`：功能内细节。
-5. `docs/progress/<相关功能>/功能现状.md`：当前实际进度与已知偏差。
-6. `docs/testing/critical-integration-tests.md`：提交前必跑清单。
-7. `docs/research/<相关主题>/`：与本任务相关的历史调研。
-8. `docs/deployment/runtime/配置说明.md`：运行环境与配置项。
+2. 本文件 + `docs/progress/overview.md`：定位相关功能目录和当前状态。
+3. `docs/progress/<相关功能>/功能现状.md`：当前实际进度与已知偏差。
+4. `docs/architecture/<相关组件>/架构设计.md`：组件边界与契约。
+5. `docs/development/<相关功能>/功能设计.md` → `接口设计.md` → `数据设计.md`：功能内细节。
+6. `docs/testing/critical-integration-tests.md` 和任务相关测试文档：验证清单和测试门禁。
+7. `docs/research/<相关主题>/`：仅在需要调研依据、证据追溯或新增依赖时读取。
+8. `docs/deployment/runtime/配置说明.md`：仅在运行时配置、环境变量、部署任务中读取。
+
+**上下文加载硬规则**：不要全量加载本目录。先读入口和相关功能目录，用 `rg` / `find` 定位文件后再打开。除非任务明确要求全仓审计，不要一次性读取 `docs/**`、`research/附件/**` 或历史报告全文；能用摘要回答时不要把长文档整段塞进上下文。
 
 ## 目录结构（当前）
 

@@ -7,7 +7,9 @@
 接到任务后按此顺序拉齐上下文：
 
 1. 本文件。
-2. [`docs/README.md`](docs/README.md) → 任务相关的 `docs/architecture/<组件>/` → `docs/development/<功能>/` → `docs/progress/<功能>/`。
+2. [`docs/README.md`](docs/README.md) + [`docs/progress/overview.md`](docs/progress/overview.md)，再进入任务相关的 `docs/architecture/<组件>/` → `docs/development/<功能>/` → `docs/progress/<功能>/`。
+
+**上下文加载硬规则**：禁止一次性读取或粘贴 `docs/` 全量内容。默认只读 `docs/README.md`、`docs/progress/overview.md` 和任务相关功能目录；先用 `rg` / `find` 定位，再按需打开具体文件。`docs/research/附件/`、历史验证报告、大型清单只在需要证据、追溯或调研时读取。能用摘要回答时不要把长文档整段塞进上下文。任务切换时不得沿用上一任务的 `docs` 细节作为事实，必须按当前任务重新读取最小必要文件集合。
 
 **新功能必须先做调研并写入 `docs/research/<主题>/`，经人类确认后才允许进入开发**。文档与代码不一致时以代码 + `progress/` 为准。
 
