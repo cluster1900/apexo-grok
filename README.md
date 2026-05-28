@@ -2,7 +2,7 @@
 
 `opencode-rs` 是将开源 coding agent [`opencode`](https://github.com/sst/opencode) 迁移到 Rust 生态的项目。目标不是简单重写命令行入口，而是用 Rust core 承接 agent 循环、会话、工具执行、Provider、MCP、配置、存储和权限模型，同时保留上游 Web UI / Desktop / TUI / SDK / 插件生态的兼容入口。
 
-项目当前处于 **M0：文档和协议基线阶段**。仓库中已有的主要产物是上游功能扫描、架构拆分、功能设计、进度记录和测试基线；Rust 源码 skeleton 尚未落位。
+项目当前处于 **M1：Rust workspace skeleton 已闭环**。仓库中已有上游功能扫描、架构拆分、功能设计、进度记录和测试基线，并已落位最小 Rust workspace / crate 边界、HTTP health/OpenAPI router、可运行 TCP server smoke、TypeScript SDK codegen seam、Desktop sidecar JSON contract 与第一条 mock provider application 垂直链路；真实 agent 主链路仍待实现。
 
 ## 项目目标
 
@@ -14,6 +14,7 @@
 
 ## 当前状态
 
+- Rust workspace skeleton 位于 [`crates/`](crates/)，当前包含 domain 值对象、application provider registry、provider transport 占位、server router/OpenAPI/SDK codegen 和 desktop sidecar contract。
 - 上游源码扫描基线位于 [`docs/research/opencode-upstream-analysis/`](docs/research/opencode-upstream-analysis/)。
 - 全局架构入口位于 [`docs/architecture/overview.md`](docs/architecture/overview.md)。
 - 功能设计入口位于 [`docs/development/`](docs/development/)。
@@ -25,7 +26,7 @@
 ## 规划阶段
 
 1. **M0**：完成文档和协议基线，生成清单并与上游源码对齐。
-2. **M1**：建立 Rust server skeleton、OpenAPI/SDK 生成链路和 WebJS desktop sidecar。
+2. **M1**：建立 Rust workspace/server skeleton、OpenAPI/SDK 生成链路和 WebJS desktop sidecar contract。
 3. **M2**：打通 session、agent、tool、provider、config、project、storage 主路径。
 4. **M3**：补齐 MCP、plugin、PTY、LSP、share、sync、desktop native 能力。
 5. **M4**：完善部署分发、外部集成、cloud/share/stats、repo-local prompt/asset 和 shared library/codegen 兼容。

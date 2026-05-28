@@ -1,0 +1,43 @@
+[workspace]
+members = [
+    "crates/opencode_application",
+    "crates/opencode_desktop",
+    "crates/opencode_domain",
+    "crates/opencode_provider",
+    "crates/opencode_server",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/cluster1900/opencode-rs"
+publish = false
+
+[workspace.dependencies]
+opencode_application = { path = "crates/opencode_application", version = "0.1.0" }
+opencode_desktop = { path = "crates/opencode_desktop", version = "0.1.0" }
+opencode_domain = { path = "crates/opencode_domain", version = "0.1.0" }
+
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio"] }
+reqwest = { version = "0.13", default-features = false, features = ["charset", "http2", "json", "rustls", "stream"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "signal"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+tower = { version = "0.5", features = ["util"] }
+
+[workspace.lints.rust]
+rust_2018_idioms = { level = "deny", priority = -1 }
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+expect_used = "deny"
+panic = "deny"
+print_stderr = "deny"
+print_stdout = "deny"
+todo = "deny"
+unwrap_used = "deny"
