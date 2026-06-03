@@ -11,6 +11,14 @@
 - 能逐步接入 provider、workspace 文件操作和命令执行。
 - 每一步都有可运行测试，而不是只完成文档矩阵。
 
+当前第一条主线为 [`minimum-agent`](minimum-agent/架构设计.md)。它拆成 M0-M9：先实现 domain kernel，再做 mock CLI、ContextPack、session store、真实 provider、capability kernel、read/skill tool、MCP Lite，最后进入 write/shell permission；其它上游能力以插件或接口层方式安装进来。
+
+全局边界：
+
+- [`context-map.md`](context-map.md)：限界上下文和阶段启用顺序。
+- [`ubiquitous-language.md`](ubiquitous-language.md)：通用语言和命名约束。
+- [`events.md`](events.md)：`LlmEvent` / `DomainEvent` schema 登记。
+
 ## 当前 crate 边界
 
 | Crate | 责任 | 当前状态 |
@@ -28,14 +36,14 @@
 
 以下能力暂不拆独立模块：
 
-- Provider 协议适配。
-- Tool 执行和权限审批。
-- Session 存储和压缩。
-- MCP/plugin。
+- 完整 Provider catalog。
+- 完整 Tool 执行和权限审批。
+- Session 压缩 / summary / revert / share。
+- 完整 MCP/plugin runtime。
 - Desktop/WebJS/HTTP API。
 - OpenAPI/SDK 生成。
 
-这些能力会在第一条主线确认后按需求进入设计。
+其中 `minimum-agent` 会先落最小 Provider streaming、ContextPack、Session 持久化、read/skill/MCP Lite、Tool/Permission 子集；完整能力后续按插件或接口层进入设计。
 
 ## 安全不变量
 

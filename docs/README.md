@@ -38,6 +38,7 @@ docs/
 │   ├── overview.md            ← Rust DDD 总览
 │   ├── context-map.md         ← 限界上下文图
 │   ├── ubiquitous-language.md ← 通用语言
+│   ├── events.md              ← 事件 schema 登记
 │   └── <feature>/
 ├── development/
 │   ├── README.md              ← 开发目录规范
@@ -50,7 +51,10 @@ docs/
 │   ├── README.md              ← 调研目录规范
 │   └── <feature>/
 ├── testing/
-│   └── README.md              ← 测试目录规范
+│   ├── README.md              ← 测试目录规范
+│   ├── critical-integration-tests.md
+│   ├── adversarial-cases.md
+│   ├── fuzz-corpus.md
 │   └── <feature>/
 └── deployment/
     ├── README.md              ← 部署目录规范
