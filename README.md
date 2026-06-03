@@ -1,8 +1,6 @@
 # opencode-rs
 
-`opencode-rs` 是将开源 coding agent [`opencode`](https://github.com/sst/opencode) 迁移到 Rust 生态的项目。目标不是简单重写命令行入口，而是用 Rust core 承接 agent 循环、会话、工具执行、Provider、MCP、配置、存储和权限模型，同时保留上游 Web UI / Desktop / TUI / SDK / 插件生态的兼容入口。
-
-项目当前处于 **M1：Rust workspace skeleton 已闭环**。仓库中已有上游功能扫描、架构拆分、功能设计、进度记录和测试基线，并已落位最小 Rust workspace / crate 边界、HTTP health/OpenAPI router、可运行 TCP server smoke、TypeScript SDK codegen seam、Desktop sidecar JSON contract 与第一条 mock provider application 垂直链路；真实 agent 主链路仍待实现。
+`opencode-rs` 是一个重新设计中的 Rust coding agent 项目。旧的细粒度功能拆分和 M1/M2 进度记录已经清空，仓库现在回到最小可编译基线，用于重新讨论架构和实现顺序。
 
 ## 项目目标
 
@@ -14,24 +12,46 @@
 
 ## 当前状态
 
-- Rust workspace skeleton 位于 [`crates/`](crates/)，当前包含 domain 值对象、application provider registry、provider transport 占位、server router/OpenAPI/SDK codegen 和 desktop sidecar contract。
-- 上游源码扫描基线位于 [`docs/research/opencode-upstream-analysis/`](docs/research/opencode-upstream-analysis/)。
-- 全局架构入口位于 [`docs/architecture/overview.md`](docs/architecture/overview.md)。
-- 功能设计入口位于 [`docs/development/`](docs/development/)。
-- 当前进度入口位于 [`docs/progress/overview.md`](docs/progress/overview.md)。
-- 测试与完整性验证入口位于 [`docs/testing/`](docs/testing/)。
+- 文档内容已经重新初始化，旧功能拆分被清空；各一级目录 README 规范仍保留。
+- Rust workspace 已收敛为 `opencode-core` 和 `opencode-cli` 两个 crate。
+- 真实 agent loop、provider、tool、session、MCP、desktop、HTTP API 都尚未实现。
 
-更多文档目录规则见 [`docs/README.md`](docs/README.md)。
+## 仓库结构
 
-## 规划阶段
+```text
+.
+├── AGENTS.md
+├── Cargo.toml
+├── crates/
+│   ├── opencode-cli/
+│   └── opencode-core/
+└── docs/
+    ├── README.md
+    ├── architecture/
+    │   ├── README.md
+    │   └── overview.md
+    ├── development/
+    │   ├── README.md
+    │   └── restart-plan.md
+    ├── progress/
+    │   ├── README.md
+    │   └── overview.md
+    ├── research/
+    │   ├── README.md
+    │   └── restart-2026-06-03.md
+    ├── testing/README.md
+    └── deployment/README.md
+```
 
-1. **M0**：完成文档和协议基线，生成清单并与上游源码对齐。
-2. **M1**：建立 Rust workspace/server skeleton、OpenAPI/SDK 生成链路和 WebJS desktop sidecar contract。
-3. **M2**：打通 session、agent、tool、provider、config、project、storage 主路径。
-4. **M3**：补齐 MCP、plugin、PTY、LSP、share、sync、desktop native 能力。
-5. **M4**：完善部署分发、外部集成、cloud/share/stats、repo-local prompt/asset 和 shared library/codegen 兼容。
-6. **M5**：完成 CLI/TUI/Web UI 兼容性测试、E2E、Agent Eval 和发布门禁。
+## 本地验证
+
+```sh
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo test --workspace --all-features
+cargo deny check
+```
 
 ## 协作入口
 
-开始任何任务前先读 [`AGENTS.md`](AGENTS.md)。该文件定义了本仓库的硬约束，包括文档先行、Rust 工程规范、DDD 分层、agent 安全、测试门禁和文档同步要求。
+开始任何任务前先读 `AGENTS.md`。该文件定义了本仓库的硬约束，包括文档先行、Rust 工程规范、DDD 分层、agent 安全、测试门禁和文档同步要求。文档目录规则见 `docs/README.md` 和各一级目录 `README.md`。
