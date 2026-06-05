@@ -13,11 +13,12 @@
 | `Message` | 消息 | M1 | user / assistant / tool / system 角色产生的可持久化记录。 | 不是 UI 渲染块。 |
 | `Part` | 消息片段 | M1 | message 下的 text、tool call、tool result、usage、error 等结构化片段。 | 不是任意字符串拼接。 |
 | `SessionProjector` | 会话投影器 | M1 | 把 `LlmEvent` 和 tool result 投影成 message / part 状态变化的 domain service。 | 不是 provider adapter。 |
-| `ModelRef` | 模型引用 | M1 | `provider_id + model_id + variant` 的值对象。 | 不是裸字符串。 |
-| `LlmRequest` | 模型请求 | M1 | application 传给 provider port 的 provider-neutral 请求。 | 不是 OpenAI 原始 JSON DTO。 |
+| `ModelRef` | 模型引用 | M1 | `provider/model[:variant]` 的值对象；文法见 `接口设计.md` §2.1。 | 不是裸字符串。 |
+| `LlmRequest` | 模型请求 | M1 | application 传给 provider port 的 provider-neutral 请求；字段随阶段扩展，见 `接口设计.md` §4.1/§4.2。 | 不是 OpenAI 原始 JSON DTO。 |
 | `LlmEvent` | 模型事件 | M1 | provider streaming 输出的统一事件输入。 | 不是 session 持久化事件本身。 |
+| `FinishReason` | 结束原因 | M1 | assistant turn 结束原因的值对象枚举（stop/length/error/cancelled，后续阶段追加）。 | 不是裸字符串，也不携带 usage。 |
 | `AgentProfile` | Agent 配置档 | M1 | agent 名称、prompt 资产引用、模型偏好、step 上限、默认权限。 | 不是插件 manifest。 |
-| `TraceId` | 链路 ID | M1 | 一次 run 全链路追踪 ID。 | 不是 session id。 |
+| `TraceId` | 链路 ID | M1 | 一次 run 全链路追踪 ID；内部新建用 `trc_`，外部传入的 W3C trace id 必须优先复用。 | 不是 session id，也不是实体主键。 |
 | `ContextPack` | 上下文包 | M3 | 进入模型前的 system/context block 集合，包含 instruction、skill index、memory snapshot、MCP resource。 | 不是自由字符串拼接。 |
 | `ContextBlock` | 上下文块 | M3 | 带来源、信任级别、token 预算和内容的上下文片段。 | 不是未标记来源的 prompt 文本。 |
 | `InstructionSource` | 指令来源 | M3 | `AGENTS.md`、`CONTEXT.md` 等指令文件或配置项。 | 不是用户当前 prompt。 |

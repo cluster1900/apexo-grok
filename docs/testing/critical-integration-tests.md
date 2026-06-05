@@ -6,16 +6,16 @@
 
 - **类型**：单元 / 场景
 - **触发命令**：`cargo test -p opencode-core domain::`
-- **覆盖范围**：`Session`、`Message`、`Part`、`SessionProjector`。
-- **预期结果**：text delta、finish 和 provider error 可投影；finish 后继续追加 text 被拒绝；domain 不依赖 I/O。
+- **覆盖范围**：`Session`、`Message`、`Part`、`SessionProjector`、`FinishReason`。
+- **预期结果**：text delta、finish 和 provider error 可投影；finish 写入 finish reason 但不生成 usage part；finish 后继续追加 text 被拒绝；provider error 使 turn 进入 failed；domain 不依赖 I/O。
 - **阶段**：M1
 
 ### CIT-0002：Domain value object invariants
 
 - **类型**：单元
 - **触发命令**：`cargo test -p opencode-core domain::`
-- **覆盖范围**：`SessionId`、`TurnId`、`MessageId`、`PartId`、`TraceId`、`ModelRef`。
-- **预期结果**：空值、非法 provider/model、非法 variant 被拒绝；合法值可 round-trip。
+- **覆盖范围**：`SessionId`、`TurnId`、`MessageId`、`PartId`、`TraceId`、`ModelRef`、`FinishReason`。
+- **预期结果**：空值、非法前缀、非法 ID body、非法 provider/model、非法 variant、未知 finish reason 被拒绝；内部 `trc_` 与外部 W3C trace id 可 round-trip。
 - **阶段**：M1
 
 ### CIT-0003：Mock CLI run

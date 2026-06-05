@@ -32,6 +32,17 @@
 - 文档先说明新 crate 的调用方、被调用方、非目标和迁移方式。
 - 至少有一个测试能证明拆分后的行为边界。
 
+## 工具链与版本决策
+
+| 项 | 决定 | 理由 |
+|---|---|---|
+| Rust edition | `2024`（`Cargo.toml` workspace 统一） | 使用当前 stable 默认 edition，避免后续大规模迁移。 |
+| `rust-version` (MSRV) | `1.85`（edition 2024 的最低 stable） | 与 workspace `rust-version` 对齐；`rust-toolchain.toml` 的 `stable` 只是开发默认，CI 仍需单独验证 MSRV。 |
+| unsafe | workspace `unsafe_code = "forbid"` | 业务与基础类库均无 unsafe 需求；如未来确需，必须单独 ADR + `SAFETY` 注释。 |
+| 生产 lint | `unwrap_used` / `expect_used` / `panic` / `print_stdout` / `print_stderr` / `todo` = deny | 落实 `AGENTS.md §5` 错误处理与日志红线；CLI 用户输出走 `writeln!` 到显式 handle，不用 `println!`。 |
+
+edition / MSRV 调整属架构变化，必须先改本表再改 `Cargo.toml`（`AGENTS.md §10`）。
+
 ## 暂缓边界
 
 以下能力暂不拆独立模块：

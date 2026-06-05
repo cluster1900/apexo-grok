@@ -8,7 +8,9 @@
 
 | Target | 阶段 | 入口 | 触发命令 | 当前状态 |
 |---|---|---|---|---|
+| `id_value_object` | M1 | `SessionId` / `TurnId` / `MessageId` / `PartId` / `TraceId::try_from` | `cargo fuzz run id_value_object -- -max_total_time=1800` | 待实现。 |
 | `model_ref_parser` | M1 | `ModelRef::try_from` | `cargo fuzz run model_ref_parser -- -max_total_time=1800` | 待实现。 |
+| `finish_reason_parser` | M1 | `FinishReason::try_from` | `cargo fuzz run finish_reason_parser -- -max_total_time=1800` | 待实现。 |
 | `skill_frontmatter` | M3 | `SkillDefinition` frontmatter parser | `cargo fuzz run skill_frontmatter -- -max_total_time=1800` | 待实现。 |
 | `context_pack` | M3 | `ContextPackBuilder` block parser/budgeter | `cargo fuzz run context_pack -- -max_total_time=1800` | 待实现。 |
 | `llm_event_stream` | M5 | Provider SSE / JSON frame parser | `cargo fuzz run llm_event_stream -- -max_total_time=1800` | 待实现。 |

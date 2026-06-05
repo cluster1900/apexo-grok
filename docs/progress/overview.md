@@ -1,6 +1,6 @@
 # 进度总览
 
-日期：2026-06-03
+日期：2026-06-05（文档修订）/ 2026-06-03（基线重置）
 
 ## 当前状态
 
@@ -23,6 +23,18 @@
 | 功能 | 状态 | 说明 |
 |---|---|---|
 | [`minimum-agent`](minimum-agent/功能现状.md) | 未开始 | 文档待人工确认，代码未开始。已拆为 M0-M9，并补齐 `research`、`architecture`、`development`、`testing` 的支撑文档；M1 只做 domain kernel，M3 做 ContextPack，M8 做 MCP Lite，M9 才做 write/shell。 |
+
+## 2026-06-05 文档修订
+
+针对 M1 可开工性做了一轮一致性修订（代码仍未开始）：
+
+- 明确 ID 生成分层：domain 只校验稳定 envelope、不铸造；外部 trace id 必须优先复用，缺失时才生成内部 `trc_`；`IdFactory` / `Clock` 端口在 M2 引入；完成 [`id-generation`](../research/id-generation/调研报告_2026-06-05.md) 调研（上游 opencode ID 形态分析 + 复刻上游/ulid/uuid v7 对比，倾向复刻上游），方案定稿列为 M2 前置门禁、待人工拍板。
+- 定义 `FinishReason` 值对象枚举与取值；界定 M1 最小 `LlmRequest` 字段并逐字段标阶段（防半成品 API）。
+- 定义 `ModelRef` 的 `provider/model[:variant]` 文法与校验。
+- 修正 M1 用例的 usage 矛盾（usage 下放 M5）并补 `Turn` 创建步骤。
+- 架构拓扑改用实际 crate 路径；新增 edition/MSRV 决策表；测试门禁补 `cargo llvm-cov` 覆盖率命令。
+
+涉及文档：`architecture/overview.md`、`architecture/events.md`、`architecture/ubiquitous-language.md`、`architecture/minimum-agent/架构设计.md`、`development/minimum-agent/{功能设计,接口设计,数据设计,阶段拆分,测试矩阵}.md`、`research/id-generation/调研报告_2026-06-05.md`、`progress/*`。
 
 ## 作废说明
 

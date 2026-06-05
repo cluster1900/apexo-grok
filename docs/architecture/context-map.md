@@ -74,7 +74,7 @@ RunPrompt use case
 | 来源 | 目标 | 方式 | 规则 |
 |---|---|---|---|
 | Provider | Conversation | `LlmEvent` | 只能由 application 调用 projector。 |
-| Context | Provider | `ContextPack` -> `LlmRequest.system` | 所有 block 标记来源和信任边界。 |
+| Context | Provider | `ContextPack` -> `LlmRequest.context`（M3），M5 起再渲染到 provider system prompt。 | 所有 block 标记来源和信任边界。 |
 | Tool | Conversation | `ToolResult` -> `Part` | 结果先截断和不可信包裹。 |
 | MCP | Tool / Context | `ToolDefinition` / `McpResourceRef` | MCP tool 经 ToolRegistry；resource 经 ContextPack。 |
 | Permission | Tool | `PermissionDecision` | ask 未获批准即不执行。 |

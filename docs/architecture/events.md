@@ -31,10 +31,12 @@
 | `ToolCallDelta` | M7 | `tool_call_id`、`name?`、`arguments_delta` | tool call 参数流。 |
 | `ToolCallFinished` | M7 | `tool_call_id`、`name`、`arguments_json` | 参数收敛后进入 schema 校验。 |
 | `UsageDelta` | M5 | `input_tokens?`、`output_tokens?`、`cache_tokens?` | usage 统计。 |
-| `Finished` | M1 | `finish_reason` | 当前 assistant turn 结束。 |
+| `Finished` | M1 | `finish_reason: FinishReason` | 当前 assistant turn 结束。 |
 | `ProviderError` | M1 | `code`、`message`、`retryable` | provider 或 fake provider 失败；M1 只建模和投影，M2 才由 fake provider 触发。 |
 
 M1 只实现 `TextDelta`、`Finished`、`ProviderError`。其它事件进入对应阶段前再实现。
+
+`FinishReason` 是值对象枚举，取值与引入阶段：M1 = `stop` / `length` / `error` / `cancelled`；M5 追加 `content_filter`；M7 追加 `tool_calls`。完整字段说明见 [`../development/minimum-agent/接口设计.md`](../development/minimum-agent/接口设计.md) §4.4。`Finished` **不携带 usage**；token 计数由 `UsageDelta`（M5）单独投影。
 
 ## 4. DomainEvent
 
