@@ -78,7 +78,7 @@ const providerConfig = (input: {
   },
 })
 
-const RECORDED_SCENARIOS = [
+const RECORDED_SCENARIOS: ReadonlyArray<RecordedScenario> = [
   {
     id: "openai-api-key",
     name: "OpenAI API key",
@@ -125,7 +125,7 @@ const RECORDED_SCENARIOS = [
         },
       }),
   },
-] satisfies ReadonlyArray<RecordedScenario>
+]
 
 const shouldRecord = process.env.RECORD === "true"
 const selectedScenarios = new Set(

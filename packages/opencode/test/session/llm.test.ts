@@ -915,7 +915,7 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Vivgrid",
             npm: "@ai-sdk/openai",
-            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) },
+            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) as ConfigModel },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -983,7 +983,7 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Vivgrid",
             npm: "@ai-sdk/openai",
-            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) },
+            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) as ConfigModel },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1050,7 +1050,7 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Alibaba",
             npm: "@ai-sdk/openai-compatible",
-            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) },
+            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) as ConfigModel },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1122,7 +1122,7 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Alibaba",
             npm: "@ai-sdk/openai-compatible",
-            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) },
+            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) as ConfigModel },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1789,7 +1789,7 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "MiniMax",
             npm: "@ai-sdk/anthropic",
-            models: { [minimaxFixture.modelID]: configModel(loadFixture(minimaxFixture.providerID, minimaxFixture.modelID).model) },
+            models: { [minimaxFixture.modelID]: configModel(loadFixture(minimaxFixture.providerID, minimaxFixture.modelID).model) as ConfigModel },
             options: { apiKey: "test-anthropic-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
