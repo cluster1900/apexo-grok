@@ -1,6 +1,7 @@
-# OpenCode Desktop
+# Apexo Desktop
 
-The OpenCode Desktop app, built with Electron.
+The Apexo desktop app, built with Electron. It bundles the `apexo` server as a sidecar and
+shows the same UI as `apexo web`, with the Grove theme by default.
 
 ## Development
 
@@ -11,9 +12,17 @@ bun dev
 
 ## Build
 
-Run the `build` script to build the app's JS assets, then `package` to
-bundle the assets as an application. The resulting app will be in `dist/`.
+Run the `build` script to build the app's JS assets, then `package` to bundle them as an
+application. The resulting app will be in `dist/`.
 
 ```bash
 bun run build && bun run package
 ```
+
+Notes:
+
+- The auto-updater is disabled because Apexo has no release feed yet.
+- The app ID (`ai.opencode.desktop*`) is unchanged so existing user data and OS integrations
+  keep working.
+- Linux `.deb` packaging needs a maintainer email (`author.email` in `package.json`), which is
+  not set.

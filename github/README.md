@@ -1,6 +1,12 @@
-# opencode GitHub Action
+# opencode GitHub Action (inherited, not yet adapted for Apexo)
 
-A GitHub Action that integrates [opencode](https://opencode.ai) directly into your GitHub workflow.
+> [!WARNING]
+> This GitHub Action is inherited from upstream [OpenCode](https://github.com/anomalyco/opencode).
+> It still installs the upstream `opencode` CLI and relies on OpenCode's GitHub App and token
+> exchange service. It has not been rebranded or tested for Apexo. The docs below describe the
+> upstream behavior.
+
+A GitHub Action that integrates opencode directly into your GitHub workflow.
 
 Mention `/opencode` in your comment, and opencode will execute tasks within your GitHub Actions runner.
 

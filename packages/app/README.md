@@ -1,37 +1,21 @@
-## Usage
+# Apexo app (`packages/app`)
 
-Dependencies for these templates are managed with [pnpm](https://pnpm.io) using `pnpm up -Lri`.
+The SolidJS web UI used by `apexo web` and the Apexo desktop app. The default theme is Grove.
 
-This is the reason you see a `pnpm-lock.yaml`. That said, any package manager will work. This file can safely be removed once you clone a template.
+## Development
 
 ```bash
-$ npm install # or pnpm install or yarn install
+bun install
+bun run dev          # Vite dev server on http://localhost:3000
+bun run build        # production build into dist/
+bun run test:unit    # unit tests
 ```
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm run dev` or `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+The UI talks to a local Apexo server (`apexo serve`).
 
 ## E2E Testing
 
-Playwright starts the Vite dev server automatically via `webServer`, and UI tests expect an opencode backend at `localhost:4096` by default.
+Playwright starts the Vite dev server automatically via `webServer`, and UI tests expect an Apexo backend (`apexo serve --port 4096`) at `localhost:4096` by default.
 
 ```bash
 bunx playwright install chromium
@@ -45,6 +29,3 @@ Environment options:
 - `PLAYWRIGHT_PORT` (Vite dev server port, default: `3000`)
 - `PLAYWRIGHT_BASE_URL` (override base URL, default: `http://localhost:<PLAYWRIGHT_PORT>`)
 
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)

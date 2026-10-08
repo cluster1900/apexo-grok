@@ -1,129 +1,179 @@
 <p align="center">
-  <a href="https://opencode.ai">
-    <picture>
-      <source srcset="packages/console/app/src/asset/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="packages/console/app/src/asset/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
-      <img src="packages/console/app/src/asset/logo-ornate-light.svg" alt="OpenCode logo">
-    </picture>
-  </a>
+  <img src="docs/assets/apexo-wordmark.png" alt="Apexo" width="420">
 </p>
-<p align="center">The open source AI coding agent.</p>
-<p align="center">
-  <a href="https://opencode.ai/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
-  <a href="https://www.npmjs.com/package/opencode-ai"><img alt="npm" src="https://img.shields.io/npm/v/opencode-ai?style=flat-square" /></a>
-  <a href="https://github.com/anomalyco/opencode/actions/workflows/publish.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/anomalyco/opencode/publish.yml?style=flat-square&branch=dev" /></a>
-</p>
-
+<p align="center"><b>A UI harness for Grok.</b> Open-source coding agent for the terminal, the browser and the desktop.</p>
 <p align="center">
   <a href="README.md">English</a> |
-  <a href="README.zh.md">简体中文</a> |
-  <a href="README.zht.md">繁體中文</a> |
-  <a href="README.ko.md">한국어</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.it.md">Italiano</a> |
-  <a href="README.da.md">Dansk</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.pl.md">Polski</a> |
-  <a href="README.ru.md">Русский</a> |
-  <a href="README.bs.md">Bosanski</a> |
-  <a href="README.ar.md">العربية</a> |
-  <a href="README.no.md">Norsk</a> |
-  <a href="README.br.md">Português (Brasil)</a> |
-  <a href="README.th.md">ไทย</a> |
-  <a href="README.tr.md">Türkçe</a> |
-  <a href="README.uk.md">Українська</a> |
-  <a href="README.bn.md">বাংলা</a> |
-  <a href="README.gr.md">Ελληνικά</a> |
-  <a href="README.vi.md">Tiếng Việt</a>
+  <a href="README.zh.md">简体中文</a>
 </p>
 
-[![OpenCode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://opencode.ai)
+---
+
+## What is Apexo?
+
+Apexo is a UI harness for **Grok**. Its main purpose is to support
+[Grok Build](https://github.com/xai-org/grok-build), SpaceXAI's official open-source coding
+agent, and to make Grok easier for everyone to use, with a terminal UI, a web UI and a desktop
+app on top of the same local agent server.
+
+What you get today:
+
+- **Grok first.** Sign in with your xAI account (SuperGrok, or X Premium where xAI grants
+  Grok access) using xAI's OAuth device-code flow. No API key needed. An `XAI_API_KEY` works too.
+  All current Grok models from the models.dev catalog are available, for example `grok-4.7`,
+  `grok-4.6`, `grok-4.20` and `grok-build-0.1`.
+- **Secondary providers via API key:** OpenAI, Anthropic (Claude) and Google (Gemini).
+  No other providers or OAuth logins are included.
+- **No paid subscription, no ads.** There is no hosted model gateway, account console,
+  session sharing service, upsell or promotional content. Everything runs locally and talks
+  directly to the provider you configure.
+- **Terminal UI, web UI and desktop app** share one local server and one session history.
+- **Grove theme**: a warm-dark/green default theme for both the TUI and the app. All of the
+  classic themes are still available.
+
+> [!NOTE]
+> **Status of the Grok Build integration.** Apexo does not drive the Grok Build CLI yet. Today
+> it runs its own agent loop against the xAI API, using your Grok login or API key. Running Grok
+> Build itself behind Apexo's UI is the goal: Grok Build exposes an Agent Client Protocol (ACP)
+> server through `grok agent stdio`, and Apexo already ships an ACP SDK. Until that lands,
+> treat Apexo as a Grok-first UI and agent, not as a Grok Build frontend.
+
+<p align="center">
+  <img src="docs/assets/apexo-tui.png" alt="Apexo terminal UI" width="820">
+</p>
+<p align="center">
+  <img src="docs/assets/apexo-web.png" alt="Apexo web UI" width="820">
+</p>
+
+## Install (build from source)
+
+Apexo is not published to package managers yet. To build it you need
+[Bun](https://bun.sh) 1.3.x (the repo pins `bun@1.3.14`) and git.
+
+```bash
+git clone <your-apexo-repo-url> apexo && cd apexo
+bun install
+
+# Build a single native binary for this machine (the web UI is embedded)
+bun run --cwd packages/opencode build --single
+
+# The binary lands in packages/opencode/dist/opencode-<os>-<arch>/bin/apexo
+# (an identical "opencode" binary is placed next to it for compatibility)
+install -m755 packages/opencode/dist/opencode-*/bin/apexo ~/.local/bin/apexo
+apexo --version
+```
+
+To run from source without building:
+
+```bash
+bun dev            # same as: bun run --cwd packages/opencode src/index.ts
+bun dev --help
+```
+
+## Usage
+
+```bash
+apexo                     # start the terminal UI in the current directory
+apexo auth login          # sign in: pick xAI -> "SuperGrok Subscription" (OAuth) or an API key
+apexo auth list           # show configured credentials
+apexo models xai          # list Grok models
+apexo run "explain this repo"   # one-shot, non-interactive
+apexo web                 # start the local server and open the web UI
+apexo serve               # headless server (for the desktop app, editors, scripts)
+apexo acp                 # run Apexo as an ACP agent for editors such as Zed
+```
+
+In the TUI, `/connect` opens the provider dialog, `/models` switches models, `/themes` switches
+themes, and `ctrl+p` opens the command palette. Start a prompt with `!` to run a shell command.
+
+### Providers
+
+| Provider | How to connect | Environment variable |
+| --- | --- | --- |
+| **xAI Grok** (primary) | `apexo auth login`, then xAI -> SuperGrok Subscription (device-code OAuth), or an API key | `XAI_API_KEY` |
+| OpenAI | API key | `OPENAI_API_KEY` |
+| Anthropic (Claude) | API key | `ANTHROPIC_API_KEY` |
+| Google (Gemini) | API key | `GOOGLE_GENERATIVE_AI_API_KEY` |
+
+A generic OpenAI-compatible "custom provider" entry is still available for self-hosted endpoints.
+
+### Desktop app
+
+The Electron desktop app lives in `packages/desktop`:
+
+```bash
+bun run --cwd packages/desktop dev        # development build
+bun run --cwd packages/desktop build      # production bundle (packaging uses electron-builder)
+```
+
+The auto-updater is disabled because Apexo has no release feed yet.
+
+## Configuration
+
+Apexo reads JSON/JSONC config files. Apexo names are preferred and the OpenCode names are still
+read, so existing setups keep working:
+
+| What | Apexo | Also read (legacy) |
+| --- | --- | --- |
+| Global config dir | `~/.config/apexo/` (`apexo.jsonc`) | `~/.config/opencode/` (used if it exists and `apexo/` does not) |
+| Data / state / cache | `~/.local/share/apexo`, `~/.local/state/apexo`, `~/.cache/apexo` | the matching `opencode` directories |
+| Project config | `apexo.json` / `apexo.jsonc` | `opencode.json` / `opencode.jsonc` |
+| Project directory | `.apexo/` (agents, commands, plugins, themes, tools) | `.opencode/` |
+| Environment variables | `APEXO_*` (for example `APEXO_CONFIG`, `APEXO_CONFIG_CONTENT`) | `OPENCODE_*` |
+
+When both exist in the same directory, `apexo.json` wins over `opencode.json`, and `APEXO_*`
+wins over `OPENCODE_*`. Example `apexo.json`:
+
+```jsonc
+{
+  "model": "xai/grok-4.7",
+  "theme": "grove"
+}
+```
+
+The config format is the same as upstream OpenCode, so the
+[OpenCode config reference](https://github.com/anomalyco/opencode/blob/dev/packages/web/src/content/docs/config.mdx) applies.
+
+## Themes
+
+- **TUI:** `grove` is the default. Switch with `/themes`, or set `"theme"` in `tui.json`
+  (`~/.config/apexo/tui.json`). Custom themes go in `.apexo/themes/*.json` or
+  `~/.config/apexo/themes/`.
+- **Web and desktop app:** Grove is the default in Settings -> Appearance. The original theme is
+  listed as "Classic".
+
+## Development
+
+```bash
+bun install
+bun turbo typecheck --concurrency=3
+(cd packages/core && bun test)
+(cd packages/opencode && bun test)
+(cd packages/tui && bun test)
+```
+
+Internal package names (`@opencode-ai/*`) and source directories (`packages/opencode`) keep
+their upstream names on purpose, to keep merges from upstream manageable.
+
+## License
+
+MIT. See [LICENSE](LICENSE). The original copyright notice is kept intact.
 
 ---
 
-### Installation
+## Derived from OpenCode
 
-```bash
-# YOLO
-curl -fsSL https://opencode.ai/install | bash
+Apexo is a fork of [OpenCode](https://github.com/anomalyco/opencode) (MIT License,
+Copyright (c) 2025 opencode). Thanks to the OpenCode authors and contributors. Changes made
+in Apexo:
 
-# Package managers
-npm i -g opencode-ai@latest        # or bun/pnpm/yarn
-scoop install opencode             # Windows
-choco install opencode             # Windows
-brew install anomalyco/tap/opencode # macOS and Linux (recommended, always up to date)
-brew install opencode              # macOS and Linux (official brew formula, updated less)
-sudo pacman -S opencode            # Arch Linux (Stable)
-paru -S opencode-bin               # Arch Linux (Latest from AUR)
-mise use -g opencode               # Any OS
-nix run nixpkgs#opencode           # or github:anomalyco/opencode for latest dev branch
-```
-
-> [!TIP]
-> Remove versions older than 0.1.x before installing.
-
-### Desktop App (BETA)
-
-OpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/anomalyco/opencode/releases) or [opencode.ai/download](https://opencode.ai/download).
-
-| Platform              | Download                           |
-| --------------------- | ---------------------------------- |
-| macOS (Apple Silicon) | `opencode-desktop-mac-arm64.dmg`   |
-| macOS (Intel)         | `opencode-desktop-mac-x64.dmg`     |
-| Windows               | `opencode-desktop-windows-x64.exe` |
-| Linux                 | `.deb`, `.rpm`, or `.AppImage`     |
-
-```bash
-# macOS (Homebrew)
-brew install --cask opencode-desktop
-# Windows (Scoop)
-scoop bucket add extras; scoop install extras/opencode-desktop
-```
-
-#### Installation Directory
-
-The install script respects the following priority order for the installation path:
-
-1. `$OPENCODE_INSTALL_DIR` - Custom installation directory
-2. `$XDG_BIN_DIR` - XDG Base Directory Specification compliant path
-3. `$HOME/bin` - Standard user binary directory (if it exists or can be created)
-4. `$HOME/.opencode/bin` - Default fallback
-
-```bash
-# Examples
-OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash
-XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
-```
-
-### Agents
-
-OpenCode includes two built-in agents you can switch between with the `Tab` key.
-
-- **build** - Default, full-access agent for development work
-- **plan** - Read-only agent for analysis and code exploration
-  - Denies file edits by default
-  - Asks permission before running bash commands
-  - Ideal for exploring unfamiliar codebases or planning changes
-
-Also included is a **general** subagent for complex searches and multistep tasks.
-This is used internally and can be invoked using `@general` in messages.
-
-Learn more about [agents](https://opencode.ai/docs/agents).
-
-### Documentation
-
-For more info on how to configure OpenCode, [**head over to our docs**](https://opencode.ai/docs).
-
-### Contributing
-
-If you're interested in contributing to OpenCode, please read our [contributing docs](./CONTRIBUTING.md) before submitting a pull request.
-
-### Building on OpenCode
-
-If you are working on a project that's related to OpenCode and is using "opencode" as part of its name, for example "opencode-dashboard" or "opencode-mobile", please add a note to your README to clarify that it is not built by the OpenCode team and is not affiliated with us in any way.
-
----
-
-**Join our community** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)
+- Removed every OAuth/subscription login except xAI (SuperGrok): the ChatGPT/Codex, GitHub
+  Copilot, GitLab Duo and Poe logins are gone.
+- Limited the built-in providers to four: xAI, OpenAI, Anthropic and Google, with OpenAI,
+  Anthropic and Google using API keys only.
+- Removed OpenCode Zen/Go, the hosted console and account login, the website and docs app,
+  session sharing, stats, the hosted infrastructure, and all paid, upsell, promo and ad content.
+- Added the Qoder-inspired "Grove" warm-dark/green theme as the default for the TUI and the app.
+  The other themes are kept.
+- Renamed the product to Apexo: new wordmark and icons, an `apexo` binary, and
+  `apexo.json`, `.apexo/`, `~/.config/apexo` and `APEXO_*`, with OpenCode-name fallbacks.

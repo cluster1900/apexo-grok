@@ -1,15 +1,15 @@
-# js
+# Apexo CLI and server (`packages/opencode`)
 
-To install dependencies:
+This package builds the `apexo` command: the terminal UI, the local HTTP server used by the
+web and desktop apps, `apexo run`, `apexo acp` and the other subcommands. The directory and the
+npm package keep their upstream `opencode` names to make upstream merges easier.
 
 ```bash
 bun install
+bun run src/index.ts --help          # run from source (same as `bun dev` at the repo root)
+bun run build --single               # build dist/opencode-<os>-<arch>/bin/apexo
+bun test                             # tests (run from this directory, not the repo root)
 ```
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.12. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+See the [root README](../../README.md) for providers (xAI Grok first; OpenAI, Anthropic and Google
+via API key), configuration (`apexo.json`, `.apexo/`, `APEXO_*` with OpenCode fallbacks) and themes.
