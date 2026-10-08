@@ -3,11 +3,13 @@ import { Schema } from "effect"
 import { logo as glyphs } from "./logo"
 
 const wordmark = [
-  `⠀                                ▄     `,
-  `█▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█`,
-  `█  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀`,
-  `▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀  ▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀`,
+  `⠀                       `,
+  `▀▀▀█ █▀▀█ █▀▀█ █  █ █▀▀█`,
+  `█▀▀█ █  █ █▀▀▀ ▄▀▀▄ █  █`,
+  `▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀  ▀ ▀▀▀▀`,
 ]
+
+export const TAGLINE = "Apexo: a UI harness for Grok. Coding agent for the terminal and desktop."
 
 export class CancelledError extends Schema.TaggedErrorClass<CancelledError>()("UICancelledError", {}) {}
 
@@ -64,7 +66,7 @@ export function logo(pad?: string) {
     bg: "\x1b[48;5;235m",
   }
   const right = {
-    fg: reset,
+    fg: "\x1b[38;5;77m",
     shadow: "\x1b[38;5;238m",
     bg: "\x1b[48;5;238m",
   }

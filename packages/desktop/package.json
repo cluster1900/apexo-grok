@@ -4,10 +4,9 @@
   "version": "1.18.35",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://opencode.ai",
+  "homepage": "https://apexolab.com",
   "author": {
-    "name": "OpenCode",
-    "email": "hello@opencode.ai"
+    "name": "Apexo"
   },
   "scripts": {
     "typecheck": "tsgo -b",

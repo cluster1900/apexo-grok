@@ -1,11 +1,13 @@
+// "apexo" wordmark: "apex" is drawn in the muted color, the trailing "o" in the theme primary.
 export const logo = {
-  left: ["                   ", "█▀▀█ █▀▀█ █▀▀█ █▀▀▄", "█__█ █__█ █^^^ █__█", "▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀~~▀"],
-  right: ["             ▄     ", "█▀▀▀ █▀▀█ █▀▀█ █▀▀█", "█___ █__█ █__█ █^^^", "▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀"],
+  left: ["                   ", "▀▀▀█ █▀▀█ █▀▀█ █  █", "█^^█ █__█ █^^^ ▄▀▀▄", "▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀  ▀"],
+  right: ["    ", "█▀▀█", "█__█", "▀▀▀▀"],
 }
 
+// Compact single-glyph mark (an "a") used for splash/exit badges.
 export const go = {
-  left: ["    ", "█▀▀▀", "█_^█", "▀▀▀▀"],
-  right: ["    ", "█▀▀█", "█__█", "▀▀▀▀"],
+  left: ["    ", "▀▀▀█", "█^^█", "▀▀▀▀"],
+  right: ["    ", "▀▀▀█", "█^^█", "▀▀▀▀"],
 }
 
 export const marks = "_^~,"
