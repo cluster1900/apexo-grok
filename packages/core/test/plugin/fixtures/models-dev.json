@@ -1,8 +1,8 @@
 {
-  "acme": {
-    "id": "acme",
-    "name": "Acme",
-    "env": ["ACME_API_KEY"],
+  "xai": {
+    "id": "xai",
+    "name": "xAI",
+    "env": ["XAI_API_KEY"],
     "models": {}
   },
   "local": {

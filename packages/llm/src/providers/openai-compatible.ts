@@ -56,10 +56,3 @@ export const provider = {
   configure,
 }
 
-export const baseten = define(profiles.baseten)
-export const cerebras = define(profiles.cerebras)
-export const deepinfra = define(profiles.deepinfra)
-export const deepseek = define(profiles.deepseek)
-export const fireworks = define(profiles.fireworks)
-export const groq = define(profiles.groq)
-export const togetherai = define(profiles.togetherai)

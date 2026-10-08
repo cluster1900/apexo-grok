@@ -3,15 +3,10 @@ import type { Auth } from "../src/route/auth"
 import type { ModelFactory } from "../src/route/auth-options"
 import { Auth as RuntimeAuth } from "../src/route/auth"
 import * as OpenAIChat from "../src/protocols/openai-chat"
-import * as AmazonBedrock from "../src/providers/amazon-bedrock"
 import * as Anthropic from "../src/providers/anthropic"
-import * as Azure from "../src/providers/azure"
-import * as Cloudflare from "../src/providers/cloudflare"
-import * as GitHubCopilot from "../src/providers/github-copilot"
 import * as Google from "../src/providers/google"
 import * as OpenAI from "../src/providers/openai"
 import * as OpenAICompatible from "../src/providers/openai-compatible"
-import * as OpenRouter from "../src/providers/openrouter"
 import * as XAI from "../src/providers/xai"
 
 type BaseOptions = {
@@ -110,28 +105,6 @@ OpenAI.configure({ apiKey: "sk-test" }).chat("gpt-4.1-mini", {})
 // @ts-expect-error auth is an override, so OpenAI Chat rejects apiKey with auth.
 OpenAI.configure({ apiKey: "sk-test", auth: RuntimeAuth.bearer("oauth-token") })
 
-// @ts-expect-error Azure requires at least one of `resourceName` or `baseURL`.
-Azure.configure()
-Azure.configure({ apiKey: "azure-key", resourceName: "resource" }).responses("deployment")
-Azure.configure({ apiKey: configApiKey, resourceName: "resource" }).responses("deployment")
-Azure.configure({ auth: RuntimeAuth.header("api-key", "azure-key"), resourceName: "resource" }).responses("deployment")
-
-// @ts-expect-error Azure model selectors only accept deployment ids.
-Azure.configure({ apiKey: "azure-key", resourceName: "resource" }).responses("deployment", {})
-
-// @ts-expect-error auth is an override, so Azure rejects apiKey with auth.
-Azure.configure({ resourceName: "resource", apiKey: "azure-key", auth: RuntimeAuth.header("api-key", "override") })
-
-Azure.configure({ apiKey: "azure-key", resourceName: "resource" }).chat("deployment")
-Azure.configure({ apiKey: configApiKey, resourceName: "resource" }).chat("deployment")
-Azure.configure({ auth: RuntimeAuth.header("api-key", "azure-key"), resourceName: "resource" }).chat("deployment")
-
-// @ts-expect-error Azure chat model selectors only accept deployment ids.
-Azure.configure({ apiKey: "azure-key", resourceName: "resource" }).chat("deployment", {})
-
-// @ts-expect-error auth is an override, so Azure Chat rejects apiKey with auth.
-Azure.configure({ resourceName: "resource", apiKey: "azure-key", auth: RuntimeAuth.header("api-key", "override") })
-
 Anthropic.configure({ apiKey: "anthropic-key" }).model("claude-haiku")
 // @ts-expect-error Anthropic model selectors only accept model ids.
 Anthropic.configure({ apiKey: "anthropic-key" }).model("claude-haiku", {})
@@ -140,29 +113,9 @@ Google.configure({ apiKey: "google-key" }).model("gemini-2.5-flash")
 // @ts-expect-error Google model selectors only accept model ids.
 Google.configure({ apiKey: "google-key" }).model("gemini-2.5-flash", {})
 
-AmazonBedrock.configure({ apiKey: "bedrock-key" }).model("anthropic.claude")
-// @ts-expect-error Bedrock model selectors only accept model ids.
-AmazonBedrock.configure({ apiKey: "bedrock-key" }).model("anthropic.claude", {})
-
-OpenRouter.configure({ apiKey: "openrouter-key" }).model("openai/gpt-4o-mini")
-// @ts-expect-error OpenRouter model selectors only accept model ids.
-OpenRouter.configure({ apiKey: "openrouter-key" }).model("openai/gpt-4o-mini", {})
-
 XAI.configure({ apiKey: "xai-key" }).responses("grok-4")
 XAI.configure({ apiKey: "xai-key" }).chat("grok-4")
 // @ts-expect-error xAI Responses selectors only accept model ids.
 XAI.configure({ apiKey: "xai-key" }).responses("grok-4", {})
 // @ts-expect-error xAI Chat selectors only accept model ids.
 XAI.configure({ apiKey: "xai-key" }).chat("grok-4", {})
-
-OpenAICompatible.deepseek.configure({ apiKey: "deepseek-key" }).model("deepseek-chat")
-// @ts-expect-error OpenAI-compatible family selectors only accept model ids.
-OpenAICompatible.deepseek.configure({ apiKey: "deepseek-key" }).model("deepseek-chat", {})
-
-Cloudflare.CloudflareWorkersAI.configure({ accountId: "account", apiKey: "cf-key" }).model("@cf/meta/llama")
-// @ts-expect-error Cloudflare Workers AI model selectors only accept model ids.
-Cloudflare.CloudflareWorkersAI.configure({ accountId: "account", apiKey: "cf-key" }).model("@cf/meta/llama", {})
-
-GitHubCopilot.configure({ baseURL: "https://copilot.test", apiKey: "copilot-key" }).model("gpt-4.1")
-// @ts-expect-error GitHub Copilot model selectors only accept model ids.
-GitHubCopilot.configure({ baseURL: "https://copilot.test", apiKey: "copilot-key" }).model("gpt-4.1", {})

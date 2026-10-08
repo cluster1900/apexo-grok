@@ -3,7 +3,6 @@ import { ConfigProvider, Effect, Layer, Stream } from "effect"
 import { Headers, HttpClientRequest } from "effect/unstable/http"
 import { LLM, LLMError, Message, Model, ToolCallPart, Usage } from "../../src"
 import { Auth, LLMClient, RequestExecutor, WebSocketExecutor } from "../../src/route"
-import * as Azure from "../../src/providers/azure"
 import * as OpenAI from "../../src/providers/openai"
 import * as OpenAIResponses from "../../src/protocols/openai-responses"
 import * as ProviderShared from "../../src/protocols/shared"
@@ -254,34 +253,6 @@ describe("OpenAI Responses route", () => {
             Effect.gen(function* () {
               const web = yield* HttpClientRequest.toWeb(input.request).pipe(Effect.orDie)
               expect(web.url).toBe("https://api.openai.test/v1/responses?api-version=v1")
-              return input.respond(sseEvents({ type: "response.completed", response: {} }), {
-                headers: { "content-type": "text/event-stream" },
-              })
-            }),
-          ),
-        ),
-      )
-    }),
-  )
-
-  it.effect("uses Azure api-key header for static OpenAI Responses keys", () =>
-    Effect.gen(function* () {
-      yield* LLMClient.generate(
-        LLM.updateRequest(request, {
-          model: Azure.configure({
-            baseURL: "https://opencode-test.openai.azure.com/openai/v1/",
-            apiKey: "azure-key",
-            headers: { authorization: "Bearer stale" },
-          }).responses("gpt-4.1-mini"),
-        }),
-      ).pipe(
-        Effect.provide(
-          dynamicResponse((input) =>
-            Effect.gen(function* () {
-              const web = yield* HttpClientRequest.toWeb(input.request).pipe(Effect.orDie)
-              expect(web.url).toBe("https://opencode-test.openai.azure.com/openai/v1/responses?api-version=v1")
-              expect(web.headers.get("api-key")).toBe("azure-key")
-              expect(web.headers.get("authorization")).toBeNull()
               return input.respond(sseEvents({ type: "response.completed", response: {} }), {
                 headers: { "content-type": "text/event-stream" },
               })

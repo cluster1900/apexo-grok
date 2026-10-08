@@ -147,13 +147,13 @@ describe("ModelsDevPlugin", () => {
           )
           expect(yield* integrations.list()).toEqual([
             new Integration.Info({
-              id: Integration.ID.make("acme"),
-              name: "Acme",
+              id: Integration.ID.make("xai"),
+              name: "xAI",
               methods: [
                 { type: "key" },
                 {
                   type: "env",
-                  names: ["ACME_API_KEY"],
+                  names: ["XAI_API_KEY"],
                 },
               ],
               connections: [],

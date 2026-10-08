@@ -6,9 +6,7 @@ import { ProviderV2 } from "@opencode-ai/core/provider"
 import { ModelV2 } from "@opencode-ai/core/model"
 import { ModelsDev } from "@opencode-ai/core/models-dev"
 import { generateText, jsonSchema, type ModelMessage } from "ai"
-import { createAmazonBedrock, type AmazonBedrockLanguageModelOptions } from "@ai-sdk/amazon-bedrock"
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { createVertexAnthropic } from "@ai-sdk/google-vertex/anthropic"
 
 describe("ProviderTransform.options - setCacheKey", () => {
   const sessionID = "test-session-123"
@@ -600,67 +598,6 @@ describe("ProviderTransform.options - gpt-5 textVerbosity", () => {
     expect(result.textVerbosity).toBeUndefined()
   })
 
-  test("azure chat completions omit Responses-only reasoning options after variants merge", async () => {
-    const model = {
-      ...createGpt5Model("gpt-5.4"),
-      id: "azure/gpt-5.4",
-      providerID: "azure",
-      api: {
-        id: "gpt-5.4",
-        url: "https://azure.com",
-        npm: "@ai-sdk/azure",
-      },
-      variants: {
-        high: {
-          reasoningEffort: "high",
-          reasoningSummary: "auto",
-          include: ["reasoning.encrypted_content"],
-        },
-      },
-    }
-    const result = await Effect.runPromise(
-      LLMRequestPrep.prepare({
-        user: {
-          id: "msg_user-test",
-          sessionID,
-          role: "user",
-          time: { created: Date.now() },
-          agent: "test",
-          model: { providerID: "azure", modelID: "gpt-5.4", variant: "high" },
-        } as any,
-        sessionID,
-        model,
-        agent: {
-          name: "test",
-          mode: "primary",
-          options: {},
-          permission: [],
-        } as any,
-        system: [],
-        messages: [{ role: "user", content: "Hello" }],
-        tools: {
-          lookup: {
-            description: "Look up a value",
-            inputSchema: jsonSchema({ type: "object", properties: {} }),
-          },
-        },
-        provider: { id: "azure", options: { useCompletionUrls: true } } as any,
-        auth: undefined,
-        plugin: {
-          trigger: (_name: string, _input: unknown, output: unknown) => Effect.succeed(output),
-          list: () => Effect.succeed([]),
-          init: () => Effect.void,
-        } as any,
-        flags: { outputTokenMax: 32_000, client: "test" } as any,
-        isWorkflow: false,
-      }),
-    )
-    expect(result.params.options.reasoningEffort).toBe("high")
-    expect(result.params.options.reasoningSummary).toBeUndefined()
-    expect(result.params.options.include).toBeUndefined()
-    expect(result.tools.lookup.strict).toBe(false)
-  })
-
   test("gpt-5.1 should have textVerbosity set to low", () => {
     const model = createGpt5Model("gpt-5.1")
     const result = ProviderTransform.options({ model, sessionID, providerOptions: {} })
@@ -1024,87 +961,6 @@ describe("ProviderTransform.providerOptions", () => {
           expect(ProviderTransform.providerOptions(model, custom)).toEqual({ [sdk.key]: custom })
         })
 
-        test.each([
-          ["claude-opus-5", "default"],
-          ["claude-opus-5", "high"],
-          ["claude-sonnet-5", "default"],
-          ["claude-sonnet-5", "high"],
-          ["claude-mythos-5-1", "default"],
-          ["claude-mythos-5-1", "high"],
-          ["claude-haiku-4-5", "title"],
-        ])("omits binding from the %s %s request body and betas", async (id, mode) => {
-          const requests: Request[] = []
-          const capture = Object.assign(
-            async (...args: Parameters<typeof fetch>) => {
-              requests.push(new Request(...args))
-              return Response.json(
-                sdk.key === "bedrock"
-                  ? {
-                      output: { message: { role: "assistant", content: [{ text: "ok" }] } },
-                      stopReason: "end_turn",
-                      usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-                    }
-                  : {
-                      type: "message",
-                      id: "msg_1",
-                      model: "test-model",
-                      role: "assistant",
-                      content: [{ type: "text", text: "ok" }],
-                      stop_reason: "end_turn",
-                      usage: { input_tokens: 1, output_tokens: 1 },
-                    },
-              )
-            },
-            { preconnect: () => undefined },
-          )
-          const provider =
-            sdk.key === "bedrock"
-              ? createAmazonBedrock({ apiKey: "test-key", region: "ap-southeast-1", fetch: capture })
-              : sdk.npm === "@ai-sdk/google-vertex/anthropic"
-                ? createVertexAnthropic({
-                    project: "test-project",
-                    location: "global",
-                    generateAuthToken: async () => "test-token",
-                    fetch: capture,
-                  })
-                : createAnthropic({ apiKey: "test-key", fetch: capture })
-          const model = claude(
-            sdk.npm,
-            sdk.key === "bedrock"
-              ? `global.anthropic.${id}`
-              : sdk.npm === "@ai-sdk/google-vertex/anthropic"
-                ? `${id}@default`
-                : id,
-          )
-          const variants = ProviderTransform.variants(model)
-          const options =
-            mode === "title"
-              ? ProviderTransform.smallOptions({ ...model, variants })
-              : mode === "high"
-                ? variants.high
-                : {}
-          await generateText({
-            model: provider(model.api.id),
-            prompt: "hi",
-            maxOutputTokens: 32000,
-            providerOptions: ProviderTransform.providerOptions(model, options),
-          })
-          expect(requests).toHaveLength(1)
-          const body = await requests[0].json()
-          const fields = sdk.key === "bedrock" ? (body.additionalModelRequestFields ?? {}) : body
-          expect(fields.thinking).toEqual(
-            mode === "title"
-              ? { type: "enabled", budget_tokens: 16000 }
-              : mode === "high"
-                ? { type: "adaptive", display: "summarized" }
-                : undefined,
-          )
-          expect(fields.output_config).toEqual(mode === "high" ? { effort: "high" } : undefined)
-          expect(fields.anthropic_beta ?? []).not.toContain("thinking-binding-controls-2026-08-01")
-          expect(requests[0].headers.get("anthropic-beta")?.split(",") ?? []).not.toContain(
-            "thinking-binding-controls-2026-08-01",
-          )
-        })
       })
     })
 
@@ -1187,83 +1043,6 @@ describe("ProviderTransform.providerOptions", () => {
       ])
     })
 
-    test("reaches the vertex anthropic wire as block_binding plus beta header", async () => {
-      const model = claude("@ai-sdk/google-vertex/anthropic", "claude-fable-5-1")
-      let sent: { url: string; headers: Headers; body: any } | undefined
-      const provider = createVertexAnthropic({
-        project: "test-project",
-        location: "global",
-        generateAuthToken: async () => "test-token",
-        fetch: Object.assign(
-          async (...args: Parameters<typeof fetch>) => {
-            sent = {
-              url: String(args[0]),
-              headers: new Headers(args[1]?.headers),
-              body: JSON.parse(String(args[1]?.body)),
-            }
-            return Response.json({
-              type: "message",
-              id: "msg_1",
-              model: "claude-fable-5-1",
-              role: "assistant",
-              content: [{ type: "text", text: "ok" }],
-              stop_reason: "end_turn",
-              usage: { input_tokens: 1, output_tokens: 1 },
-            })
-          },
-          { preconnect: () => undefined },
-        ),
-      })
-      await generateText({
-        model: provider("claude-fable-5-1"),
-        prompt: "hi",
-        providerOptions: ProviderTransform.providerOptions(model, {}),
-      })
-      // Same wire shape Anthropic's own Vertex SDK produces: rawPredict URL, model moved
-      // out of the body, anthropic_version added, betas carried in the anthropic-beta header.
-      expect(sent?.url).toBe(
-        "https://aiplatform.googleapis.com/v1/projects/test-project/locations/global/publishers/anthropic/models/claude-fable-5-1:rawPredict",
-      )
-      expect(sent?.body.model).toBeUndefined()
-      expect(sent?.body.anthropic_version).toBe("vertex-2023-10-16")
-      expect(sent?.body.thinking).toEqual({
-        type: "adaptive",
-        block_binding: { prefix_mismatch_behavior: "drop_block" },
-      })
-      expect(sent?.headers.get("anthropic-beta")?.split(",")).toContain("thinking-binding-controls-2026-08-01")
-    })
-
-    test("reaches the bedrock wire as additionalModelRequestFields", async () => {
-      const model = claude("@ai-sdk/amazon-bedrock", "us.anthropic.claude-fable-5-1-v1:0")
-      let body: any
-      const provider = createAmazonBedrock({
-        apiKey: "test-key",
-        region: "us-east-1",
-        fetch: Object.assign(
-          async (...args: Parameters<typeof fetch>) => {
-            body = JSON.parse(String(args[1]?.body))
-            return Response.json({
-              output: { message: { role: "assistant", content: [{ text: "ok" }] } },
-              stopReason: "end_turn",
-              usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-            })
-          },
-          { preconnect: () => undefined },
-        ),
-      })
-      await generateText({
-        model: provider("us.anthropic.claude-fable-5-1-v1:0"),
-        prompt: "hi",
-        providerOptions: ProviderTransform.providerOptions(model, {
-          reasoningConfig: { type: "adaptive", maxReasoningEffort: "high" },
-        }),
-      })
-      expect(body.additionalModelRequestFields.thinking).toEqual({
-        type: "adaptive",
-        block_binding: { prefix_mismatch_behavior: "drop_block" },
-      })
-      expect(body.additionalModelRequestFields.anthropic_beta).toContain("thinking-binding-controls-2026-08-01")
-    })
   })
 
   test("forces reasoning for explicit effort even when model is not marked reasoning-capable", () => {
@@ -2797,57 +2576,6 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     }
 
     for (const cached of [false, true]) {
-      test(`omits unsigned reasoning before SDK conversion (caching: ${cached})`, async () => {
-        const selected = cached
-          ? model
-          : { ...model, id: "amazon-bedrock/openai.gpt-oss-120b", api: { ...model.api, id: "openai.gpt-oss-120b" } }
-        const messages = ProviderTransform.message(
-          [
-            { role: "user", content: "Think" },
-            { role: "assistant", content: [{ type: "text", text: "Earlier answer" }] },
-            {
-              role: "assistant",
-              content: [
-                { type: "reasoning", text: "Partial thought" },
-                { type: "text", text: "" },
-              ],
-            },
-            { role: "user", content: "Continue" },
-          ],
-          selected,
-          {},
-        )
-        expect(messages.map((message) => message.role)).toEqual(["user", "assistant", "user"])
-        expect(messages[1].providerOptions?.bedrock?.cachePoint).toEqual(cached ? { type: "default" } : undefined)
-        const provider = createAmazonBedrock({
-          apiKey: "test-key",
-          region: "us-east-1",
-          fetch: Object.assign(
-            async (...args: Parameters<typeof fetch>) => {
-              const body = JSON.parse(String(args[1]?.body))
-              expect(body.messages).toEqual([
-                { role: "user", content: [{ text: "Think" }] },
-                {
-                  role: "assistant",
-                  content: [{ text: "Earlier answer" }, ...(cached ? [{ cachePoint: { type: "default" } }] : [])],
-                },
-                {
-                  role: "user",
-                  content: [{ text: "Continue" }, ...(cached ? [{ cachePoint: { type: "default" } }] : [])],
-                },
-              ])
-              return Response.json({
-                output: { message: { role: "assistant", content: [{ text: "Recovered" }] } },
-                stopReason: "end_turn",
-                usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-              })
-            },
-            { preconnect: () => undefined },
-          ),
-        })
-        const result = await generateText({ model: provider(selected.api.id), messages, maxRetries: 0 })
-        expect(result.text).toBe("Recovered")
-      })
     }
 
     for (const namespace of ["bedrock", "amazon-bedrock", "custom-bedrock"]) {
@@ -3942,42 +3670,6 @@ describe("ProviderTransform.reasoningVariants", () => {
     expect(ProviderTransform.reasoningVariants(model([{ type: "effort", values: ["high"] }]), target(npm, id))).toEqual(
       { high: expected },
     )
-  })
-
-  test.each(["luna", "sol", "terra"])("serializes Bedrock GPT-5.6 %s none effort", async (name) => {
-    const item = target("@ai-sdk/amazon-bedrock", `global.openai.gpt-5.6-${name}`)
-    const variants = ProviderTransform.reasoningVariants(
-      model([{ type: "effort", values: ["none", "low", "medium", "high", "xhigh", "max"] }]),
-      item,
-    )
-    for (const effort of ["low", "medium", "high", "xhigh", "max"]) {
-      expect(variants?.[effort]).toEqual({ reasoningConfig: { type: "enabled", maxReasoningEffort: effort } })
-    }
-    expect(variants?.none).toEqual({
-      reasoningConfig: { type: "enabled", maxReasoningEffort: "none" },
-    } satisfies AmazonBedrockLanguageModelOptions)
-    const sent: unknown[] = []
-    const provider = createAmazonBedrock({
-      apiKey: "test-key",
-      region: "us-east-1",
-      fetch: Object.assign(
-        async (...args: Parameters<typeof fetch>) => {
-          sent.push(JSON.parse(String(args[1]?.body)))
-          return Response.json({
-            output: { message: { role: "assistant", content: [{ text: "ok" }] } },
-            stopReason: "end_turn",
-            usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-          })
-        },
-        { preconnect: () => undefined },
-      ),
-    })
-    await generateText({
-      model: provider(item.api.id),
-      prompt: "hi",
-      providerOptions: ProviderTransform.providerOptions(item, variants?.none ?? {}),
-    })
-    expect(sent).toEqual([expect.objectContaining({ additionalModelRequestFields: { reasoning: { effort: "none" } } })])
   })
 
   test("combines effort with extended thinking for Claude Opus 4.5", () => {

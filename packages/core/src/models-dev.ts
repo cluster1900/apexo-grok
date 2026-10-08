@@ -135,6 +135,14 @@ export const Event = ModelsDev.Event
 
 declare const OPENCODE_MODELS_DEV: Record<string, Provider> | undefined
 
+// This build only ships these built-in providers. Everything else in the models.dev catalog is
+// dropped; custom providers can still be declared under `provider` in opencode.json.
+export const ALLOWED_PROVIDERS: readonly string[] = ["xai", "openai", "anthropic", "google"]
+
+export function filterProviders(input: Record<string, Provider>): Record<string, Provider> {
+  return Object.fromEntries(Object.entries(input).filter(([id]) => ALLOWED_PROVIDERS.includes(id)))
+}
+
 export interface Interface {
   readonly get: () => Effect.Effect<Record<string, Provider>>
   readonly refresh: (force?: boolean) => Effect.Effect<void>
@@ -157,10 +165,10 @@ const layer = Layer.effect(
       ),
     )
 
-    const source = Flag.OPENCODE_MODELS_URL || "https://models.opencode.ai"
+    const source = Flag.OPENCODE_MODELS_URL || "https://models.dev"
     const filepath = path.join(
       Global.Path.cache,
-      source === "https://models.opencode.ai" ? "models.json" : `models-${Hash.fast(source)}.json`,
+      source === "https://models.dev" ? "models.json" : `models-${Hash.fast(source)}.json`,
     )
     const ttl = Duration.minutes(5)
     const lockKey = `models-dev:${filepath}`
@@ -230,7 +238,10 @@ const layer = Layer.effect(
       return JSON.parse(text) as Record<string, Provider>
     }).pipe(Effect.withSpan("ModelsDev.populate"), Effect.orDie)
 
-    const [cachedGet, invalidate] = yield* Effect.cachedInvalidateWithTTL(populate, Duration.infinity)
+    const [cachedGet, invalidate] = yield* Effect.cachedInvalidateWithTTL(
+      populate.pipe(Effect.map(filterProviders)),
+      Duration.infinity,
+    )
 
     const get = (): Effect.Effect<Record<string, Provider>> => cachedGet
 

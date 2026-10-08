@@ -912,6 +912,10 @@ describe("session.llm.stream", () => {
         enabled_providers: [vivgridFixture.providerID],
         provider: {
           [vivgridFixture.providerID]: {
+            // Not in the trimmed models.dev catalog: configure as a fully custom provider.
+            name: "Vivgrid",
+            npm: "@ai-sdk/openai",
+            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -976,191 +980,10 @@ describe("session.llm.stream", () => {
         enabled_providers: [vivgridFixture.providerID],
         provider: {
           [vivgridFixture.providerID]: {
-            options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
-          },
-        },
-      }),
-    },
-  )
-
-  const cerebrasFixture = { providerID: "cerebras", modelID: "gpt-oss-120b" }
-  it.instance(
-    "replays Cerebras assistant reasoning using the provider-supported field",
-    () =>
-      Effect.gen(function* () {
-        const fixture = loadFixture(cerebrasFixture.providerID, cerebrasFixture.modelID)
-        const request = waitRequest(
-          "/chat/completions",
-          new Response(createChatStream("Hello"), {
-            status: 200,
-            headers: { "Content-Type": "text/event-stream" },
-          }),
-        )
-
-        const resolved = yield* Provider.use.getModel(
-          ProviderV2.ID.make(cerebrasFixture.providerID),
-          ModelV2.ID.make(fixture.model.id),
-        )
-        const sessionID = SessionID.make("session-test-cerebras-reasoning")
-        const agent = {
-          name: "test",
-          mode: "primary",
-          options: {},
-          permission: [{ permission: "*", pattern: "*", action: "allow" }],
-        } satisfies Agent.Info
-
-        const user = {
-          id: MessageID.make("msg_user-cerebras-reasoning"),
-          sessionID,
-          role: "user",
-          time: { created: Date.now() },
-          agent: agent.name,
-          model: { providerID: ProviderV2.ID.make(cerebrasFixture.providerID), modelID: resolved.id },
-        } satisfies SessionV1.User
-
-        yield* drain({
-          user,
-          sessionID,
-          model: resolved,
-          agent,
-          system: ["You are a helpful assistant."],
-          messages: [
-            { role: "user", content: "Hello" },
-            {
-              role: "assistant",
-              content: [
-                { type: "reasoning", text: "thinking" },
-                { type: "text", text: "Previous answer" },
-              ],
-            },
-            { role: "user", content: "Continue" },
-          ] satisfies ModelMessage[],
-          tools: {},
-        })
-
-        const capture = yield* Effect.promise(() => request)
-        const messages = capture.body.messages as Array<Record<string, unknown>>
-        const assistant = messages.find((msg) => msg.role === "assistant")
-
-        expect(assistant?.reasoning).toBe("thinking")
-        expect(assistant && "reasoning_content" in assistant).toBe(false)
-      }),
-    {
-      config: () => ({
-        enabled_providers: [cerebrasFixture.providerID],
-        provider: {
-          [cerebrasFixture.providerID]: {
-            options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
-          },
-        },
-      }),
-    },
-  )
-
-  const mistralFixture = { providerID: "mistral", modelID: "mistral-small-latest" }
-  it.instance(
-    "replays native Mistral reasoning from chat history",
-    () =>
-      Effect.gen(function* () {
-        const fixture = loadFixture(mistralFixture.providerID, mistralFixture.modelID)
-        const request = waitRequest(
-          "/chat/completions",
-          createEventResponse(
-            [
-              {
-                id: "chatcmpl-mistral",
-                object: "chat.completion.chunk",
-                created: 0,
-                model: fixture.model.id,
-                choices: [{ index: 0, delta: { role: "assistant", content: "Hello" } }],
-              },
-              {
-                id: "chatcmpl-mistral",
-                object: "chat.completion.chunk",
-                created: 0,
-                model: fixture.model.id,
-                choices: [{ index: 0, delta: {}, finish_reason: "stop" }],
-              },
-            ],
-            true,
-          ),
-        )
-
-        const resolved = yield* Provider.use.getModel(
-          ProviderV2.ID.make(mistralFixture.providerID),
-          ModelV2.ID.make(fixture.model.id),
-        )
-        const sessionID = SessionID.make("session-test-mistral-reasoning")
-        const agent = {
-          name: "test",
-          mode: "primary",
-          options: {},
-          permission: [{ permission: "*", pattern: "*", action: "allow" }],
-        } satisfies Agent.Info
-
-        const user = {
-          id: MessageID.make("msg_user-mistral-reasoning"),
-          sessionID,
-          role: "user",
-          time: { created: Date.now() },
-          agent: agent.name,
-          model: { providerID: ProviderV2.ID.make(mistralFixture.providerID), modelID: resolved.id },
-        } satisfies SessionV1.User
-
-        const thinking = {
-          type: "thinking",
-          thinking: [
-            { type: "text", text: "thinking" },
-            {
-              type: "tool_reference",
-              tool: "web_search",
-              title: "Example result",
-              url: "https://example.com/tool",
-              favicon: "https://example.com/favicon.ico",
-              description: "Example description",
-            },
-            { type: "reference", reference_ids: [1, "source-2"] },
-          ],
-          closed: true,
-          signature: "sig-123",
-        }
-
-        yield* drain({
-          user,
-          sessionID,
-          model: resolved,
-          agent,
-          system: ["You are a helpful assistant."],
-          messages: [
-            { role: "user", content: "Hello" },
-            {
-              role: "assistant",
-              content: [
-                {
-                  type: "reasoning",
-                  text: "thinking",
-                  providerOptions: { mistral: { thinking } },
-                },
-                { type: "text", text: "Previous answer" },
-              ],
-            },
-            { role: "user", content: "Continue" },
-          ] satisfies ModelMessage[],
-          tools: {},
-        })
-
-        const capture = yield* Effect.promise(() => request)
-        const messages = capture.body.messages as Array<Record<string, unknown>>
-        expect(messages.find((message) => message.role === "assistant")).toEqual({
-          role: "assistant",
-          content: [thinking, { type: "text", text: "Previous answer" }],
-        })
-      }),
-    {
-      config: () => ({
-        enabled_providers: [mistralFixture.providerID],
-        provider: {
-          [mistralFixture.providerID]: {
+            // Not in the trimmed models.dev catalog: configure as a fully custom provider.
+            name: "Vivgrid",
+            npm: "@ai-sdk/openai",
+            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1224,6 +1047,10 @@ describe("session.llm.stream", () => {
         enabled_providers: [alibabaQwenFixture.providerID],
         provider: {
           [alibabaQwenFixture.providerID]: {
+            // Not in the trimmed models.dev catalog: configure as a fully custom provider.
+            name: "Alibaba",
+            npm: "@ai-sdk/openai-compatible",
+            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1292,6 +1119,10 @@ describe("session.llm.stream", () => {
         enabled_providers: [alibabaQwenFixture.providerID],
         provider: {
           [alibabaQwenFixture.providerID]: {
+            // Not in the trimmed models.dev catalog: configure as a fully custom provider.
+            name: "Alibaba",
+            npm: "@ai-sdk/openai-compatible",
+            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1955,6 +1786,10 @@ describe("session.llm.stream", () => {
         enabled_providers: [minimaxFixture.providerID],
         provider: {
           [minimaxFixture.providerID]: {
+            // Not in the trimmed models.dev catalog: configure as a fully custom provider.
+            name: "MiniMax",
+            npm: "@ai-sdk/anthropic",
+            models: { [minimaxFixture.modelID]: configModel(loadFixture(minimaxFixture.providerID, minimaxFixture.modelID).model) },
             options: { apiKey: "test-anthropic-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },

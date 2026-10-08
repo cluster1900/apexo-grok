@@ -3,11 +3,9 @@
 import { NodeFileSystem } from "@effect/platform-node"
 import * as path from "node:path"
 import * as prompts from "@clack/prompts"
-import { AwsV4Signer } from "aws4fetch"
 import { Config, ConfigProvider, Effect, FileSystem, PlatformError, Redacted } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, type HttpClientResponse } from "effect/unstable/http"
 import * as ProviderShared from "../src/protocols/shared"
-import * as Cloudflare from "../src/providers/cloudflare"
 
 type Provider = {
   readonly id: string
@@ -61,162 +59,12 @@ const PROVIDERS: ReadonlyArray<Provider> = [
       ).pipe(executeRequest),
   },
   {
-    id: "bedrock",
-    label: "Amazon Bedrock",
-    tier: "core",
-    note: "Native Bedrock Converse recorded tests",
-    vars: [
-      { name: "AWS_ACCESS_KEY_ID" },
-      { name: "AWS_SECRET_ACCESS_KEY" },
-      { name: "AWS_SESSION_TOKEN", optional: true },
-      { name: "BEDROCK_RECORDING_REGION", optional: true },
-      { name: "BEDROCK_MODEL_ID", optional: true },
-    ],
-    validate: (env) => validateBedrock(env),
-  },
-  {
-    id: "groq",
-    label: "Groq",
-    tier: "canary",
-    note: "Fast OpenAI-compatible canary for text/tool streaming",
-    vars: [{ name: "GROQ_API_KEY" }],
-    validate: (env) => validateBearer("https://api.groq.com/openai/v1/models", Redacted.make(env.GROQ_API_KEY)),
-  },
-  {
-    id: "openrouter",
-    label: "OpenRouter",
-    tier: "canary",
-    note: "Router canary for OpenAI-compatible text/tool streaming",
-    vars: [{ name: "OPENROUTER_API_KEY" }],
-    validate: (env) =>
-      validateChat({
-        url: "https://openrouter.ai/api/v1/chat/completions",
-        token: Redacted.make(env.OPENROUTER_API_KEY),
-        model: "openai/gpt-4o-mini",
-      }),
-  },
-  {
     id: "xai",
     label: "xAI",
     tier: "canary",
     note: "OpenAI-compatible xAI chat endpoint",
     vars: [{ name: "XAI_API_KEY" }],
     validate: (env) => validateBearer("https://api.x.ai/v1/models", Redacted.make(env.XAI_API_KEY)),
-  },
-  {
-    id: "cloudflare-ai-gateway",
-    label: "Cloudflare AI Gateway",
-    tier: "canary",
-    note: "Cloudflare Unified/OpenAI-compatible gateway; supports provider/model ids like workers-ai/@cf/...",
-    vars: [
-      { name: "CLOUDFLARE_ACCOUNT_ID", label: "Cloudflare account ID", secret: false },
-      {
-        name: "CLOUDFLARE_GATEWAY_ID",
-        label: "Cloudflare AI Gateway ID (defaults to default)",
-        optional: true,
-        secret: false,
-      },
-      { name: "CLOUDFLARE_API_TOKEN", label: "Cloudflare AI Gateway token" },
-    ],
-    validate: (env) =>
-      validateChat({
-        url: `${Cloudflare.aiGatewayBaseURL({
-          accountId: env.CLOUDFLARE_ACCOUNT_ID,
-          gatewayId: env.CLOUDFLARE_GATEWAY_ID || undefined,
-        })}/chat/completions`,
-        token: Redacted.make(envValue(env, Cloudflare.aiGatewayAuthEnvVars)),
-        tokenHeader: "cf-aig-authorization",
-        model: "workers-ai/@cf/meta/llama-3.1-8b-instruct",
-      }),
-  },
-  {
-    id: "cloudflare-workers-ai",
-    label: "Cloudflare Workers AI",
-    tier: "canary",
-    note: "Direct Workers AI OpenAI-compatible endpoint; supports model ids like @cf/meta/...",
-    vars: [
-      { name: "CLOUDFLARE_ACCOUNT_ID", label: "Cloudflare account ID", secret: false },
-      { name: "CLOUDFLARE_API_KEY", label: "Cloudflare Workers AI API token" },
-    ],
-    validate: (env) =>
-      validateChat({
-        url: `${Cloudflare.workersAIBaseURL({ accountId: env.CLOUDFLARE_ACCOUNT_ID })}/chat/completions`,
-        token: Redacted.make(envValue(env, Cloudflare.workersAIAuthEnvVars)),
-        model: "@cf/meta/llama-3.1-8b-instruct",
-      }),
-  },
-  {
-    id: "deepseek",
-    label: "DeepSeek",
-    tier: "compatible",
-    note: "Existing OpenAI-compatible recorded tests",
-    vars: [{ name: "DEEPSEEK_API_KEY" }],
-    validate: (env) => validateBearer("https://api.deepseek.com/models", Redacted.make(env.DEEPSEEK_API_KEY)),
-  },
-  {
-    id: "togetherai",
-    label: "TogetherAI",
-    tier: "compatible",
-    note: "Existing OpenAI-compatible text/tool recorded tests",
-    vars: [{ name: "TOGETHER_AI_API_KEY" }],
-    validate: (env) => validateBearer("https://api.together.xyz/v1/models", Redacted.make(env.TOGETHER_AI_API_KEY)),
-  },
-  {
-    id: "mistral",
-    label: "Mistral",
-    tier: "optional",
-    note: "OpenAI-compatible bridge; native reasoning parity is follow-up work",
-    vars: [{ name: "MISTRAL_API_KEY" }],
-    validate: (env) => validateBearer("https://api.mistral.ai/v1/models", Redacted.make(env.MISTRAL_API_KEY)),
-  },
-  {
-    id: "perplexity",
-    label: "Perplexity",
-    tier: "optional",
-    note: "OpenAI-compatible bridge; citations/search metadata are follow-up work",
-    vars: [{ name: "PERPLEXITY_API_KEY" }],
-    validate: (env) => validateBearer("https://api.perplexity.ai/models", Redacted.make(env.PERPLEXITY_API_KEY)),
-  },
-  {
-    id: "venice",
-    label: "Venice",
-    tier: "optional",
-    note: "OpenAI-compatible bridge",
-    vars: [{ name: "VENICE_API_KEY" }],
-    validate: (env) => validateBearer("https://api.venice.ai/api/v1/models", Redacted.make(env.VENICE_API_KEY)),
-  },
-  {
-    id: "cerebras",
-    label: "Cerebras",
-    tier: "optional",
-    note: "OpenAI-compatible bridge",
-    vars: [{ name: "CEREBRAS_API_KEY" }],
-    validate: (env) => validateBearer("https://api.cerebras.ai/v1/models", Redacted.make(env.CEREBRAS_API_KEY)),
-  },
-  {
-    id: "deepinfra",
-    label: "DeepInfra",
-    tier: "optional",
-    note: "OpenAI-compatible bridge",
-    vars: [{ name: "DEEPINFRA_API_KEY" }],
-    validate: (env) =>
-      validateBearer("https://api.deepinfra.com/v1/openai/models", Redacted.make(env.DEEPINFRA_API_KEY)),
-  },
-  {
-    id: "fireworks",
-    label: "Fireworks",
-    tier: "optional",
-    note: "OpenAI-compatible bridge",
-    vars: [{ name: "FIREWORKS_API_KEY" }],
-    validate: (env) =>
-      validateBearer("https://api.fireworks.ai/inference/v1/models", Redacted.make(env.FIREWORKS_API_KEY)),
-  },
-  {
-    id: "baseten",
-    label: "Baseten",
-    tier: "optional",
-    note: "OpenAI-compatible bridge",
-    vars: [{ name: "BASETEN_API_KEY" }],
   },
 ]
 
@@ -393,24 +241,6 @@ const validateChat = (input: {
     }),
   }).pipe(executeRequest)
 
-const validateBedrock = (env: Env) =>
-  Effect.gen(function* () {
-    const request = yield* Effect.promise(() =>
-      new AwsV4Signer({
-        url: `https://bedrock.${env.BEDROCK_RECORDING_REGION || "us-east-1"}.amazonaws.com/foundation-models`,
-        method: "GET",
-        service: "bedrock",
-        region: env.BEDROCK_RECORDING_REGION || "us-east-1",
-        accessKeyId: env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-        sessionToken: env.AWS_SESSION_TOKEN || undefined,
-      }).sign(),
-    )
-    return yield* HttpClientRequest.get(request.url.toString()).pipe(
-      HttpClientRequest.setHeaders(Object.fromEntries(request.headers.entries())),
-      executeRequest,
-    )
-  })
 
 const validateProvider = Effect.fn("RecordingEnv.validateProvider")(function* (provider: Provider, env: Env) {
   return yield* (provider.validate?.(env) ?? Effect.succeed("no lightweight validator")).pipe(

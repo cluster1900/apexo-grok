@@ -30,8 +30,8 @@ afterAll(() => {
 const cacheFile = path.join(Global.Path.cache, "models.json")
 
 const fixture: Record<string, ModelsDev.Provider> = {
-  acme: {
-    id: "acme",
+  xai: {
+    id: "xai",
     name: "Acme",
     env: ["ACME_API_KEY"],
     models: {
@@ -50,8 +50,8 @@ const fixture: Record<string, ModelsDev.Provider> = {
 }
 
 const fixture2: Record<string, ModelsDev.Provider> = {
-  beta: {
-    id: "beta",
+  openai: {
+    id: "openai",
     name: "Beta",
     env: ["BETA_API_KEY"],
     models: {
@@ -138,6 +138,18 @@ describe("ModelsDev Service", () => {
       expect(result).toEqual(fixture)
       const final = yield* Ref.get(state)
       expect(final.calls).toEqual([])
+    }),
+  )
+
+  it.live("get() drops providers outside the xai/openai/anthropic/google allow-list", () =>
+    Effect.gen(function* () {
+      yield* writeCache({ ...fixture, acme: { ...fixture.xai, id: "acme", name: "Acme" } })
+      const state = yield* Ref.make(initialState)
+      const result = yield* provided(
+        state,
+        ModelsDev.Service.use((s) => s.get()),
+      )
+      expect(Object.keys(result)).toEqual(["xai"])
     }),
   )
 
