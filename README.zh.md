@@ -155,16 +155,4 @@ MIT，详见 [LICENSE](LICENSE)，原版权声明保持不变。
 
 ---
 
-## 源自 OpenCode
-
-Apexo 基于 [OpenCode](https://github.com/anomalyco/opencode)（MIT 许可证，Copyright (c) 2025 opencode）
-修改而来，感谢 OpenCode 的作者和贡献者。Apexo 所做的主要改动：
-
-- 删除除 xAI（SuperGrok）之外的所有 OAuth/订阅登录方式，包括 ChatGPT/Codex、GitHub Copilot、
-  GitLab Duo 和 Poe 登录。
-- 内置提供商只保留四个：xAI、OpenAI、Anthropic、Google。其中 OpenAI、Anthropic、Google 仅支持 API key。
-- 删除 OpenCode Zen/Go、托管控制台和账号登录、官网和文档站、会话分享、统计、托管基础设施，
-  以及所有付费、升级推销、推广和广告内容。
-- 新增受 Qoder 启发的 “Grove” 暖黑/绿色主题，作为 TUI 和应用的默认主题，其他主题保留。
-- 产品更名为 Apexo：新的字标和图标、`apexo` 命令，以及 `apexo.json`、`.apexo/`、`~/.config/apexo`
-  和 `APEXO_*`，并保留 OpenCode 命名的兼容回退。
+Apexo 基于 [OpenCode](https://github.com/anomalyco/opencode) 构建，感谢 OpenCode 的作者和贡献者。

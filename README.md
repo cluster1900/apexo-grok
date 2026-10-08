@@ -165,19 +165,4 @@ MIT. See [LICENSE](LICENSE). The original copyright notice is kept intact.
 
 ---
 
-## Derived from OpenCode
-
-Apexo is a fork of [OpenCode](https://github.com/anomalyco/opencode) (MIT License,
-Copyright (c) 2025 opencode). Thanks to the OpenCode authors and contributors. Changes made
-in Apexo:
-
-- Removed every OAuth/subscription login except xAI (SuperGrok): the ChatGPT/Codex, GitHub
-  Copilot, GitLab Duo and Poe logins are gone.
-- Limited the built-in providers to four: xAI, OpenAI, Anthropic and Google, with OpenAI,
-  Anthropic and Google using API keys only.
-- Removed OpenCode Zen/Go, the hosted console and account login, the website and docs app,
-  session sharing, stats, the hosted infrastructure, and all paid, upsell, promo and ad content.
-- Added the Qoder-inspired "Grove" warm-dark/green theme as the default for the TUI and the app.
-  The other themes are kept.
-- Renamed the product to Apexo: new wordmark and icons, an `apexo` binary, and
-  `apexo.json`, `.apexo/`, `~/.config/apexo` and `APEXO_*`, with OpenCode-name fallbacks.
+Apexo is built on [OpenCode](https://github.com/anomalyco/opencode). Thanks to the OpenCode authors and contributors.
