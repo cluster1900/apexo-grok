@@ -108,7 +108,7 @@ export function lower(input: unknown, source = "configuration"): Result {
       path: source,
       issues: permissions.map((path) => ({
         path,
-        message: 'V2 permissions are not supported by OpenCode V1. Use V1 "permission" rules or run opencode2.',
+        message: 'V2 permissions are not supported by the V1 config loader. Use V1 "permission" rules or run opencode2.',
       })),
     })
 
