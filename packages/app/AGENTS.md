@@ -9,9 +9,9 @@
 
 ## Local Dev
 
-- `opencode dev web` proxies `https://app.opencode.ai`, so local UI/CSS changes will not show there.
+- `apexo dev web` serves only the embedded UI (or a short notice when none is embedded); run the app dev server for local UI/CSS changes.
 - For local UI changes, run the backend and app dev servers separately.
-- Backend (from `packages/opencode`): `bun run ./src/index.ts serve --port 4096`
+- Backend (from `packages/apexo`): `bun run ./src/index.ts serve --port 4096`
 - App (from `packages/app`): `bun dev -- --port 4444`
 - Open `http://localhost:4444` to verify UI changes (it targets the backend at `http://localhost:4096`).
 

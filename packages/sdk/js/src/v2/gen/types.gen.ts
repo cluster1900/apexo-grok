@@ -1644,7 +1644,7 @@ export type GlobalEvent = {
 export type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR"
 
 /**
- * Server configuration for opencode serve and web commands
+ * Server configuration for apexo serve and web commands
  */
 export type ServerConfig = {
   port?: number
@@ -7353,41 +7353,6 @@ export type GlobalDisposeResponses = {
 }
 
 export type GlobalDisposeResponse = GlobalDisposeResponses[keyof GlobalDisposeResponses]
-
-export type GlobalUpgradeData = {
-  body?: {
-    target: string
-  }
-  path?: never
-  query?: never
-  url: "/global/upgrade"
-}
-
-export type GlobalUpgradeErrors = {
-  /**
-   * BadRequest | InvalidRequestError
-   */
-  400: EffectHttpApiErrorBadRequest | InvalidRequestError
-}
-
-export type GlobalUpgradeError = GlobalUpgradeErrors[keyof GlobalUpgradeErrors]
-
-export type GlobalUpgradeResponses = {
-  /**
-   * Upgrade result
-   */
-  200:
-    | {
-        success: true
-        version: string
-      }
-    | {
-        success: false
-        error: string
-      }
-}
-
-export type GlobalUpgradeResponse = GlobalUpgradeResponses[keyof GlobalUpgradeResponses]
 
 export type EventSubscribeData = {
   body?: never

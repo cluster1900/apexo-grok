@@ -25,7 +25,7 @@ export function cliErrorMessage(input: unknown): string | undefined {
       `Model not found: ${field(model, "providerID")}/${field(model, "modelID")}`,
       ...(suggestions.length ? ["Did you mean: " + suggestions.join(", ")] : []),
       "Try: `apexo models` to list available models",
-      "Or check your config (apexo.json or opencode.json) provider/model names",
+      "Or check your config (apexo.json) provider/model names",
     ].join("\n")
   }
 

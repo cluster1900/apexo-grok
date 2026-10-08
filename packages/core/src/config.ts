@@ -4,9 +4,10 @@ import { makeLocationNode } from "./effect/app-node"
 import path from "path"
 import { type ParseError, parse } from "jsonc-parser"
 import { Context, Effect, Layer, Option, Schema } from "effect"
-import { Permission } from "@opencode-ai/schema/permission"
+import { Permission } from "@apexo/schema/permission"
 import { FSUtil } from "./fs-util"
 import { Global } from "./global"
+import { LEGACY_CONFIG_DIR, LEGACY_CONFIG_NAME } from "./legacy-compat"
 import { Location } from "./location"
 import { Policy } from "./policy"
 import { AbsolutePath } from "./schema"
@@ -130,7 +131,7 @@ export interface Interface {
   readonly entries: () => Effect.Effect<Entry[]>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Config") {}
+export class Service extends Context.Service<Service, Interface>()("@apexo/v2/Config") {}
 
 const layer = Layer.effect(
   Service,
@@ -139,9 +140,9 @@ const layer = Layer.effect(
     const global = yield* Global.Service
     const location = yield* Location.Service
     const policy = yield* Policy.Service
-    // Legacy opencode.json(c) first, then apexo.json(c) so Apexo files win within a directory.
-    const names = ["opencode.json", "opencode.jsonc", "apexo.json", "apexo.jsonc"]
-    const configDirs = [".apexo", ".opencode"]
+    // Legacy config names (legacy-compat.ts) first, then apexo.json(c) so Apexo files win within a directory.
+    const names = [`${LEGACY_CONFIG_NAME}.json`, `${LEGACY_CONFIG_NAME}.jsonc`, "apexo.json", "apexo.jsonc"]
+    const configDirs = [".apexo", LEGACY_CONFIG_DIR]
     const decodeOptions = { errors: "all", onExcessProperty: "ignore", propertyOrder: "original" } as const
     const decodeInfo = Schema.decodeUnknownOption(Info, decodeOptions)
     const decodeV1Info = Schema.decodeUnknownOption(ConfigV1.Info, decodeOptions)
@@ -201,7 +202,7 @@ const layer = Layer.effect(
     )
     const supplementary = yield* Effect.forEach(directories, loadDirectory).pipe(Effect.orDie)
     // Apply general settings first and more specific settings last:
-    // global config, project files, then `.opencode` files.
+    // global config, project files, then `.apexo` files.
     const configs = [...(supplementary[0] ?? []), ...direct, ...supplementary.slice(1).flat()]
     // Rules use the opposite order so a user-global rule can override a
     // repository rule. Statement order inside each file stays unchanged.

@@ -1,4 +1,4 @@
-import type { TuiPluginApi } from "@opencode-ai/plugin/tui"
+import type { TuiPluginApi } from "@apexo/plugin/tui"
 import { createMemo, For, type Accessor } from "solid-js"
 import { DEFAULT_THEMES, useTheme } from "../../context/theme"
 import { useCommandShortcut } from "../../keymap"
@@ -128,7 +128,7 @@ export function Tips(props: { api: TuiPluginApi; connected?: boolean }) {
     sessionQuickSwitch9: useCommandShortcut("session.quick_switch.9"),
     sessionSidebarToggle: configShortcut(props.api, "session.sidebar.toggle"),
     sessionTimeline: configShortcut(props.api, "session.timeline"),
-    statusView: useCommandShortcut("opencode.status"),
+    statusView: useCommandShortcut("apexo.status"),
     terminalSuspend: useCommandShortcut("terminal.suspend"),
     themeList: useCommandShortcut("theme.switch"),
   }
@@ -209,7 +209,7 @@ const TIPS: Tip[] = [
     if (!items.length) return undefined
     return `Use ${items.map(shortcutText).join(" / ")} for parent/child sessions`
   },
-  "Create {highlight}apexo.json{/highlight} (or {highlight}opencode.json{/highlight}) for server settings, and {highlight}tui.json{/highlight} for TUI",
+  "Create {highlight}apexo.json{/highlight} for server settings, and {highlight}tui.json{/highlight} for TUI",
   "Place TUI settings in {highlight}~/.config/apexo/tui.json{/highlight} for global config",
   "Add {highlight}$schema{/highlight} to your config for autocomplete in your editor",
   "Configure {highlight}model{/highlight} in config to set your default model",
@@ -241,9 +241,9 @@ const TIPS: Tip[] = [
   "Use {highlight}apexo run --attach{/highlight} to connect to a running server",
   "Run {highlight}apexo auth list{/highlight} to see all configured providers",
   "Run {highlight}apexo agent create{/highlight} for guided agent creation",
-  "Use {highlight}/opencode{/highlight} in GitHub issues/PRs to trigger AI actions",
+  "Use {highlight}/apexo{/highlight} in GitHub issues/PRs to trigger AI actions",
   "Run {highlight}apexo github install{/highlight} to set up the GitHub workflow",
-  "Comment {highlight}/opencode fix this{/highlight} on issues to auto-create PRs",
+  "Comment {highlight}/apexo fix this{/highlight} on issues to auto-create PRs",
   "Comment {highlight}/oc{/highlight} on PR code lines for targeted code reviews",
   'Use {highlight}"theme": "system"{/highlight} to match your terminal\'s colors',
   "Create JSON theme files in {highlight}.apexo/themes/{/highlight} directory",

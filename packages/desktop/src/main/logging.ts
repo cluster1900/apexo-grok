@@ -54,7 +54,7 @@ export async function exportDebugLogs() {
     await netLog.stopLogging().catch((error) => write("network", "failed to stop net log", { error }))
   }
 
-  const output = join(app.getPath("downloads"), `opencode-debug-${stamp()}.zip`)
+  const output = join(app.getPath("downloads"), `apexo-debug-${stamp()}.zip`)
   try {
     write("main", "exporting debug logs", { output })
     await writeZip(output, [
@@ -154,8 +154,8 @@ function serverLogRoots() {
   return [
     ...new Set([
       join(xdgData, "apexo", "log"),
-      join(xdgData, "opencode", "log"),
-      join(app.getPath("userData"), "opencode", "log"),
+      join(xdgData, "apexo", "log"),
+      join(app.getPath("userData"), "apexo", "log"),
     ]),
   ]
 }

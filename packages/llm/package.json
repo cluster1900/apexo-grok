@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "version": "1.18.35",
-  "name": "@opencode-ai/llm",
+  "name": "@apexo/llm",
   "type": "module",
   "license": "MIT",
   "private": true,
@@ -31,13 +31,13 @@
   "devDependencies": {
     "@clack/prompts": "1.0.0-alpha.1",
     "@effect/platform-node": "catalog:",
-    "@opencode-ai/http-recorder": "workspace:*",
+    "@apexo/http-recorder": "workspace:*",
     "@tsconfig/bun": "catalog:",
     "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:"
   },
   "dependencies": {
-    "@opencode-ai/schema": "workspace:*",
+    "@apexo/schema": "workspace:*",
     "effect": "catalog:"
   }
 }

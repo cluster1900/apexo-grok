@@ -19,7 +19,7 @@ body:
       required: false
 
   - type: input
-    id: opencode-version
+    id: apexo-version
     attributes:
       label: Apexo version
       description: What version of Apexo are you using? (`apexo --version`)

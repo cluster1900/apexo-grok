@@ -1,0 +1,4 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
+  "model": "anthropic/claude-sonnet"
+}

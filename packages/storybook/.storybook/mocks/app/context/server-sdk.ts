@@ -1,6 +1,6 @@
 const providers = [
-  "opencode",
-  "opencode-go",
+  "apexo",
+  "apexo-go",
   "anthropic",
   "openai",
   "google",

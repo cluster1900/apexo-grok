@@ -24,10 +24,11 @@ import { createStore, produce } from "solid-js/store"
 import { createSimpleContext } from "./helper"
 import { useKV } from "./kv"
 import { useTuiConfig } from "../config"
-import { Global } from "@opencode-ai/core/global"
-import { Glob } from "@opencode-ai/core/util/glob"
+import { Global } from "@apexo/core/global"
+import { Glob } from "@apexo/core/util/glob"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+import { LEGACY_CONFIG_DIR, LEGACY_THEME_ID } from "@apexo/core/legacy-compat"
 
 export type ThemeSource = Readonly<{
   discover(): Promise<Record<string, unknown>>
@@ -38,8 +39,8 @@ const themeSource: ThemeSource = {
   async discover() {
     const directories = [Global.Path.config]
     for (let current = process.cwd(); ; current = path.dirname(current)) {
-      directories.push(path.join(current, ".opencode"))
       directories.push(path.join(current, ".apexo"))
+      directories.push(path.join(current, LEGACY_CONFIG_DIR))
       if (path.dirname(current) === current) break
     }
     return discoverThemes(directories)
@@ -123,7 +124,8 @@ export const { use: useTheme, provider: ThemeProvider } = createSimpleContext({
         draft.mode = mode
         draft.lock = lock
         const active = config.theme ?? kv.get("theme", DEFAULT_THEME)
-        draft.active = typeof active === "string" ? active : DEFAULT_THEME
+        // The "Classic" theme used to have the legacy id (legacy-compat.ts).
+        draft.active = typeof active === "string" ? (active === LEGACY_THEME_ID ? "classic" : active) : DEFAULT_THEME
         draft.ready = false
       }),
     )
@@ -267,7 +269,7 @@ export const { use: useTheme, provider: ThemeProvider } = createSimpleContext({
         if (theme) return resolveTheme(theme, store.mode)
       }
 
-      return resolveTheme(store.themes[DEFAULT_THEME] ?? store.themes.opencode, store.mode)
+      return resolveTheme(store.themes[DEFAULT_THEME] ?? store.themes.classic, store.mode)
     })
 
     createEffect(() => renderer.setBackgroundColor(values().background))

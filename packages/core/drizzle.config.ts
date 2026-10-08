@@ -1,3 +1,5 @@
+import os from "os"
+import path from "path"
 import { defineConfig } from "drizzle-kit"
 
 export default defineConfig({
@@ -5,6 +7,6 @@ export default defineConfig({
   schema: ["./src/**/*.sql.ts", "./src/**/sql.ts"],
   out: "./migration",
   dbCredentials: {
-    url: "/home/thdxr/.local/share/opencode/opencode.db",
+    url: path.join(os.homedir(), ".local/share/apexo/apexo.db"),
   },
 })

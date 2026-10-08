@@ -1,10 +1,10 @@
-import { DialogBody, DialogHeader, DialogTitle, DialogV2 } from "@opencode-ai/ui/v2/dialog-v2"
-import { Icon } from "@opencode-ai/ui/v2/icon"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import { Tag } from "@opencode-ai/ui/v2/badge-v2"
-import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
-import { useTheme } from "@opencode-ai/ui/theme"
+import { DialogBody, DialogHeader, DialogTitle, DialogV2 } from "@apexo/ui/v2/dialog-v2"
+import { Icon } from "@apexo/ui/v2/icon"
+import { ProviderIcon } from "@apexo/ui/provider-icon"
+import { Tag } from "@apexo/ui/v2/badge-v2"
+import { TooltipV2 } from "@apexo/ui/v2/tooltip-v2"
+import { useDialog } from "@apexo/ui/context/dialog"
+import { useTheme } from "@apexo/ui/theme"
 import { createMemo, onCleanup, onMount, type Component, For, Show } from "solid-js"
 import { useLocal } from "@/context/local"
 import { useProviders } from "@/hooks/use-providers"
@@ -29,7 +29,7 @@ export const DialogSelectModelUnpaidV2: Component<{ model?: ModelState }> = (pro
     const c = model.current()
     return c ? `${c.provider.id}:${c.id}` : undefined
   })
-  // The hosted OpenCode free tier was removed; free models only come from user-configured providers.
+  // The hosted Apexo free tier was removed; free models only come from user-configured providers.
   const isFree = (item: ReturnType<ModelState["list"]>[number]) => !!item.cost && item.cost.input === 0
   const freeModels = createMemo(() => model.list().filter(isFree))
 

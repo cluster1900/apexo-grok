@@ -1,5 +1,5 @@
 {
-  "name": "opencode",
+  "name": "apexo",
   "displayName": "Apexo",
   "description": "Apexo (Grok-first coding agent) for VS Code",
   "version": "1.18.35",
@@ -27,7 +27,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "opencode.openTerminal",
+        "command": "apexo.openTerminal",
         "title": "Open Apexo",
         "icon": {
           "light": "images/button-dark.svg",
@@ -35,7 +35,7 @@
         }
       },
       {
-        "command": "opencode.openNewTerminal",
+        "command": "apexo.openNewTerminal",
         "title": "Open Apexo in new tab",
         "icon": {
           "light": "images/button-dark.svg",
@@ -43,21 +43,21 @@
         }
       },
       {
-        "command": "opencode.addFilepathToTerminal",
+        "command": "apexo.addFilepathToTerminal",
         "title": "Add Filepath to Terminal"
       }
     ],
     "menus": {
       "editor/title": [
         {
-          "command": "opencode.openNewTerminal",
+          "command": "apexo.openNewTerminal",
           "group": "navigation"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "opencode.openTerminal",
+        "command": "apexo.openTerminal",
         "title": "Run Apexo",
         "key": "cmd+escape",
         "mac": "cmd+escape",
@@ -65,7 +65,7 @@
         "linux": "ctrl+escape"
       },
       {
-        "command": "opencode.openNewTerminal",
+        "command": "apexo.openNewTerminal",
         "title": "Run Apexo",
         "key": "cmd+shift+escape",
         "mac": "cmd+shift+escape",
@@ -73,7 +73,7 @@
         "linux": "ctrl+shift+escape"
       },
       {
-        "command": "opencode.addFilepathToTerminal",
+        "command": "apexo.addFilepathToTerminal",
         "title": "Apexo: Insert At-Mentioned",
         "key": "cmd+alt+k",
         "mac": "cmd+alt+k",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "version": "1.18.35",
-  "name": "@opencode-ai/effect-sqlite-node",
+  "name": "@apexo/effect-sqlite-node",
   "type": "module",
   "license": "MIT",
   "private": true,

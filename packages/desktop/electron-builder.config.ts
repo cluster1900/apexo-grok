@@ -10,10 +10,10 @@ const packageDir = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(packageDir, "../..")
 const signScript = path.join(rootDir, "script", "sign-windows.ps1")
 // The Electron 42 packaging update briefly installed Linux launchers/icons under
-// "opencode-desktop". Keep that hidden desktop entry around so existing GNOME/KDE
-// pins still resolve after the canonical app id changes back to ai.opencode.desktop.
-const legacyDesktopEntry = path.join(packageDir, "resources", "linux", "opencode-desktop.desktop")
-const legacyDesktopEntryFpm = `${legacyDesktopEntry}=/usr/share/applications/opencode-desktop.desktop`
+// "apexo-desktop". Keep that hidden desktop entry around so existing GNOME/KDE
+// pins still resolve after the canonical app id changes back to com.apexolab.desktop.
+const legacyDesktopEntry = path.join(packageDir, "resources", "linux", "apexo-desktop.desktop")
+const legacyDesktopEntryFpm = `${legacyDesktopEntry}=/usr/share/applications/apexo-desktop.desktop`
 
 const metainfoFpm = (appId: string) =>
   `${path.join(packageDir, "resources", `${appId}.metainfo.xml`)}=/usr/share/metainfo/${appId}.metainfo.xml`
@@ -30,15 +30,15 @@ async function signWindows(configuration: { path: string }) {
 }
 
 const channel = (() => {
-  const raw = process.env.OPENCODE_CHANNEL
+  const raw = process.env.APEXO_CHANNEL
   if (raw === "dev" || raw === "beta" || raw === "prod") return raw
   return "dev"
 })()
 
 const APP_IDS = {
-  dev: "ai.opencode.desktop.dev",
-  beta: "ai.opencode.desktop.beta",
-  prod: "ai.opencode.desktop",
+  dev: "com.apexolab.desktop.dev",
+  beta: "com.apexolab.desktop.beta",
+  prod: "com.apexolab.desktop",
 } as const
 
 const getBase = (appId: string): Configuration => ({
@@ -48,21 +48,21 @@ const getBase = (appId: string): Configuration => ({
     buildResources: "resources",
   },
   // Linux launchers are .desktop files, so this is the desktop file name,
-  // not just the app id. For prod, app id "ai.opencode.desktop" becomes
-  // "ai.opencode.desktop.desktop".
+  // not just the app id. For prod, app id "com.apexolab.desktop" becomes
+  // "com.apexolab.desktop.desktop".
   // https://developer.gnome.org/documentation/guidelines/maintainer/integrating.html
   // https://www.electron.build/docs/linux/
   extraMetadata: {
     desktopName: `${appId}.desktop`,
   },
-  files: ["out/**/*", "resources/**/*", "!resources/opencode-cli*"],
+  files: ["out/**/*", "resources/**/*", "!resources/apexo-cli*"],
   extraResources: [
     ...(channel === "dev"
       ? [
           {
             from: "resources/",
             to: "",
-            filter: ["opencode-cli*"],
+            filter: ["apexo-cli*"],
           },
         ]
       : []),
@@ -87,7 +87,7 @@ const getBase = (appId: string): Configuration => ({
   },
   protocols: {
     name: "Apexo",
-    schemes: ["opencode"],
+    schemes: ["apexo"],
   },
   win: {
     icon: `resources/icons/icon.ico`,
@@ -129,7 +129,7 @@ function getConfig() {
         appId,
         productName: "Apexo Dev",
         deb: { fpm: [metainfoFpm(appId)] },
-        rpm: { packageName: "opencode-dev", fpm: [metainfoFpm(appId)] },
+        rpm: { packageName: "apexo-dev", fpm: [metainfoFpm(appId)] },
       }
     }
     case "beta": {
@@ -137,10 +137,10 @@ function getConfig() {
         ...base,
         appId,
         productName: "Apexo Beta",
-        protocols: { name: "Apexo Beta", schemes: ["opencode"] },
+        protocols: { name: "Apexo Beta", schemes: ["apexo"] },
         publish: null,
         deb: { fpm: [metainfoFpm(appId)] },
-        rpm: { packageName: "opencode-beta", fpm: [metainfoFpm(appId)] },
+        rpm: { packageName: "apexo-beta", fpm: [metainfoFpm(appId)] },
       }
     }
     case "prod": {
@@ -148,10 +148,10 @@ function getConfig() {
         ...base,
         appId,
         productName: "Apexo",
-        protocols: { name: "Apexo", schemes: ["opencode"] },
+        protocols: { name: "Apexo", schemes: ["apexo"] },
         publish: null,
         deb: { fpm: [metainfoFpm(appId), legacyDesktopEntryFpm] },
-        rpm: { packageName: "opencode", fpm: [metainfoFpm(appId), legacyDesktopEntryFpm] },
+        rpm: { packageName: "apexo", fpm: [metainfoFpm(appId), legacyDesktopEntryFpm] },
       }
     }
   }

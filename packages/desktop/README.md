@@ -22,7 +22,7 @@ bun run build && bun run package
 Notes:
 
 - The auto-updater is disabled because Apexo has no release feed yet.
-- The app ID (`ai.opencode.desktop*`) is unchanged so existing user data and OS integrations
+- The app ID (`com.apexolab.desktop*`) is unchanged so existing user data and OS integrations
   keep working.
 - Linux `.deb` packaging needs a maintainer email (`author.email` in `package.json`), which is
   not set.

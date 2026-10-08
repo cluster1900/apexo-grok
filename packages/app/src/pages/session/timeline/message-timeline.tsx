@@ -16,9 +16,9 @@ import { Dynamic } from "solid-js/web"
 import { useNavigate } from "@solidjs/router"
 import { useMutation } from "@tanstack/solid-query"
 import { createVirtualizer, defaultRangeExtractor, elementScroll, type VirtualItem } from "@tanstack/solid-virtual"
-import { Accordion } from "@opencode-ai/ui/accordion"
-import { Button } from "@opencode-ai/ui/button"
-import { Card } from "@opencode-ai/ui/card"
+import { Accordion } from "@apexo/ui/accordion"
+import { Button } from "@apexo/ui/button"
+import { Card } from "@apexo/ui/card"
 import {
   ContextToolGroup,
   Message,
@@ -26,41 +26,41 @@ import {
   Part as MessagePart,
   partDefaultOpen,
   type UserActions,
-} from "@opencode-ai/session-ui/message-part"
-import { DiffChanges } from "@opencode-ai/ui/diff-changes"
-import { FileIcon } from "@opencode-ai/ui/file-icon"
-import { Icon } from "@opencode-ai/ui/icon"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { Icon as IconV2 } from "@opencode-ai/ui/v2/icon"
-import { IconButtonV2 } from "@opencode-ai/ui/v2/icon-button-v2"
-import { DropdownMenu } from "@opencode-ai/ui/dropdown-menu"
-import { MenuV2 } from "@opencode-ai/ui/v2/menu-v2"
-import { Dialog } from "@opencode-ai/ui/dialog"
-import { DialogFooter, DialogHeader, DialogTitleGroup, DialogV2 } from "@opencode-ai/ui/v2/dialog-v2"
-import { InlineInput } from "@opencode-ai/ui/inline-input"
-import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
-import { SessionRetry } from "@opencode-ai/session-ui/session-retry"
-import { isScrollKeyTarget, scrollKey, scrollKeyOwner, ScrollView } from "@opencode-ai/ui/scroll-view"
-import { StickyAccordionHeader } from "@opencode-ai/ui/sticky-accordion-header"
-import { TextField } from "@opencode-ai/ui/text-field"
-import { TextReveal } from "@opencode-ai/ui/text-reveal"
-import { TextShimmer } from "@opencode-ai/ui/text-shimmer"
+} from "@apexo/session-ui/message-part"
+import { DiffChanges } from "@apexo/ui/diff-changes"
+import { FileIcon } from "@apexo/ui/file-icon"
+import { Icon } from "@apexo/ui/icon"
+import { IconButton } from "@apexo/ui/icon-button"
+import { Icon as IconV2 } from "@apexo/ui/v2/icon"
+import { IconButtonV2 } from "@apexo/ui/v2/icon-button-v2"
+import { DropdownMenu } from "@apexo/ui/dropdown-menu"
+import { MenuV2 } from "@apexo/ui/v2/menu-v2"
+import { Dialog } from "@apexo/ui/dialog"
+import { DialogFooter, DialogHeader, DialogTitleGroup, DialogV2 } from "@apexo/ui/v2/dialog-v2"
+import { InlineInput } from "@apexo/ui/inline-input"
+import { ButtonV2 } from "@apexo/ui/v2/button-v2"
+import { SessionRetry } from "@apexo/session-ui/session-retry"
+import { isScrollKeyTarget, scrollKey, scrollKeyOwner, ScrollView } from "@apexo/ui/scroll-view"
+import { StickyAccordionHeader } from "@apexo/ui/sticky-accordion-header"
+import { TextField } from "@apexo/ui/text-field"
+import { TextReveal } from "@apexo/ui/text-reveal"
+import { TextShimmer } from "@apexo/ui/text-shimmer"
 import type {
   AssistantMessage,
   Message as MessageType,
   Part as PartType,
   ToolPart,
   UserMessage,
-} from "@opencode-ai/sdk/v2"
+} from "@apexo/sdk/v2"
 import { showToast } from "@/utils/toast"
 import { downloadSessionExport, fetchSessionExport, sessionExportFilename } from "@/utils/session-export"
-import { getDirectory, getFilename } from "@opencode-ai/core/util/path"
+import { getDirectory, getFilename } from "@apexo/core/util/path"
 import { Popover as KobaltePopover } from "@kobalte/core/popover"
-import { normalize } from "@opencode-ai/session-ui/session-diff"
-import { useFileComponent } from "@opencode-ai/ui/context/file"
+import { normalize } from "@apexo/session-ui/session-diff"
+import { useFileComponent } from "@apexo/ui/context/file"
 import { shouldMarkBoundaryGesture, normalizeWheelDelta } from "@/pages/session/message-gesture"
 import { SessionContextUsage } from "@/components/session-context-usage"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { useDialog } from "@apexo/ui/context/dialog"
 import { useLanguage } from "@/context/language"
 import { useSessionKey } from "@/pages/session/session-layout"
 import { useSessionArchive } from "@/pages/session/session-archive"
@@ -299,7 +299,7 @@ export function MessageTimeline(props: {
   const titleValue = createMemo(() => info()?.title)
   const titleLabel = createMemo(() => sessionTitle(titleValue()))
   const shareUrl = createMemo(() => info()?.share?.url)
-  // Sharing to opencode.ai was removed from this build; keep the menu entries hidden.
+  // Sharing to the hosted share service was removed from this build; keep the menu entries hidden.
   const shareEnabled = createMemo(() => false)
   const parentID = createMemo(() => info()?.parentID)
   const parent = createMemo(() => {

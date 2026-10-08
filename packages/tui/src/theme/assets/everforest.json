@@ -1,5 +1,5 @@
 {
-  "$schema": "https://opencode.ai/theme.json",
+  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/theme.json",
   "defs": {
     "darkStep1": "#2d353b",
     "darkStep2": "#333c43",

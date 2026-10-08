@@ -1,11 +1,11 @@
-import { Button } from "@opencode-ai/ui/button"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
-import { Dialog } from "@opencode-ai/ui/dialog"
-import { DropdownMenu } from "@opencode-ai/ui/dropdown-menu"
-import { Icon } from "@opencode-ai/ui/icon"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { List } from "@opencode-ai/ui/list"
-import { TextField } from "@opencode-ai/ui/text-field"
+import { Button } from "@apexo/ui/button"
+import { useDialog } from "@apexo/ui/context/dialog"
+import { Dialog } from "@apexo/ui/dialog"
+import { DropdownMenu } from "@apexo/ui/dropdown-menu"
+import { Icon } from "@apexo/ui/icon"
+import { IconButton } from "@apexo/ui/icon-button"
+import { List } from "@apexo/ui/list"
+import { TextField } from "@apexo/ui/text-field"
 import { useMutation } from "@tanstack/solid-query"
 import { showToast } from "@/utils/toast"
 import { useNavigate } from "@solidjs/router"
@@ -21,7 +21,7 @@ import { type ServerHealth, useCheckServerHealth } from "@/utils/server-health"
 import { useSettings } from "@/context/settings"
 import { useTabs } from "@/context/tabs"
 
-const DEFAULT_USERNAME = "opencode"
+const DEFAULT_USERNAME = "apexo"
 
 interface ServerFormProps {
   value: string

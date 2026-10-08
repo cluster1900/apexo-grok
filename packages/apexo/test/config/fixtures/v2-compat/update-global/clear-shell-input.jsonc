@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
+  // Empty shell in a global update removes the setting.
+  "shell": "bash",
+  "model": { "providerID": "example", "model": "demo" },
+  "snapshots": false,
+}

@@ -1,4 +1,4 @@
-import { define } from "@opencode-ai/plugin/v2/effect/plugin"
+import { define } from "@apexo/plugin/v2/effect/plugin"
 import { Effect } from "effect"
 import type { Scope } from "effect"
 import { ModelV2 } from "../../model"

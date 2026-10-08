@@ -8,53 +8,53 @@ import {
   InvalidRequestReason,
   type LLMClientShape,
   type LLMRequest,
-} from "@opencode-ai/llm"
-import * as OpenAIChat from "@opencode-ai/llm/protocols/openai-chat"
-import { Database } from "@opencode-ai/core/database/database"
-import { makeLocationNode } from "@opencode-ai/core/effect/app-node"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNodePlatform } from "@opencode-ai/core/effect/app-node-platform"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { PermissionV2 } from "@opencode-ai/core/permission"
-import { EventTable } from "@opencode-ai/core/event/sql"
-import { Project } from "@opencode-ai/core/project"
-import { ProjectTable } from "@opencode-ai/core/project/sql"
-import { QuestionV2 } from "@opencode-ai/core/question"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { SessionV2 } from "@opencode-ai/core/session"
-import { Snapshot } from "@opencode-ai/core/snapshot"
-import { ContextSnapshotDecodeError } from "@opencode-ai/core/session/error"
-import { SessionEvent } from "@opencode-ai/core/session/event"
-import { SessionInput } from "@opencode-ai/core/session/input"
-import { SessionMessage } from "@opencode-ai/core/session/message"
-import { Prompt } from "@opencode-ai/core/session/prompt"
-import { SessionProjector } from "@opencode-ai/core/session/projector"
-import { SessionExecution } from "@opencode-ai/core/session/execution"
-import { SessionRunCoordinator } from "@opencode-ai/core/session/run-coordinator"
-import { SessionRunner } from "@opencode-ai/core/session/runner"
-import * as SessionRunnerLLM from "@opencode-ai/core/session/runner/llm"
-import { SessionRunnerModel } from "@opencode-ai/core/session/runner/model"
-import { ToolRegistry } from "@opencode-ai/core/tool/registry"
-import { ApplicationTools } from "@opencode-ai/core/tool/application-tools"
-import { AgentV2 } from "@opencode-ai/core/agent"
-import { Config } from "@opencode-ai/core/config"
-import { ConfigCompaction } from "@opencode-ai/core/config/compaction"
-import { Tool } from "@opencode-ai/core/tool/tool"
+} from "@apexo/llm"
+import * as OpenAIChat from "@apexo/llm/protocols/openai-chat"
+import { Database } from "@apexo/core/database/database"
+import { makeLocationNode } from "@apexo/core/effect/app-node"
+import { AppNodeBuilder } from "@apexo/core/effect/app-node-builder"
+import { LayerNodePlatform } from "@apexo/core/effect/app-node-platform"
+import { LayerNode } from "@apexo/core/effect/layer-node"
+import { EventV2 } from "@apexo/core/event"
+import { PermissionV2 } from "@apexo/core/permission"
+import { EventTable } from "@apexo/core/event/sql"
+import { Project } from "@apexo/core/project"
+import { ProjectTable } from "@apexo/core/project/sql"
+import { QuestionV2 } from "@apexo/core/question"
+import { AbsolutePath } from "@apexo/core/schema"
+import { SessionV2 } from "@apexo/core/session"
+import { Snapshot } from "@apexo/core/snapshot"
+import { ContextSnapshotDecodeError } from "@apexo/core/session/error"
+import { SessionEvent } from "@apexo/core/session/event"
+import { SessionInput } from "@apexo/core/session/input"
+import { SessionMessage } from "@apexo/core/session/message"
+import { Prompt } from "@apexo/core/session/prompt"
+import { SessionProjector } from "@apexo/core/session/projector"
+import { SessionExecution } from "@apexo/core/session/execution"
+import { SessionRunCoordinator } from "@apexo/core/session/run-coordinator"
+import { SessionRunner } from "@apexo/core/session/runner"
+import * as SessionRunnerLLM from "@apexo/core/session/runner/llm"
+import { SessionRunnerModel } from "@apexo/core/session/runner/model"
+import { ToolRegistry } from "@apexo/core/tool/registry"
+import { ApplicationTools } from "@apexo/core/tool/application-tools"
+import { AgentV2 } from "@apexo/core/agent"
+import { Config } from "@apexo/core/config"
+import { ConfigCompaction } from "@apexo/core/config/compaction"
+import { Tool } from "@apexo/core/tool/tool"
 import {
   SessionContextEpochTable,
   SessionInputTable,
   SessionMessageTable,
   SessionTable,
-} from "@opencode-ai/core/session/sql"
-import { SessionStore } from "@opencode-ai/core/session/store"
-import { SystemContext } from "@opencode-ai/core/system-context"
-import { SystemContextRegistry } from "@opencode-ai/core/system-context/registry"
-import { SkillGuidance } from "@opencode-ai/core/skill/guidance"
-import { ReferenceGuidance } from "@opencode-ai/core/reference/guidance"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { Location } from "@opencode-ai/core/location"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+} from "@apexo/core/session/sql"
+import { SessionStore } from "@apexo/core/session/store"
+import { SystemContext } from "@apexo/core/system-context"
+import { SystemContextRegistry } from "@apexo/core/system-context/registry"
+import { SkillGuidance } from "@apexo/core/skill/guidance"
+import { ReferenceGuidance } from "@apexo/core/reference/guidance"
+import { ModelV2 } from "@apexo/core/model"
+import { Location } from "@apexo/core/location"
+import { ProviderV2 } from "@apexo/core/provider"
 import { Cause, DateTime, Deferred, Effect, Exit, Fiber, Layer, Schema, Stream } from "effect"
 import { asc, eq } from "drizzle-orm"
 import { testEffect } from "./lib/effect"
@@ -1103,12 +1103,12 @@ describe("SessionRunnerLLM", () => {
       expect(requests).toHaveLength(2)
       expect(requests.map((request) => request.http?.headers)).toEqual([
         {
-          "x-opencode-session-id": sessionID,
+          "x-apexo-session-id": sessionID,
           "x-session-affinity": sessionID,
           "X-Session-Id": sessionID,
         },
         {
-          "x-opencode-session-id": sessionID,
+          "x-apexo-session-id": sessionID,
           "x-session-affinity": sessionID,
           "X-Session-Id": sessionID,
         },
@@ -2530,7 +2530,7 @@ describe("SessionRunnerLLM", () => {
       yield* session.resume(sessionID)
 
       expect(requests[0]?.http?.headers).toEqual({
-        "x-opencode-session-id": sessionID,
+        "x-apexo-session-id": sessionID,
         "x-session-affinity": sessionID,
         "X-Session-Id": sessionID,
       })
@@ -2555,8 +2555,8 @@ describe("SessionRunnerLLM", () => {
       yield* session.resume(sessionID)
 
       expect(requests[0]?.http?.headers).toEqual({
-        "x-opencode-session-id": sessionID,
-        "x-opencode-parent-session-id": parentID,
+        "x-apexo-session-id": sessionID,
+        "x-apexo-parent-session-id": parentID,
         "x-session-affinity": sessionID,
         "X-Session-Id": sessionID,
         "x-parent-session-id": parentID,

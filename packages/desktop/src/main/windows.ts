@@ -1,6 +1,6 @@
 import windowState from "electron-window-state"
-import { resolveThemeVariant } from "@opencode-ai/ui/theme/resolve"
-import type { DesktopTheme } from "@opencode-ai/ui/theme/types"
+import { resolveThemeVariant } from "@apexo/ui/theme/resolve"
+import type { DesktopTheme } from "@apexo/ui/theme/types"
 import groveThemeJson from "../../../ui/src/theme/themes/grove.json"
 import { randomUUID } from "node:crypto"
 import { rmSync } from "node:fs"
@@ -286,7 +286,7 @@ function windowStateFile(id: string) {
 // Mirrors windowStorage() in packages/app/src/utils/persist.ts, which names
 // the per-window renderer store this window persists its tabs into.
 function windowDataFile(id: string) {
-  return `opencode.window.${id.replace(/[^a-zA-Z0-9._-]/g, "-")}.dat`
+  return `apexo.window.${id.replace(/[^a-zA-Z0-9._-]/g, "-")}.dat`
 }
 
 export function registerRendererProtocol() {

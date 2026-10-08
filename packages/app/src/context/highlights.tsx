@@ -1,7 +1,7 @@
 import { createEffect, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
-import { createSimpleContext } from "@opencode-ai/ui/context"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { createSimpleContext } from "@apexo/ui/context"
+import { useDialog } from "@apexo/ui/context/dialog"
 import { usePlatform } from "@/context/platform"
 import { useSettings } from "@/context/settings"
 import { persisted } from "@/utils/persist"
@@ -154,7 +154,7 @@ export const { use: useHighlights, provider: HighlightsProvider } = createSimple
       setStore("version", platform.version)
     }
 
-    // Release notes used to be fetched from opencode.ai/changelog.json; hosted calls are removed in this build.
+    // Release notes used to be fetched from the upstream hosted changelog; hosted calls are removed in this build.
     const start = (_previous: string) => {
       markSeen()
     }

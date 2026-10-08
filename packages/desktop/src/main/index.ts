@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto"
-import { mkdirSync, rmSync } from "node:fs"
+import { existsSync, mkdirSync, rmSync } from "node:fs"
+import { LEGACY_DESKTOP_APP_ID } from "@apexo/core/legacy-compat"
 import * as http from "node:http"
 import { createServer } from "node:net"
 import { homedir, tmpdir } from "node:os"
@@ -45,7 +46,6 @@ import {
 import { createWslServersController } from "./wsl/servers"
 import { registerWslIpcHandlers } from "./wsl/ipc"
 import { spawnWslSidecar } from "./wsl/sidecar"
-import { migrate } from "./migrate"
 import { cleanupStoreFiles } from "./store-cleanup"
 import { startBackgroundCli } from "./background-cli"
 import { setNativeTranslations } from "./native-translations"
@@ -56,12 +56,20 @@ const APP_NAMES: Record<string, string> = {
   prod: "Apexo",
 }
 const APP_IDS: Record<string, string> = {
-  dev: "ai.opencode.desktop.dev",
-  beta: "ai.opencode.desktop.beta",
-  prod: "ai.opencode.desktop",
+  dev: "com.apexolab.desktop.dev",
+  beta: "com.apexolab.desktop.beta",
+  prod: "com.apexolab.desktop",
 }
-const TEST_ONBOARDING = process.env.OPENCODE_TEST_ONBOARDING === "1"
-const SIDECAR_VERSION = process.env.OPENCODE_SIDECAR_V2 === "1" ? "v2" : "v1"
+
+// Reuse the previous desktop app's data directory (legacy-compat.ts) until an Apexo one exists.
+function userDataDir(appId: string) {
+  const next = join(app.getPath("appData"), appId)
+  const legacy = join(app.getPath("appData"), appId.replace(/^com\.apexolab\.desktop/, LEGACY_DESKTOP_APP_ID))
+  return !existsSync(next) && existsSync(legacy) ? legacy : next
+}
+
+const TEST_ONBOARDING = process.env.APEXO_TEST_ONBOARDING === "1"
+const SIDECAR_VERSION = process.env.APEXO_SIDECAR_V2 === "1" ? "v2" : "v1"
 const jsCallStackFeature = "DocumentPolicyIncludeJSCallStacksInCrashReports"
 
 let logger: ReturnType<typeof initLogging>
@@ -120,18 +128,18 @@ const main = Effect.gen(function* () {
     process.chdir(homedir())
   } catch {}
 
-  process.env.OPENCODE_DISABLE_EMBEDDED_WEB_UI = "true"
+  process.env.APEXO_DISABLE_EMBEDDED_WEB_UI = "true"
 
-  const appId = app.isPackaged ? APP_IDS[CHANNEL] : "ai.opencode.desktop.dev"
+  const appId = app.isPackaged ? APP_IDS[CHANNEL] : "com.apexolab.desktop.dev"
   const onboardingTestRoot = ((): string | undefined => {
     if (!TEST_ONBOARDING) return
 
-    const root = join(tmpdir(), `opencode-onboarding-${randomUUID()}`)
+    const root = join(tmpdir(), `apexo-onboarding-${randomUUID()}`)
     rmSync(root, { recursive: true, force: true })
     ;["data", "config", "cache", "state", "desktop", "session"].forEach((dir) =>
       mkdirSync(join(root, dir), { recursive: true }),
     )
-    process.env.OPENCODE_DB = ":memory:"
+    process.env.APEXO_DB = ":memory:"
     process.env.XDG_DATA_HOME = join(root, "data")
     process.env.XDG_CONFIG_HOME = join(root, "config")
     process.env.XDG_CACHE_HOME = join(root, "cache")
@@ -140,10 +148,7 @@ const main = Effect.gen(function* () {
   })()
   app.setName(app.isPackaged ? APP_NAMES[CHANNEL] : "Apexo Dev")
   app.setAppUserModelId(appId)
-  app.setPath(
-    "userData",
-    onboardingTestRoot ? join(onboardingTestRoot, "desktop") : join(app.getPath("appData"), appId),
-  )
+  app.setPath("userData", onboardingTestRoot ? join(onboardingTestRoot, "desktop") : userDataDir(appId))
   if (onboardingTestRoot) app.setPath("sessionData", join(onboardingTestRoot, "session"))
   initializeOldLayoutEligibility(app.getPath("userData"))
   logger = initLogging()
@@ -203,7 +208,7 @@ const main = Effect.gen(function* () {
   const shellEnv = preferAppEnv(app.getPath("userData"))
 
   app.on("second-instance", (_event: Event, argv: string[]) => {
-    const urls = argv.filter((arg: string) => arg.startsWith("opencode://"))
+    const urls = argv.filter((arg: string) => arg.startsWith("apexo://"))
     if (urls.length) {
       logger.log("deep link received via second-instance", { urls })
       emitDeepLinks(urls)
@@ -254,7 +259,6 @@ const main = Effect.gen(function* () {
 
   yield* Effect.promise(() => app.whenReady())
 
-  if (!TEST_ONBOARDING) migrate()
   yield* Effect.promise(() => cleanupStoreFiles(app.getPath("userData"))).pipe(
     Effect.tap((result) =>
       Effect.sync(() => {
@@ -268,7 +272,7 @@ const main = Effect.gen(function* () {
       }),
     ),
   )
-  app.setAsDefaultProtocolClient("opencode")
+  app.setAsDefaultProtocolClient("apexo")
   registerRendererProtocol()
   setDockIcon()
   const updater = setupAutoUpdater(stopSidecars)
@@ -348,7 +352,7 @@ const main = Effect.gen(function* () {
     }
 
     const port = yield* Effect.gen(function* () {
-      const fromEnv = process.env.OPENCODE_PORT
+      const fromEnv = process.env.APEXO_PORT
       if (fromEnv) {
         const parsed = Number.parseInt(fromEnv, 10)
         if (!Number.isNaN(parsed)) return parsed
@@ -386,7 +390,7 @@ const main = Effect.gen(function* () {
     server = listener
     yield* Deferred.succeed(serverReady, {
       url,
-      username: "opencode",
+      username: "apexo",
       password,
     })
 

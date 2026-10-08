@@ -8,7 +8,7 @@ import type { PluginInternal } from "./internal"
 import type { Scope } from "effect"
 
 // Built-in providers are limited to xAI, OpenAI, Anthropic and Google. OpenAICompatiblePlugin and
-// DynamicProviderPlugin stay so custom providers declared in opencode.json keep working.
+// DynamicProviderPlugin stay so custom providers declared in apexo.json keep working.
 export const ProviderPlugins: PluginInternal.Plugin<PluginInternal.Requirements | Scope.Scope>[] = [
   AnthropicPlugin,
   GooglePlugin,

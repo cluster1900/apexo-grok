@@ -1,6 +1,7 @@
 import { Platform, usePlatform } from "@/context/platform"
 import { makePersisted, type AsyncStorage, type SyncStorage } from "@solid-primitives/storage"
-import { checksum } from "@opencode-ai/core/util/encode"
+import { checksum } from "@apexo/core/util/encode"
+import { LEGACY_STORAGE_PREFIX } from "@apexo/core/legacy-compat"
 import { createResource, type Accessor } from "solid-js"
 import type { SetStoreFunction, Store } from "solid-js/store"
 import { pathKey } from "@/utils/path-key"
@@ -25,10 +26,25 @@ type PersistTarget = {
 }
 
 const LEGACY_STORAGE = "default.dat"
-const GLOBAL_STORAGE = "opencode.global.dat"
-const WINDOW_STORAGE = "opencode.window"
-const LOCAL_PREFIX = "opencode."
+const GLOBAL_STORAGE = "apexo.global.dat"
+const WINDOW_STORAGE = "apexo.window"
+const LOCAL_PREFIX = "apexo."
 const fallback = new Map<string, boolean>()
+
+// Copy browser UI state saved under the legacy storage prefix (legacy-compat.ts) to the Apexo keys once.
+function adoptLegacyLocalStorage() {
+  try {
+    if (typeof localStorage === "undefined") return
+    const keys = Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index))
+    for (const key of keys) {
+      if (!key?.startsWith(LEGACY_STORAGE_PREFIX)) continue
+      const next = LOCAL_PREFIX + key.slice(LEGACY_STORAGE_PREFIX.length)
+      const value = localStorage.getItem(key)
+      if (value !== null && localStorage.getItem(next) === null) localStorage.setItem(next, value)
+    }
+  } catch {}
+}
+adoptLegacyLocalStorage()
 
 const CACHE_MAX_ENTRIES = 500
 const CACHE_MAX_BYTES = 8 * 1024 * 1024
@@ -349,13 +365,13 @@ async function migrateLegacyAsync(input: {
 function workspaceStorage(dir: string) {
   const head = (dir.slice(0, 12) || "workspace").replace(/[^a-zA-Z0-9._-]/g, "-")
   const sum = checksum(dir) ?? "0"
-  return `opencode.workspace.${head}.${sum}.dat`
+  return `apexo.workspace.${head}.${sum}.dat`
 }
 
 function draftStorage(draftID: string) {
   const head = (draftID.slice(0, 12) || "draft").replace(/[^a-zA-Z0-9._-]/g, "-")
   const sum = checksum(draftID) ?? "0"
-  return `opencode.draft.${head}.${sum}.dat`
+  return `apexo.draft.${head}.${sum}.dat`
 }
 
 function windowStorage(windowID: string) {

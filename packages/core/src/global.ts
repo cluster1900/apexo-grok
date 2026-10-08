@@ -7,15 +7,15 @@ import { Context, Effect, Layer } from "effect"
 import { Flock } from "./util/flock"
 import { Flag } from "./flag/flag"
 import { makeGlobalNode } from "./effect/app-node"
+import { LEGACY_APP_DIR_NAME } from "./legacy-compat"
 
-// Apexo stores its files under "apexo" directories. Existing OpenCode installs keep
-// working: if an "apexo" directory does not exist yet but a legacy "opencode" one does,
-// the legacy directory is used so sessions, auth and config are not lost.
-// OPENCODE_APP_DIR_NAME (or APEXO_APP_DIR_NAME) forces a specific directory name.
+// Apexo stores its files under "apexo" directories. If an "apexo" directory does not exist yet
+// but a legacy one does (see legacy-compat.ts), the legacy directory is used so sessions, auth
+// and config are not lost. APEXO_APP_DIR_NAME forces a specific directory name.
 export const APP_DIR_NAME = "apexo"
-export const LEGACY_APP_DIR_NAME = "opencode"
+export { LEGACY_APP_DIR_NAME }
 
-export function resolveAppDir(base: string, forced = process.env.OPENCODE_APP_DIR_NAME) {
+export function resolveAppDir(base: string, forced = process.env.APEXO_APP_DIR_NAME) {
   if (forced) return path.join(base, forced)
   const next = path.join(base, APP_DIR_NAME)
   if (existsSync(next)) return next
@@ -28,11 +28,11 @@ const data = resolveAppDir(xdgData!)
 const cache = resolveAppDir(xdgCache!)
 const config = resolveAppDir(xdgConfig!)
 const state = resolveAppDir(xdgState!)
-const tmp = path.join(os.tmpdir(), process.env.OPENCODE_APP_DIR_NAME || APP_DIR_NAME)
+const tmp = path.join(os.tmpdir(), process.env.APEXO_APP_DIR_NAME || APP_DIR_NAME)
 
 const paths = {
   get home() {
-    return process.env.OPENCODE_TEST_HOME ?? os.homedir()
+    return process.env.APEXO_TEST_HOME ?? os.homedir()
   },
   data,
   bin: path.join(cache, "bin"),
@@ -58,7 +58,7 @@ await Promise.all([
   fs.mkdir(Path.repos, { recursive: true }),
 ])
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Global") {}
+export class Service extends Context.Service<Service, Interface>()("@apexo/Global") {}
 
 export interface Interface {
   readonly home: string
@@ -77,7 +77,7 @@ export function make(input: Partial<Interface> = {}): Interface {
     home: Path.home,
     data: Path.data,
     cache: Path.cache,
-    config: Flag.OPENCODE_CONFIG_DIR ?? Path.config,
+    config: Flag.APEXO_CONFIG_DIR ?? Path.config,
     state: Path.state,
     tmp: Path.tmp,
     bin: Path.bin,

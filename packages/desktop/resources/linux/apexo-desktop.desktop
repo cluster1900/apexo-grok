@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Apexo
+Exec=/opt/Apexo/com.apexolab.desktop %U
+Terminal=false
+Type=Application
+Icon=com.apexolab.desktop
+StartupWMClass=com.apexolab.desktop
+NoDisplay=true
+Comment=Open source AI coding agent
+Categories=Development;

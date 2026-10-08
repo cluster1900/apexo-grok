@@ -1,8 +1,8 @@
-import { createOpencodeClient, createOpencodeServer } from "@opencode-ai/sdk"
+import { createApexoClient, createApexoServer } from "@apexo/sdk"
 import { pathToFileURL } from "bun"
 
-const server = await createOpencodeServer()
-const client = createOpencodeClient({ baseUrl: server.url })
+const server = await createApexoServer()
+const client = createApexoClient({ baseUrl: server.url })
 
 const input = await Array.fromAsync(new Bun.Glob("packages/core/*.ts").scan())
 

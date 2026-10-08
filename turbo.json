@@ -2,11 +2,11 @@
   "$schema": "https://v2-8-13.turborepo.dev/schema.json",
   "globalEnv": [
     "CI",
-    "OPENCODE_DISABLE_SHARE"
+    "APEXO_DISABLE_SHARE"
   ],
   "globalPassThroughEnv": [
     "CI",
-    "OPENCODE_DISABLE_SHARE"
+    "APEXO_DISABLE_SHARE"
   ],
   "tasks": {
     "typecheck": {},
@@ -16,7 +16,7 @@
         "dist/**"
       ]
     },
-    "opencode#test": {
+    "apexo#test": {
       "dependsOn": [
         "^build"
       ],
@@ -25,25 +25,25 @@
         "*"
       ]
     },
-    "@opencode-ai/core#test": {
+    "@apexo/core#test": {
       "dependsOn": [
         "^build"
       ],
       "outputs": []
     },
-    "@opencode-ai/app#test": {
+    "@apexo/app#test": {
       "dependsOn": [
         "^build"
       ],
       "outputs": []
     },
-    "@opencode-ai/ui#test": {
+    "@apexo/ui#test": {
       "dependsOn": [
         "^build"
       ],
       "outputs": []
     },
-    "@opencode-ai/session-ui#test": {
+    "@apexo/session-ui#test": {
       "dependsOn": [
         "^build"
       ],

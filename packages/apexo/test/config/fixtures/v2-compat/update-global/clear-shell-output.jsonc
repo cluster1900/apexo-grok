@@ -1,0 +1,5 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
+  "model": { "providerID": "example", "model": "demo" },
+  "snapshots": false,
+}
