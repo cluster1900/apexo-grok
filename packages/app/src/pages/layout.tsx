@@ -2195,9 +2195,6 @@ export default function LegacyLayout(props: ParentProps) {
               <div class="flex flex-col gap-2">
                 <div class="text-14-medium text-text-strong">{language.t("sidebar.gettingStarted.title")}</div>
                 <div class="text-14-regular text-text-base" style={{ "line-height": "var(--line-height-normal)" }}>
-                  {language.t("sidebar.gettingStarted.line1")}
-                </div>
-                <div class="text-14-regular text-text-base" style={{ "line-height": "var(--line-height-normal)" }}>
                   {language.t("sidebar.gettingStarted.line2")}
                 </div>
               </div>
@@ -2238,7 +2235,7 @@ export default function LegacyLayout(props: ParentProps) {
       settingsKeybind={() => command.keybind("settings.open")}
       onOpenSettings={openSettings}
       helpLabel={() => language.t("sidebar.help")}
-      onOpenHelp={() => platform.openExternal("https://opencode.ai/desktop-feedback")}
+      onOpenHelp={() => platform.openExternal("https://github.com/anomalyco/opencode/issues")}
       renderPanel={() =>
         mobile ? <SidebarPanel project={currentProject} mobile /> : <SidebarPanel project={currentProject} merged />
       }

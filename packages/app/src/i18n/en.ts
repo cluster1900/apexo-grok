@@ -127,9 +127,9 @@ export const dict = {
   "dialog.model.manage.description": "Customize which models appear in the model selector.",
   "dialog.model.manage.provider.toggle": "Toggle all {{provider}} models",
 
-  "dialog.model.unpaid.freeModels.title": "Free models provided by OpenCode",
+  "dialog.model.unpaid.freeModels.title": "Free models",
   "dialog.model.unpaid.addMore.title": "Add more models from popular providers",
-  "dialog.model.unpaid.viewMoreProviders": "See 70+ more providers",
+  "dialog.model.unpaid.viewMoreProviders": "See all providers",
 
   "dialog.provider.viewAll": "Show more providers",
 
@@ -848,7 +848,7 @@ export const dict = {
   "sidebar.workspaces.disable": "Disable workspaces",
   "sidebar.gettingStarted.title": "Getting started",
   "sidebar.gettingStarted.line1": "OpenCode includes free models so you can start immediately.",
-  "sidebar.gettingStarted.line2": "Connect any provider to use models, inc. Claude, GPT, Gemini etc.",
+  "sidebar.gettingStarted.line2": "Connect xAI (SuperGrok / X Premium or API key), OpenAI, Anthropic or Google to start.",
   "sidebar.project.recentSessions": "Recent sessions",
   "sidebar.project.viewAllSessions": "View all sessions",
   "sidebar.project.clearNotifications": "Clear notifications",

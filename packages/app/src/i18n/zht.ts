@@ -227,9 +227,9 @@ export const dict = {
   "dialog.model.manage.description": "自訂模型選擇器中顯示的模型。",
   "dialog.model.manage.provider.toggle": "切換所有 {{provider}} 模型",
 
-  "dialog.model.unpaid.freeModels.title": "OpenCode 提供的免費模型",
+  "dialog.model.unpaid.freeModels.title": "免費模型",
   "dialog.model.unpaid.addMore.title": "從熱門提供者新增更多模型",
-  "dialog.model.unpaid.viewMoreProviders": "查看另外 70 多個提供者",
+  "dialog.model.unpaid.viewMoreProviders": "查看全部提供者",
 
   "dialog.provider.viewAll": "查看更多提供者",
 
@@ -865,7 +865,7 @@ export const dict = {
   "sidebar.workspaces.disable": "停用工作區",
   "sidebar.gettingStarted.title": "開始使用",
   "sidebar.gettingStarted.line1": "OpenCode 提供免費模型，你可以立即開始使用。",
-  "sidebar.gettingStarted.line2": "連線任意提供者即可使用更多模型，如 Claude、GPT、Gemini 等。",
+  "sidebar.gettingStarted.line2": "連線 xAI（SuperGrok / X Premium 或 API Key）、OpenAI、Anthropic 或 Google 即可開始。",
   "sidebar.project.recentSessions": "最近工作階段",
   "sidebar.project.viewAllSessions": "查看全部工作階段",
   "sidebar.project.clearNotifications": "清除通知",

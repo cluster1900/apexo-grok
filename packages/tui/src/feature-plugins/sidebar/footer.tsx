@@ -49,9 +49,8 @@ function View(props: { api: TuiPluginApi; sessionID: string }) {
                 ✕
               </text>
             </box>
-            <text fg={theme().textMuted}>OpenCode includes free models so you can start immediately.</text>
             <text fg={theme().textMuted}>
-              Connect from 75+ providers to use other models, including Claude, GPT, Gemini etc
+              Connect xAI (SuperGrok / X Premium or API key), OpenAI, Anthropic or Google to start.
             </text>
             <box flexDirection="row" gap={1} justifyContent="space-between">
               <text fg={theme().text}>Connect provider</text>
@@ -65,7 +64,7 @@ function View(props: { api: TuiPluginApi; sessionID: string }) {
         <span style={{ fg: theme().text }}>{path().name}</span>
       </text>
       <text fg={theme().textMuted}>
-        <span style={{ fg: theme().success }}>•</span> <b>Open</b>
+        <span style={{ fg: theme().primary }}>•</span> <b>Open</b>
         <span style={{ fg: theme().text }}>
           <b>Code</b>
         </span>{" "}
