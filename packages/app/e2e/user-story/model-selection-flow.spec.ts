@@ -4,9 +4,9 @@ import { expectAppVisible } from "../utils/waits"
 
 const directory = "C:/Apexo/NewProject"
 
-test("creates a session in a new project, connects Apexo Go, and selects its model", async ({ page }) => {
-  let connectedGo = false
-  let pendingGo = false
+test("creates a session in a new project, connects xAI, and selects its model", async ({ page }) => {
+  let connectedXai = false
+  let pendingXai = false
   const connections: Array<{ integrationID: string; body: unknown }> = []
 
   await mockApexoServer(page, {
@@ -22,8 +22,8 @@ test("creates a session in a new project, connects Apexo Go, and selects its mod
     provider: () => ({
       all: [
         {
-          id: "apexo",
-          name: "Apexo",
+          id: "ollama",
+          name: "Ollama (local)",
           models: {
             "free-model": {
               id: "free-model",
@@ -34,28 +34,28 @@ test("creates a session in a new project, connects Apexo Go, and selects its mod
           },
         },
         {
-          id: "apexo-go",
-          name: "Apexo Go",
+          id: "xai",
+          name: "xAI",
           models: {
-            "go-model-1": {
-              id: "go-model-1",
-              name: "Go Model 1",
+            "grok-model-1": {
+              id: "grok-model-1",
+              name: "Grok Model 1",
               cost: { input: 1, output: 1 },
               limit: { context: 200_000 },
             },
           },
         },
       ],
-      connected: connectedGo ? ["apexo", "apexo-go"] : ["apexo"],
-      default: { providerID: "apexo", modelID: "free-model" },
+      connected: connectedXai ? ["ollama", "xai"] : ["ollama"],
+      default: { providerID: "ollama", modelID: "free-model" },
     }),
-    integrationMethods: { "apexo-go": [{ type: "api", label: "API key" }] },
+    integrationMethods: { xai: [{ type: "api", label: "API key" }] },
     onConnectKey: (input) => {
       connections.push(input)
-      if (input.integrationID === "apexo-go") pendingGo = true
+      if (input.integrationID === "xai") pendingXai = true
     },
     onInstanceDispose: () => {
-      if (pendingGo) connectedGo = true
+      if (pendingXai) connectedXai = true
     },
     sessions: [],
     pageMessages: () => ({ items: [] }),
@@ -79,19 +79,19 @@ test("creates a session in a new project, connects Apexo Go, and selects its mod
 
   const modelControl = page.locator('[data-action="prompt-model"]')
   await modelControl.click()
-  await expect(page.locator('[data-section="free-models"]')).toContainText("Free models provided by Apexo")
+  await expect(page.locator('[data-section="free-models"]')).toContainText("Free models")
 
-  await page.locator('[data-provider-id="apexo-go"]').click()
-  await page.locator('[data-input="provider-api-key"]').fill("mock-go-api-key")
+  await page.locator('[data-provider-id="xai"]').click()
+  await page.locator('[data-input="provider-api-key"]').fill("mock-xai-api-key")
   await page.locator('[data-action="provider-connect-submit"]').click()
   await expect(page.locator('[data-component="dialog-v2"]')).toHaveCount(0)
-  expect(connections).toEqual([{ integrationID: "apexo-go", body: { type: "api", key: "mock-go-api-key" } }])
+  expect(connections).toEqual([{ integrationID: "xai", body: { type: "api", key: "mock-xai-api-key" } }])
 
   await expect(modelControl).toHaveAttribute("data-control-type", "popover")
   await modelControl.click()
-  const goModel = page.locator('[data-option-key="apexo-go:go-model-1"]')
-  await expect(goModel).toBeVisible()
-  await goModel.click()
+  const grokModel = page.locator('[data-option-key="xai:grok-model-1"]')
+  await expect(grokModel).toBeVisible()
+  await grokModel.click()
 
-  await expect(modelControl).toContainText("Go Model 1")
+  await expect(modelControl).toContainText("Grok Model 1")
 })

@@ -25,13 +25,13 @@ test("expands a folder whose path has a trailing Windows separator", async ({ pa
     provider: {
       all: [
         {
-          id: "apexo",
-          name: "Apexo",
+          id: "test",
+          name: "Test",
           models: { test: { id: "test", name: "Test", limit: { context: 200_000 } } },
         },
       ],
-      connected: ["apexo"],
-      default: { providerID: "apexo", modelID: "test" },
+      connected: ["test"],
+      default: { providerID: "test", modelID: "test" },
     },
     sessions: [
       {

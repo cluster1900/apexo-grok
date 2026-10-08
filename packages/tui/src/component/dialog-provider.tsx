@@ -11,7 +11,6 @@ import { TextAttributes } from "@opentui/core"
 import type { ProviderAuthAuthorization, ProviderAuthMethod } from "@apexo/sdk/v2"
 import { DialogModel } from "./dialog-model"
 import { useToast } from "../ui/toast"
-import { isConsoleManagedProvider } from "../util/provider-origin"
 import { useConnected } from "./use-connected"
 import { useBindings } from "../keymap"
 import { useClipboard } from "../context/clipboard"
@@ -93,9 +92,7 @@ export function createDialogProviderOptions() {
     const value = await DialogPrompt.show(dialog, "Other", {
       placeholder: "Provider id",
       description: () => (
-        <text fg={theme.textMuted}>
-          This only stores a credential. Configure the provider in apexo.json to use it.
-        </text>
+        <text fg={theme.textMuted}>This only stores a credential. Configure the provider in apexo.json to use it.</text>
       ),
     })
     if (value === null) return
@@ -130,19 +127,15 @@ export function createDialogProviderOptions() {
         }
 
         const providerID = provider.providerID
-        const consoleManaged = isConsoleManagedProvider(sync.data.console_state.consoleManagedProviders, providerID)
         const connected = sync.data.provider_next.connected.includes(providerID)
 
         return {
           title: provider.title,
           value: provider.value,
           description: provider.description,
-          footer: consoleManaged ? sync.data.console_state.activeOrgName : undefined,
           category: provider.category,
           gutter: connected && onboarded() ? () => <text fg={theme.success}>✓</text> : undefined,
           async onSelect() {
-            if (consoleManaged) return
-
             const methods = sync.data.provider_auth[providerID] ?? [
               {
                 type: "api",
@@ -358,7 +351,6 @@ function ApiMethod(props: ApiMethodProps) {
   const sdk = useSDK()
   const sync = useSync()
   const toast = useToast()
-  const { theme } = useTheme()
 
   return (
     <DialogPrompt

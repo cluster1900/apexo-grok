@@ -79,13 +79,13 @@ async function setup(page: Page) {
     provider: {
       all: [
         {
-          id: "apexo",
-          name: "Apexo",
+          id: "test",
+          name: "Test",
           models: { test: { id: "test", name: "Test", limit: { context: 200_000 } } },
         },
       ],
-      connected: ["apexo"],
-      default: { providerID: "apexo", modelID: "test" },
+      connected: ["test"],
+      default: { providerID: "test", modelID: "test" },
     },
     sessions: [session(sessionA, titleA, 1700000000000), session(sessionB, titleB, 1700000001000)],
     pageMessages: () => ({ items: [] }),

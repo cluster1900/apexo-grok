@@ -15,12 +15,10 @@ import { applyEdits, modify } from "jsonc-parser"
 import { InstallationLocal, InstallationVersion } from "@apexo/core/installation/version"
 import { existsSync } from "fs"
 import { isRecord } from "@/util/record"
-import type { ConsoleState } from "@apexo/core/v1/config/console-state"
 import { FSUtil } from "@apexo/core/fs-util"
 import { InstanceState } from "@/effect/instance-state"
-import { Context, Duration, Effect, Exit, Fiber, Layer, Option, Schema } from "effect"
-import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/unstable/http"
-import { EffectFlock } from "@apexo/core/util/effect-flock"
+import { Context, Duration, Effect, Exit, Fiber, Layer, Schema } from "effect"
+import { HttpClient, HttpClientRequest } from "effect/unstable/http"
 import { containsPath, type InstanceContext } from "../project/instance-context"
 import { ConfigV1 } from "@apexo/core/v1/config/config"
 import { RemoteAuthError } from "@apexo/core/v1/config/error"
@@ -119,13 +117,11 @@ type State = {
   config: Info
   directories: string[]
   deps: Fiber.Fiber<void>[]
-  consoleState: ConsoleState
 }
 
 export interface Interface {
   readonly get: () => Effect.Effect<Info>
   readonly getGlobal: () => Effect.Effect<Info>
-  readonly getConsoleState: () => Effect.Effect<ConsoleState>
   readonly update: (config: Info) => Effect.Effect<void>
   readonly updateGlobal: (config: Info) => Effect.Effect<{ info: Info; changed: boolean }>
   readonly invalidate: () => Effect.Effect<void>
@@ -180,7 +176,6 @@ const layer = Layer.effect(
   Effect.gen(function* () {
     const fs = yield* FSUtil.Service
     const authSvc = yield* Auth.Service
-    const env = yield* Env.Service
     const npmSvc = yield* Npm.Service
     const http = yield* HttpClient.HttpClient
 
@@ -245,7 +240,10 @@ const layer = Layer.effect(
       yield* Effect.promise(() => resolveLoadedPlugins(data, options.path))
       if (!data.$schema) {
         data.$schema = "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json"
-        const updated = text.replace(/^\s*\{/, '{\n  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",')
+        const updated = text.replace(
+          /^\s*\{/,
+          '{\n  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",',
+        )
         yield* fs.writeFileString(options.path, updated).pipe(Effect.catch(() => Effect.void))
       }
       return data
@@ -266,7 +264,14 @@ const layer = Layer.effect(
         const file = globalConfigFile()
         if (!existsSync(file)) {
           yield* fs
-            .writeWithDirs(file, JSON.stringify({ $schema: "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json" }, null, 2))
+            .writeWithDirs(
+              file,
+              JSON.stringify(
+                { $schema: "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json" },
+                null,
+                2,
+              ),
+            )
             .pipe(Effect.catch(() => Effect.void))
         }
       }
@@ -333,8 +338,6 @@ const layer = Layer.effect(
 
         let result: Info = {}
         const authEnv: Record<string, string> = {}
-        const consoleManagedProviders = new Set<string>()
-        let activeOrgName: string | undefined
 
         const pluginScopeForSource = Effect.fnUntraced(function* (source: string) {
           if (source.startsWith("http://") || source.startsWith("https://")) return "global"
@@ -396,7 +399,8 @@ const layer = Layer.effect(
                 })
               : {}
             const remoteConfig = mergeConfig(isRecord(wellknown.config) ? wellknown.config : {}, fetchedConfig)
-            if (!remoteConfig.$schema) remoteConfig.$schema = "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json"
+            if (!remoteConfig.$schema)
+              remoteConfig.$schema = "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json"
             const source = wellknownURL
             const next = yield* loadConfig(
               JSON.stringify(remoteConfig),
@@ -420,7 +424,9 @@ const layer = Layer.effect(
         }
 
         if (!Flag.APEXO_DISABLE_PROJECT_CONFIG) {
-          for (const file of yield* ConfigPaths.files(ConfigPaths.CONFIG_NAMES, ctx.directory, ctx.worktree).pipe(Effect.orDie)) {
+          for (const file of yield* ConfigPaths.files(ConfigPaths.CONFIG_NAMES, ctx.directory, ctx.worktree).pipe(
+            Effect.orDie,
+          )) {
             yield* merge(file, yield* loadFile(file, authEnv), "local")
           }
         }
@@ -550,10 +556,6 @@ const layer = Layer.effect(
           }
         }
 
-        if (result.autoshare === true && !result.share) {
-          result.share = "auto"
-        }
-
         if (Flag.APEXO_DISABLE_AUTOCOMPACT) {
           result.compaction = { ...result.compaction, auto: false }
         }
@@ -565,11 +567,6 @@ const layer = Layer.effect(
           config: result,
           directories,
           deps,
-          consoleState: {
-            consoleManagedProviders: Array.from(consoleManagedProviders),
-            activeOrgName,
-            switchableOrgCount: 0,
-          },
         }
       },
       Effect.provideService(FSUtil.Service, fs),
@@ -587,10 +584,6 @@ const layer = Layer.effect(
 
     const directories = Effect.fn("Config.directories")(function* () {
       return yield* InstanceState.use(state, (s) => s.directories)
-    })
-
-    const getConsoleState = Effect.fn("Config.getConsoleState")(function* () {
-      return yield* InstanceState.use(state, (s) => s.consoleState)
     })
 
     const waitForDependencies = Effect.fn("Config.waitForDependencies")(function* () {
@@ -646,7 +639,6 @@ const layer = Layer.effect(
     return Service.of({
       get,
       getGlobal,
-      getConsoleState,
       update,
       updateGlobal,
       invalidate,

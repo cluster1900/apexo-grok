@@ -10,9 +10,6 @@ import type { ProviderMetadata, Usage } from "@apexo/llm"
 import { InstallationVersion } from "@apexo/core/installation/version"
 import { Database } from "@apexo/core/database/database"
 import { EventV2Bridge } from "@/event-v2-bridge"
-import { SessionV2 } from "@apexo/core/session"
-import * as SessionExecutionLocal from "@apexo/core/session/execution/local"
-import { locationServiceMapLayer } from "@apexo/core/location-services"
 
 import { NotFoundError } from "@/storage/storage"
 import { eq } from "drizzle-orm"
@@ -442,7 +439,6 @@ export interface Interface {
   }) => Effect.Effect<void>
   readonly clearRevert: (sessionID: SessionID) => Effect.Effect<void>
   readonly setSummary: (input: { sessionID: SessionID; summary: Info["summary"] }) => Effect.Effect<void>
-  readonly setShare: (input: { sessionID: SessionID; share: Info["share"] }) => Effect.Effect<void>
   readonly setWorkspace: (input: { sessionID: SessionID; workspaceID: Info["workspaceID"] }) => Effect.Effect<void>
   readonly diff: (sessionID: SessionID) => Effect.Effect<Snapshot.FileDiff[]>
   readonly messages: (input: { sessionID: SessionID; limit?: number }) => Effect.Effect<SessionV1.WithParts[], NotFound>
@@ -807,10 +803,6 @@ const layer: Layer.Layer<
       yield* patch(input.sessionID, { time: { updated: Date.now() }, summary: input.summary }).pipe(Effect.orDie)
     })
 
-    const setShare = Effect.fn("Session.setShare")(function* (input: { sessionID: SessionID; share: Info["share"] }) {
-      yield* patch(input.sessionID, { share: input.share ?? null, time: { updated: Date.now() } }).pipe(Effect.orDie)
-    })
-
     const setWorkspace = Effect.fn("Session.setWorkspace")(function* (input: {
       sessionID: SessionID
       workspaceID: Info["workspaceID"]
@@ -918,7 +910,6 @@ const layer: Layer.Layer<
       setRevert,
       clearRevert,
       setSummary,
-      setShare,
       setWorkspace,
       diff,
       messages,

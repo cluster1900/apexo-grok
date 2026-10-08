@@ -3,7 +3,6 @@ import type { DesktopNativeKey } from "./i18n/desktop-native"
 export type DesktopMenuPlatform = "macos" | "windows"
 
 export type DesktopMenuAction =
-  | "app.checkForUpdates"
   | "app.relaunch"
   | "edit.undo"
   | "edit.redo"
@@ -52,7 +51,6 @@ export type DesktopMenuItem = {
   role?: DesktopMenuRole
   href?: string
   accelerator?: Partial<Record<DesktopMenuPlatform, string>>
-  enabled?: "updater"
   platforms?: DesktopMenuPlatform[]
 }
 
@@ -78,12 +76,6 @@ export const DESKTOP_MENU: DesktopMenu[] = [
     platforms: ["macos"],
     items: [
       { type: "item", role: "about" },
-      {
-        type: "item",
-        labelKey: "desktop.menu.checkForUpdates",
-        action: "app.checkForUpdates",
-        enabled: "updater",
-      },
       { type: "item", labelKey: "desktop.menu.settings", command: "settings.open", accelerator: { macos: "Cmd+," } },
       { type: "item", labelKey: "desktop.menu.reloadWebview", action: "view.reload" },
       { type: "item", labelKey: "desktop.menu.restart", action: "app.relaunch" },
@@ -279,7 +271,11 @@ export const DESKTOP_MENU: DesktopMenu[] = [
     id: "help",
     labelKey: "desktop.menu.help",
     items: [
-      { type: "item", labelKey: "desktop.menu.documentation", href: "https://github.com/cluster1900/apexo-grok#readme" },
+      {
+        type: "item",
+        labelKey: "desktop.menu.documentation",
+        href: "https://github.com/cluster1900/apexo-grok#readme",
+      },
       { type: "item", labelKey: "desktop.menu.exportLogs", command: "logs.export" },
       { type: "separator" },
       {

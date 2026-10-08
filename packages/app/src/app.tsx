@@ -8,16 +8,7 @@ import { Font } from "@apexo/ui/font"
 import { Splash } from "@apexo/ui/logo"
 import { ThemeProvider } from "@apexo/ui/theme/context"
 import { MetaProvider } from "@solidjs/meta"
-import {
-  type BaseRouterProps,
-  Navigate,
-  Route,
-  Router,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "@solidjs/router"
+import { type BaseRouterProps, Navigate, Route, Router, useNavigate, useParams, useSearchParams } from "@solidjs/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"
 import { Effect } from "effect"
 import { base64Encode } from "@apexo/core/util/encode"
@@ -37,14 +28,12 @@ import {
   Show,
 } from "solid-js"
 import { Dynamic } from "solid-js/web"
-import { makeEventListener } from "@solid-primitives/event-listener"
 import { CommandProvider, useCommand, type CommandOption } from "@/context/command"
 import { CommentsProvider } from "@/context/comments"
 import { FileProvider } from "@/context/file"
 import { ServerSDKProvider } from "@/context/server-sdk"
 import { ServerSyncProvider, useServerSync } from "@/context/server-sync"
 import { GlobalProvider, useGlobal } from "@/context/global"
-import { HighlightsProvider } from "@/context/highlights"
 import { LanguageProvider, type Locale, useLanguage } from "@/context/language"
 import { LayoutProvider } from "@/context/layout"
 import { ModelsProvider } from "@/context/models"
@@ -316,7 +305,7 @@ function SharedProviders(props: ParentProps) {
       <BodyDesignClass />
       <CommandProvider>
         <DesktopCommands />
-        <HighlightsProvider>{props.children}</HighlightsProvider>
+        {props.children}
       </CommandProvider>
     </>
   )

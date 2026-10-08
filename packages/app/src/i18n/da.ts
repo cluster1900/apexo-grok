@@ -87,10 +87,6 @@ export const dict = {
   "command.session.compact.description": "Opsummer sessionen for at reducere kontekststørrelsen",
   "command.session.fork": "Forgren fra besked",
   "command.session.fork.description": "Opret en ny session fra en tidligere besked",
-  "command.session.share": "Del session",
-  "command.session.share.description": "Del denne session og kopier URL'en til udklipsholderen",
-  "command.session.unshare": "Stop deling af session",
-  "command.session.unshare.description": "Stop med at dele denne session",
 
   "command.session.export": "Eksportér session",
   "command.session.export.description": "Eksportér hele sessionsudskriften som JSON",
@@ -107,9 +103,6 @@ export const dict = {
   "dialog.provider.group.other": "Andre",
   "dialog.provider.custom.label": "Brugerdefineret OpenAI-kompatibel udbyder",
   "dialog.provider.tag.recommended": "Anbefalet",
-  "dialog.provider.apexo.note": "Udvalgte modeller inklusive Claude, GPT, Gemini og flere",
-  "dialog.provider.apexo.tagline": "Pålidelige optimerede modeller",
-  "dialog.provider.apexoGo.tagline": "Billigt abonnement for alle",
   "dialog.provider.anthropic.note": "Direkte adgang til Claude-modeller, inklusive Pro og Max",
   "dialog.provider.copilot.note": "AI-modeller til kodningsassistance via GitHub Copilot",
   "dialog.provider.openai.note": "GPT-modeller til hurtige, kompetente generelle AI-opgaver",
@@ -442,7 +435,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup": "Opstartsscript for arbejdsområde",
   "dialog.project.edit.worktree.startup.description": "Køres efter oprettelse af et nyt arbejdsområde (worktree).",
   "dialog.project.edit.worktree.startup.placeholder": "f.eks. bun install",
-  "dialog.usageExceeded.dontShowAgain": "Vis ikke igen",
 
   "context.breakdown.title": "Kontekstfordeling",
   "context.breakdown.note":
@@ -524,16 +516,6 @@ export const dict = {
   "toast.file.listFailed.title": "Kunne ikke liste filer",
   "toast.context.noLineSelection.title": "Ingen linjevalg",
   "toast.context.noLineSelection.description": "Vælg først et linjeinterval i en filfane.",
-  "toast.session.share.copyFailed.title": "Kunne ikke kopiere URL til udklipsholder",
-  "toast.session.share.success.title": "Session delt",
-  "toast.session.share.success.description": "Delings-URL kopieret til udklipsholder!",
-  "toast.session.share.failed.title": "Kunne ikke dele session",
-  "toast.session.share.failed.description": "Der opstod en fejl under deling af sessionen",
-
-  "toast.session.unshare.success.title": "Deling af session stoppet",
-  "toast.session.unshare.success.description": "Deling af session blev stoppet!",
-  "toast.session.unshare.failed.title": "Kunne ikke stoppe deling af session",
-  "toast.session.unshare.failed.description": "Der opstod en fejl under stop af sessionsdeling",
 
   "toast.session.export.success.title": "Session eksporteret",
   "toast.session.export.success.description": "Sessionen blev gemt i {{filename}}",
@@ -541,11 +523,6 @@ export const dict = {
   "toast.session.export.failed.description": "Der opstod en fejl under eksport af sessionen",
 
   "toast.session.listFailed.title": "Kunne ikke indlæse sessioner for {{project}}",
-
-  "toast.update.title": "Opdatering tilgængelig",
-  "toast.update.description": "En ny version af Apexo ({{version}}) er nu tilgængelig til installation.",
-  "toast.update.action.installRestart": "Installer og genstart",
-  "toast.update.action.notYet": "Ikke endnu",
 
   "error.page.title": "Noget gik galt",
   "error.page.description": "Der opstod en fejl under indlæsning af applikationen.",
@@ -555,11 +532,7 @@ export const dict = {
   "error.page.action.report": "Rapportér fejl",
   "error.page.action.reported": "Fejl rapporteret",
   "error.page.action.exportLogs": "Eksportér logfiler",
-  "error.page.action.checking": "Tjekker...",
-  "error.page.action.checkUpdates": "Tjek for opdateringer",
-  "error.page.action.updateTo": "Opdater til {{version}}",
   "error.page.report.prefix": "Rapporter venligst denne fejl til Apexo-teamet",
-  "error.page.report.discord": "på Discord",
   "error.page.version": "Version: {{version}}",
 
   "error.dev.rootNotFound":
@@ -700,19 +673,7 @@ export const dict = {
   "status.popover.tab.plugins": "Plugins",
   "status.popover.action.manageServers": "Administrer servere",
 
-  "session.share.popover.title": "Udgiv på nettet",
-  "session.share.popover.description.shared":
-    "Denne session er offentlig på nettet. Den er tilgængelig for alle med linket.",
-  "session.share.popover.description.unshared":
-    "Del session offentligt på nettet. Den vil være tilgængelig for alle med linket.",
-  "session.share.action.share": "Del",
-  "session.share.action.publish": "Udgiv",
-  "session.share.action.publishing": "Udgiver...",
-  "session.share.action.unpublish": "Afpublicer",
-  "session.share.action.unpublishing": "Afpublicerer...",
-  "session.share.action.view": "Vis",
   "session.share.copy.copied": "Kopieret",
-  "session.share.copy.copyLink": "Kopier link",
 
   "lsp.tooltip.none": "Ingen LSP-servere",
   "lsp.label.connected": "{{count}} LSP",
@@ -728,9 +689,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "PTY-forbindelsesticket blev afvist ved kontrollen af oprindelse eller CSRF. Kontrollér serverens CORS-konfiguration.",
   "terminal.connectTicket.statusError": "PTY-forbindelsesticket mislykkedes med {{status}}",
-
-  "titlebar.update": "Opdater",
-  "titlebar.updateVersion": "Opdater {{version}}",
 
   "common.closeTab": "Luk fane",
   "common.dismiss": "Afvis",
@@ -774,7 +732,6 @@ export const dict = {
   "settings.general.section.appearance": "Udseende",
   "settings.general.section.advanced": "Avanceret",
   "settings.general.section.notifications": "Systemmeddelelser",
-  "settings.general.section.updates": "Opdateringer",
   "settings.general.section.sounds": "Lydeffekter",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Skærm",
@@ -840,20 +797,6 @@ export const dict = {
   "settings.general.row.wayland.description": "Deaktiver X11-fallback på Wayland. Kræver genstart.",
   "settings.general.row.wayland.tooltip":
     "På Linux med skærme med forskellige opdateringshastigheder kan indbygget Wayland være mere stabilt.",
-
-  "settings.general.row.releaseNotes.title": "Udgivelsesnoter",
-  "settings.general.row.releaseNotes.description": 'Vis pop op-vinduer med "Hvad er nyt" efter opdateringer',
-
-  "settings.updates.row.startup.title": "Tjek for opdateringer ved opstart",
-  "settings.updates.row.startup.description": "Tjek automatisk for opdateringer, når Apexo starter",
-  "settings.updates.row.check.title": "Tjek for opdateringer",
-  "settings.updates.row.check.description": "Tjek manuelt for opdateringer og installer, hvis tilgængelig",
-  "settings.updates.action.checkNow": "Tjek nu",
-  "settings.updates.action.checking": "Tjekker...",
-  "settings.updates.action.downloading": "Downloader...",
-  "settings.updates.action.installing": "Installerer...",
-  "settings.updates.toast.latest.title": "Du er opdateret",
-  "settings.updates.toast.latest.description": "Du kører den nyeste version af Apexo.",
 
   "sound.option.none": "Ingen",
   "sound.option.alert01": "Alarm 01",
@@ -1022,10 +965,6 @@ export const dict = {
   "workspace.reset.archived.many": "{{count}} sessioner vil blive arkiveret.",
   "workspace.reset.note": "Dette vil nulstille arbejdsområdet til at matche hovedgrenen.",
   "common.open": "Åbn",
-  "dialog.releaseNotes.action.getStarted": "Kom i gang",
-  "dialog.releaseNotes.action.next": "Næste",
-  "dialog.releaseNotes.action.hideFuture": "Vis ikke disse i fremtiden",
-  "dialog.releaseNotes.media.alt": "Forhåndsvisning af udgivelse",
   "toast.project.reloadFailed.title": "Kunne ikke genindlæse {{project}}",
   "error.server.invalidConfiguration": "Ugyldig konfiguration",
   "common.moreCountSuffix": " (+{{count}} mere)",
@@ -1129,7 +1068,6 @@ export const dict = {
   "desktop.menu.go": "Gå",
   "desktop.menu.window": "Vindue",
   "desktop.menu.help": "Hjælp",
-  "desktop.menu.checkForUpdates": "Søg efter opdateringer...",
   "desktop.menu.settings": "Indstillinger",
   "desktop.menu.reloadWebview": "Genindlæs webvisning",
   "desktop.menu.restart": "Genstart",
@@ -1163,19 +1101,9 @@ export const dict = {
   "desktop.menu.minimize": "Minimer",
   "desktop.menu.maximize": "Maksimer",
   "desktop.menu.documentation": "Apexo-dokumentation",
-  "desktop.menu.supportForum": "Supportforum",
   "desktop.menu.shareFeedback": "Giv feedback",
   "desktop.menu.reportBug": "Rapportér en fejl",
   "desktop.menu.ariaLabel": "Apexo-menu",
-
-  "desktop.updater.dialog.checkFailed.message": "Søgningen efter opdateringer mislykkedes.",
-  "desktop.updater.dialog.checkFailed.title": "Opdateringsfejl",
-  "desktop.updater.dialog.upToDate.message": "Du er opdateret.",
-  "desktop.updater.dialog.upToDate.title": "Ingen opdateringer",
-  "desktop.updater.dialog.ready.message": "Opdatering {{version}} er downloadet. Vil du genstarte nu?",
-  "desktop.updater.dialog.ready.title": "Opdateringen er klar",
-  "desktop.updater.dialog.restart": "Genstart",
-  "desktop.updater.dialog.later": "Senere",
 
   "desktop.recovery.action.relaunch": "Start igen",
   "desktop.recovery.action.exportLogs": "Eksportér logfiler",

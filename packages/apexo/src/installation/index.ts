@@ -5,11 +5,8 @@ import { serviceUse } from "@apexo/core/effect/service-use"
 import path from "path"
 import { makeRuntime } from "@apexo/core/effect/runtime"
 import { InstallationChannel, InstallationVersion } from "@apexo/core/installation/version"
-import { InstallationEvent } from "@apexo/schema/installation-event"
 
-export type Method = "curl" | "npm" | "yarn" | "pnpm" | "bun" | "brew" | "scoop" | "choco" | "unknown"
-
-export const Event = InstallationEvent
+export type Method = "curl" | "unknown"
 
 export function userAgent(client = "cli") {
   return `apexo/${InstallationChannel}/${InstallationVersion}/${client}`

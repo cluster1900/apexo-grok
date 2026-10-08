@@ -82,7 +82,6 @@ const names = [
   "comment",
   "folder-add-left",
   "github",
-  "discord",
   "layout-bottom",
   "layout-bottom-partial",
   "layout-bottom-full",

@@ -6,7 +6,6 @@ export const dict = {
   "desktop.menu.go": "Переход",
   "desktop.menu.window": "Окно",
   "desktop.menu.help": "Справка",
-  "desktop.menu.checkForUpdates": "Проверить наличие обновлений...",
   "desktop.menu.settings": "Настройки",
   "desktop.menu.reloadWebview": "Перезагрузить веб-представление",
   "desktop.menu.restart": "Перезапустить",
@@ -40,19 +39,9 @@ export const dict = {
   "desktop.menu.minimize": "Свернуть",
   "desktop.menu.maximize": "Развернуть",
   "desktop.menu.documentation": "Документация Apexo",
-  "desktop.menu.supportForum": "Форум поддержки",
   "desktop.menu.shareFeedback": "Отправить отзыв",
   "desktop.menu.reportBug": "Сообщить об ошибке",
   "desktop.menu.ariaLabel": "Меню Apexo",
-
-  "desktop.updater.dialog.checkFailed.message": "Не удалось проверить наличие обновлений.",
-  "desktop.updater.dialog.checkFailed.title": "Ошибка обновления",
-  "desktop.updater.dialog.upToDate.message": "У вас установлена последняя версия.",
-  "desktop.updater.dialog.upToDate.title": "Обновлений нет",
-  "desktop.updater.dialog.ready.message": "Обновление {{version}} загружено. Перезапустить сейчас?",
-  "desktop.updater.dialog.ready.title": "Обновление готово",
-  "desktop.updater.dialog.restart": "Перезапустить",
-  "desktop.updater.dialog.later": "Позже",
 
   "desktop.recovery.action.relaunch": "Запустить снова",
   "desktop.recovery.action.exportLogs": "Экспортировать журналы",
@@ -187,10 +176,6 @@ export const dict = {
   "command.session.compact.description": "Сократить сессию для уменьшения размера контекста",
   "command.session.fork": "Создать ответвление",
   "command.session.fork.description": "Создать новую сессию из сообщения",
-  "command.session.share": "Поделиться сессией",
-  "command.session.share.description": "Поделиться сессией и скопировать URL в буфер обмена",
-  "command.session.unshare": "Отменить публикацию",
-  "command.session.unshare.description": "Прекратить публикацию сессии",
 
   "command.session.export": "Экспортировать сессию",
   "command.session.export.description": "Экспортировать полную историю сессии в формате JSON",
@@ -207,9 +192,6 @@ export const dict = {
   "dialog.provider.group.other": "Другие",
   "dialog.provider.custom.label": "Пользовательский провайдер, совместимый с OpenAI",
   "dialog.provider.tag.recommended": "Рекомендуемые",
-  "dialog.provider.apexo.note": "Отобранные модели, включая Claude, GPT, Gemini и другие",
-  "dialog.provider.apexo.tagline": "Надёжные оптимизированные модели",
-  "dialog.provider.apexoGo.tagline": "Доступная подписка для всех",
   "dialog.provider.anthropic.note": "Прямой доступ к моделям Claude, включая Pro и Max",
   "dialog.provider.copilot.note": "ИИ-модели для помощи в кодировании через GitHub Copilot",
   "dialog.provider.openai.note": "Модели GPT для быстрых и мощных задач общего ИИ",
@@ -560,7 +542,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description":
     "Запускается после создания нового рабочего пространства (worktree).",
   "dialog.project.edit.worktree.startup.placeholder": "например, bun install",
-  "dialog.usageExceeded.dontShowAgain": "Больше не показывать",
 
   "context.breakdown.title": "Разбивка контекста",
   "context.breakdown.note":
@@ -642,16 +623,6 @@ export const dict = {
   "toast.file.listFailed.title": "Не удалось получить список файлов",
   "toast.context.noLineSelection.title": "Нет выделения строк",
   "toast.context.noLineSelection.description": "Сначала выберите диапазон строк во вкладке файла.",
-  "toast.session.share.copyFailed.title": "Не удалось скопировать URL в буфер обмена",
-  "toast.session.share.success.title": "Сессия опубликована",
-  "toast.session.share.success.description": "URL скопирован в буфер обмена!",
-  "toast.session.share.failed.title": "Не удалось опубликовать сессию",
-  "toast.session.share.failed.description": "Произошла ошибка при публикации сессии",
-
-  "toast.session.unshare.success.title": "Публикация отменена",
-  "toast.session.unshare.success.description": "Публикация успешно отменена!",
-  "toast.session.unshare.failed.title": "Не удалось отменить публикацию",
-  "toast.session.unshare.failed.description": "Произошла ошибка при отмене публикации",
 
   "toast.session.export.success.title": "Сессия экспортирована",
   "toast.session.export.success.description": "Сессия сохранена в файл {{filename}}",
@@ -659,11 +630,6 @@ export const dict = {
   "toast.session.export.failed.description": "Произошла ошибка при экспорте сессии",
 
   "toast.session.listFailed.title": "Не удалось загрузить сессии для {{project}}",
-
-  "toast.update.title": "Доступно обновление",
-  "toast.update.description": "Новая версия Apexo ({{version}}) доступна для установки.",
-  "toast.update.action.installRestart": "Установить и перезапустить",
-  "toast.update.action.notYet": "Пока нет",
 
   "error.page.title": "Что-то пошло не так",
   "error.page.description": "Произошла ошибка при загрузке приложения.",
@@ -673,11 +639,7 @@ export const dict = {
   "error.page.action.report": "Сообщить об ошибке",
   "error.page.action.reported": "Об ошибке сообщено",
   "error.page.action.exportLogs": "Экспортировать журналы",
-  "error.page.action.checking": "Проверка...",
-  "error.page.action.checkUpdates": "Проверить обновления",
-  "error.page.action.updateTo": "Обновить до {{version}}",
   "error.page.report.prefix": "Пожалуйста, сообщите об этой ошибке команде Apexo",
-  "error.page.report.discord": "в Discord",
   "error.page.version": "Версия: {{version}}",
 
   "error.dev.rootNotFound":
@@ -825,19 +787,7 @@ export const dict = {
   "status.popover.tab.plugins": "Плагины",
   "status.popover.action.manageServers": "Управлять серверами",
 
-  "session.share.popover.title": "Опубликовать в интернете",
-  "session.share.popover.description.shared":
-    "Эта сессия общедоступна. Доступ к ней может получить любой, у кого есть ссылка.",
-  "session.share.popover.description.unshared":
-    "Опубликуйте сессию в интернете. Доступ к ней сможет получить любой, у кого есть ссылка.",
-  "session.share.action.share": "Поделиться",
-  "session.share.action.publish": "Опубликовать",
-  "session.share.action.publishing": "Публикация...",
-  "session.share.action.unpublish": "Отменить публикацию",
-  "session.share.action.unpublishing": "Отмена публикации...",
-  "session.share.action.view": "Посмотреть",
   "session.share.copy.copied": "Скопировано",
-  "session.share.copy.copyLink": "Копировать ссылку",
 
   "lsp.tooltip.none": "Нет LSP-серверов",
   "lsp.label.connected": "{{count}} LSP",
@@ -853,9 +803,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "Билет подключения PTY отклонён при проверке источника или CSRF. Проверьте конфигурацию CORS сервера.",
   "terminal.connectTicket.statusError": "Не удалось получить билет подключения PTY, статус: {{status}}",
-
-  "titlebar.update": "Обновить",
-  "titlebar.updateVersion": "Обновить {{version}}",
 
   "common.closeTab": "Закрыть вкладку",
   "common.dismiss": "Закрыть",
@@ -900,7 +847,6 @@ export const dict = {
   "settings.general.section.appearance": "Внешний вид",
   "settings.general.section.advanced": "Дополнительно",
   "settings.general.section.notifications": "Системные уведомления",
-  "settings.general.section.updates": "Обновления",
   "settings.general.section.sounds": "Звуковые эффекты",
   "settings.general.section.feed": "Лента",
   "settings.general.section.display": "Экран",
@@ -970,19 +916,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "На Linux с мониторами разной частоты обновления нативный Wayland может быть стабильнее.",
 
-  "settings.general.row.releaseNotes.title": "Примечания к выпуску",
-  "settings.general.row.releaseNotes.description": 'Показывать всплывающие окна "Что нового" после обновлений',
-
-  "settings.updates.row.startup.title": "Проверять обновления при запуске",
-  "settings.updates.row.startup.description": "Автоматически проверять обновления при запуске Apexo",
-  "settings.updates.row.check.title": "Проверить обновления",
-  "settings.updates.row.check.description": "Проверить обновления вручную и установить, если доступны",
-  "settings.updates.action.checkNow": "Проверить сейчас",
-  "settings.updates.action.checking": "Проверка...",
-  "settings.updates.action.downloading": "Загрузка...",
-  "settings.updates.action.installing": "Установка...",
-  "settings.updates.toast.latest.title": "У вас последняя версия",
-  "settings.updates.toast.latest.description": "Вы используете последнюю версию Apexo.",
   "sound.option.none": "Нет",
   "sound.option.alert01": "Alert 01",
   "sound.option.alert02": "Alert 02",
@@ -1153,10 +1086,6 @@ export const dict = {
   "workspace.reset.archived.many": "Будут архивированы сессии: {{count}}.",
   "workspace.reset.note": "Это сбросит рабочее пространство до соответствия ветке по умолчанию.",
   "common.open": "Открыть",
-  "dialog.releaseNotes.action.getStarted": "Начать",
-  "dialog.releaseNotes.action.next": "Далее",
-  "dialog.releaseNotes.action.hideFuture": "Больше не показывать",
-  "dialog.releaseNotes.media.alt": "Предварительный просмотр выпуска",
   "toast.project.reloadFailed.title": "Не удалось перезагрузить {{project}}",
   "error.server.invalidConfiguration": "Недопустимая конфигурация",
   "common.moreCountSuffix": " (ещё {{count}})",

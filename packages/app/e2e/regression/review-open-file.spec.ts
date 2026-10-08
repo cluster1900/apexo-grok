@@ -26,13 +26,13 @@ test("opens and searches project files inline", async ({ page }) => {
     provider: {
       all: [
         {
-          id: "apexo",
-          name: "Apexo",
+          id: "test",
+          name: "Test",
           models: { test: { id: "test", name: "Test", limit: { context: 200_000 } } },
         },
       ],
-      connected: ["apexo"],
-      default: { providerID: "apexo", modelID: "test" },
+      connected: ["test"],
+      default: { providerID: "test", modelID: "test" },
     },
     sessions: [
       {

@@ -33,7 +33,6 @@ import { Glob } from "@apexo/core/util/glob"
 import path from "path"
 import { pathToFileURL } from "url"
 import { Effect, Layer, Context } from "effect"
-import { ChildProcessSpawner } from "effect/unstable/process/ChildProcessSpawner"
 import { CrossSpawnSpawner } from "@apexo/core/cross-spawn-spawner"
 import { Format } from "../format"
 import { InstanceState } from "@/effect/instance-state"
@@ -55,12 +54,8 @@ import { MCP } from "@/mcp"
 import { PermissionV1 } from "@apexo/core/v1/permission"
 import { McpCatalog } from "@/mcp/catalog"
 
-export function webSearchEnabled(providerID: ProviderV2.ID, flags = { exa: false, parallel: false }) {
-  return (
-    // Hosted web search was only bundled with the removed Apexo Zen/Go providers.
-    flags.exa ||
-    flags.parallel
-  )
+export function webSearchEnabled(flags = { exa: false, parallel: false }) {
+  return flags.exa || flags.parallel
 }
 
 type TaskDef = Tool.InferDef<typeof TaskTool>
@@ -290,7 +285,7 @@ const layer = Layer.effect(
     const tools: Interface["tools"] = Effect.fn("ToolRegistry.tools")(function* (input) {
       const filtered = (yield* all()).filter((tool) => {
         if (tool.id === WebSearchTool.id) {
-          return webSearchEnabled(input.providerID, { exa: flags.enableExa, parallel: flags.enableParallel })
+          return webSearchEnabled({ exa: flags.enableExa, parallel: flags.enableParallel })
         }
 
         const usePatch =

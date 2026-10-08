@@ -1,6 +1,5 @@
 const providers = [
-  "apexo",
-  "apexo-go",
+  "xai",
   "anthropic",
   "openai",
   "google",

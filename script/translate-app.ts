@@ -551,7 +551,6 @@ function isolatedEnvironment() {
   delete env.APEXO_CONFIG_DIR
   delete env.APEXO_CONFIG_CONTENT
   delete env.APEXO_PERMISSION
-  delete env.APEXO_AUTO_SHARE
   return env
 }
 

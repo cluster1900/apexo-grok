@@ -13,7 +13,7 @@ const directory = "C:/Apexo/ContextResizeRegression"
 const projectID = "proj_context_resize_regression"
 const sessionID = "ses_context_resize_regression"
 const title = "Context resize regression"
-const model = { providerID: "apexo", modelID: "claude-opus-4-6", variant: "max" }
+const model = { providerID: "test", modelID: "claude-opus-4-6", variant: "max" }
 const contextIDs = ["prt_0100_read", "prt_0101_glob", "prt_0102_grep", "prt_0103_list"]
 const followingTextID = "prt_0104_text"
 
@@ -359,13 +359,13 @@ function provider() {
   return {
     all: [
       {
-        id: "apexo",
-        name: "Apexo",
+        id: "test",
+        name: "Test",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
     ],
-    connected: ["apexo"],
-    default: { providerID: "apexo", modelID: "claude-opus-4-6" },
+    connected: ["test"],
+    default: { providerID: "test", modelID: "claude-opus-4-6" },
   }
 }
 

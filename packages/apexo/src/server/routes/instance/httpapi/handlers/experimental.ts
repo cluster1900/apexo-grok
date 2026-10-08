@@ -1,6 +1,5 @@
 import { Agent } from "@/agent/agent"
 import { BackgroundJob } from "@/background/job"
-import { Config } from "@/config/config"
 import { InstanceState } from "@/effect/instance-state"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { MCP } from "@/mcp"
@@ -12,9 +11,9 @@ import { ToolRegistry } from "@/tool/registry"
 import { Worktree } from "@/worktree"
 import { Effect } from "effect"
 import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse"
-import { HttpApiBuilder, HttpApiError } from "effect/unstable/httpapi"
+import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"
-import { ConsoleSwitchPayload, SessionListQuery, ToolListQuery, WorktreeApiError } from "../groups/experimental"
+import { SessionListQuery, ToolListQuery, WorktreeApiError } from "../groups/experimental"
 
 function mapWorktreeError<A, R>(self: Effect.Effect<A, Worktree.Error, R>) {
   return self.pipe(
@@ -25,7 +24,6 @@ function mapWorktreeError<A, R>(self: Effect.Effect<A, Worktree.Error, R>) {
 export const experimentalHandlers = HttpApiBuilder.group(InstanceHttpApi, "experimental", (handlers) =>
   Effect.gen(function* () {
     const agents = yield* Agent.Service
-    const config = yield* Config.Service
     const mcp = yield* MCP.Service
     const project = yield* Project.Service
     const registry = yield* ToolRegistry.Service
@@ -36,27 +34,6 @@ export const experimentalHandlers = HttpApiBuilder.group(InstanceHttpApi, "exper
 
     const capabilities = Effect.fn("ExperimentalHttpApi.capabilities")(function* () {
       return { backgroundSubagents: flags.experimentalBackgroundSubagents }
-    })
-
-    // The Apexo Console (hosted accounts/orgs) has been removed from this build; these
-    // endpoints stay for API compatibility and always report no console orgs.
-    const getConsole = Effect.fn("ExperimentalHttpApi.console")(function* () {
-      const state = yield* config.getConsoleState()
-      return {
-        consoleManagedProviders: state.consoleManagedProviders,
-        ...(state.activeOrgName ? { activeOrgName: state.activeOrgName } : {}),
-        switchableOrgCount: 0,
-      }
-    })
-
-    const listConsoleOrgs = Effect.fn("ExperimentalHttpApi.consoleOrgs")(function* () {
-      return { orgs: [] }
-    })
-
-    const switchConsole = Effect.fn("ExperimentalHttpApi.consoleSwitch")(function* (_ctx: {
-      payload: typeof ConsoleSwitchPayload.Type
-    }) {
-      return yield* Effect.fail(new HttpApiError.BadRequest({}))
     })
 
     const tool = Effect.fn("ExperimentalHttpApi.tool")(function* (ctx: { query: typeof ToolListQuery.Type }) {
@@ -145,9 +122,6 @@ export const experimentalHandlers = HttpApiBuilder.group(InstanceHttpApi, "exper
 
     return handlers
       .handle("capabilities", capabilities)
-      .handle("console", getConsole)
-      .handle("consoleOrgs", listConsoleOrgs)
-      .handle("consoleSwitch", switchConsole)
       .handle("tool", tool)
       .handle("toolIDs", toolIDs)
       .handle("worktree", worktree)

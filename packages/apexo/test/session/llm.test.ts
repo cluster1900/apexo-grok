@@ -19,7 +19,6 @@ import type { Agent } from "../../src/agent/agent"
 import { MessageV2 } from "../../src/session/message-v2"
 import { SessionID, MessageID } from "../../src/session/schema"
 import { RuntimeFlags } from "@/effect/runtime-flags"
-import { Permission } from "@/permission"
 import { LLMAISDK } from "@/session/llm/ai-sdk"
 import { Session as SessionNs } from "@/session/session"
 import { ProviderV2 } from "@apexo/core/provider"
@@ -754,11 +753,7 @@ function createEventResponse(chunks: unknown[], includeDone = false) {
 
 describe("session.llm.stream", () => {
   const vivgridFixture = { providerID: "vivgrid", modelID: "gemini-3.1-pro-preview" }
-  const apexoFixture = { providerID: "apexo-test", modelID: vivgridFixture.modelID }
-
   const headerCases = [
-    { providerID: apexoFixture.providerID, child: false },
-    { providerID: apexoFixture.providerID, child: true },
     { providerID: "custom-test", child: false },
     { providerID: "custom-test", child: true },
   ]
@@ -767,7 +762,6 @@ describe("session.llm.stream", () => {
       `sends session identity headers for ${input.child ? "child" : "root"} sessions on ${input.providerID}`,
       () =>
         Effect.gen(function* () {
-          const fixture = loadFixture(vivgridFixture.providerID, vivgridFixture.modelID)
           const request = waitRequest(
             "/chat/completions",
             new Response(createChatStream("Hello"), {
@@ -777,7 +771,7 @@ describe("session.llm.stream", () => {
           )
           const resolved = yield* Provider.use.getModel(
             ProviderV2.ID.make(input.providerID),
-            ModelV2.ID.make(apexoFixture.modelID),
+            ModelV2.ID.make(vivgridFixture.modelID),
           )
           const sessionID = SessionID.make("session-child")
           const parentSessionID = input.child ? SessionID.make("session-parent") : undefined
@@ -814,10 +808,6 @@ describe("session.llm.stream", () => {
           expect(headers.get("x-apexo-session-id")).toBe(sessionID)
           expect(headers.get("x-apexo-parent-session-id")).toBe(parentSessionID ?? null)
           expect(headers.get("x-parent-session-id")).toBe(parentSessionID ?? null)
-          if (input.providerID.startsWith("apexo")) {
-            expect(headers.get("x-apexo-session")).toBe(sessionID)
-            return
-          }
           expect(headers.get("x-session-affinity")).toBe(sessionID)
           expect(headers.get("X-Session-Id")).toBe(sessionID)
         }),
@@ -915,7 +905,11 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Vivgrid",
             npm: "@ai-sdk/openai",
-            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) as ConfigModel },
+            models: {
+              [vivgridFixture.modelID]: configModel(
+                loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model,
+              ) as ConfigModel,
+            },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -983,7 +977,11 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Vivgrid",
             npm: "@ai-sdk/openai",
-            models: { [vivgridFixture.modelID]: configModel(loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model) as ConfigModel },
+            models: {
+              [vivgridFixture.modelID]: configModel(
+                loadFixture(vivgridFixture.providerID, vivgridFixture.modelID).model,
+              ) as ConfigModel,
+            },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1050,7 +1048,11 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Alibaba",
             npm: "@ai-sdk/openai-compatible",
-            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) as ConfigModel },
+            models: {
+              [alibabaQwenFixture.modelID]: configModel(
+                loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model,
+              ) as ConfigModel,
+            },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1122,7 +1124,11 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "Alibaba",
             npm: "@ai-sdk/openai-compatible",
-            models: { [alibabaQwenFixture.modelID]: configModel(loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model) as ConfigModel },
+            models: {
+              [alibabaQwenFixture.modelID]: configModel(
+                loadFixture(alibabaQwenFixture.providerID, alibabaQwenFixture.modelID).model,
+              ) as ConfigModel,
+            },
             options: { apiKey: "test-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },
@@ -1789,7 +1795,11 @@ describe("session.llm.stream", () => {
             // Not in the trimmed models.dev catalog: configure as a fully custom provider.
             name: "MiniMax",
             npm: "@ai-sdk/anthropic",
-            models: { [minimaxFixture.modelID]: configModel(loadFixture(minimaxFixture.providerID, minimaxFixture.modelID).model) as ConfigModel },
+            models: {
+              [minimaxFixture.modelID]: configModel(
+                loadFixture(minimaxFixture.providerID, minimaxFixture.modelID).model,
+              ) as ConfigModel,
+            },
             options: { apiKey: "test-anthropic-key", baseURL: `${state.server!.url.origin}/v1` },
           },
         },

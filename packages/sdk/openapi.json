@@ -775,231 +775,6 @@
         ]
       }
     },
-    "/experimental/console": {
-      "get": {
-        "tags": ["experimental"],
-        "operationId": "experimental.console.get",
-        "parameters": [
-          {
-            "name": "directory",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          },
-          {
-            "name": "workspace",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Active Console provider metadata",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConsoleState"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "InternalServerError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/effect_HttpApiError_InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get the active Console org name and the set of provider IDs managed by that Console org.",
-        "summary": "Get active Console provider metadata",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createApexoClient } from \"@apexo/sdk\n\nconst client = createApexoClient()\nawait client.experimental.console.get({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/experimental/console/orgs": {
-      "get": {
-        "tags": ["experimental"],
-        "operationId": "experimental.console.listOrgs",
-        "parameters": [
-          {
-            "name": "directory",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          },
-          {
-            "name": "workspace",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Switchable Console orgs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "orgs": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "accountID": {
-                            "type": "string"
-                          },
-                          "accountEmail": {
-                            "type": "string"
-                          },
-                          "accountUrl": {
-                            "type": "string"
-                          },
-                          "orgID": {
-                            "type": "string"
-                          },
-                          "orgName": {
-                            "type": "string"
-                          },
-                          "active": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": ["accountID", "accountEmail", "accountUrl", "orgID", "orgName", "active"],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": ["orgs"],
-                  "additionalProperties": false,
-                  "description": "Switchable Console orgs"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "InternalServerError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/effect_HttpApiError_InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get the available Console orgs across logged-in accounts, including the current active org.",
-        "summary": "List switchable Console orgs",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createApexoClient } from \"@apexo/sdk\n\nconst client = createApexoClient()\nawait client.experimental.console.listOrgs({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/experimental/console/switch": {
-      "post": {
-        "tags": ["experimental"],
-        "operationId": "experimental.console.switchOrg",
-        "parameters": [
-          {
-            "name": "directory",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          },
-          {
-            "name": "workspace",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Switch success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean",
-                  "description": "Switch success"
-                }
-              }
-            }
-          }
-        },
-        "description": "Persist a new active Console account/org selection for the current local Apexo state.",
-        "summary": "Switch active Console org",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "accountID": {
-                    "type": "string"
-                  },
-                  "orgID": {
-                    "type": "string"
-                  }
-                },
-                "required": ["accountID", "orgID"],
-                "additionalProperties": false
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createApexoClient } from \"@apexo/sdk\n\nconst client = createApexoClient()\nawait client.experimental.console.switchOrg({\n  ...\n})"
-          }
-        ]
-      }
-    },
     "/experimental/tool": {
       "get": {
         "tags": ["experimental"],
@@ -6739,170 +6514,6 @@
           {
             "lang": "js",
             "source": "import { createApexoClient } from \"@apexo/sdk\n\nconst client = createApexoClient()\nawait client.session.init({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/session/{sessionID}/share": {
-      "post": {
-        "tags": ["session"],
-        "operationId": "session.share",
-        "parameters": [
-          {
-            "name": "sessionID",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "pattern": "^ses"
-            },
-            "required": true
-          },
-          {
-            "name": "directory",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          },
-          {
-            "name": "workspace",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully shared session",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Session"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "NotFoundError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFoundError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "InternalServerError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/effect_HttpApiError_InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Create a shareable link for a session, allowing others to view the conversation.",
-        "summary": "Share session",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createApexoClient } from \"@apexo/sdk\n\nconst client = createApexoClient()\nawait client.session.share({\n  ...\n})"
-          }
-        ]
-      },
-      "delete": {
-        "tags": ["session"],
-        "operationId": "session.unshare",
-        "parameters": [
-          {
-            "name": "sessionID",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "pattern": "^ses"
-            },
-            "required": true
-          },
-          {
-            "name": "directory",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          },
-          {
-            "name": "workspace",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully unshared session",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Session"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "NotFoundError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFoundError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "InternalServerError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/effect_HttpApiError_InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Remove the shareable link for a session, making it private again.",
-        "summary": "Unshare session",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createApexoClient } from \"@apexo/sdk\n\nconst client = createApexoClient()\nawait client.session.unshare({\n  ...\n})"
           }
         ]
       }
@@ -15309,12 +14920,6 @@
             "$ref": "#/components/schemas/EventSessionError"
           },
           {
-            "$ref": "#/components/schemas/EventInstallationUpdated"
-          },
-          {
-            "$ref": "#/components/schemas/EventInstallationUpdate-available"
-          },
-          {
             "$ref": "#/components/schemas/EventFileEdited"
           },
           {
@@ -19062,56 +18667,6 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["installation.updated"]
-                  },
-                  "properties": {
-                    "type": "object",
-                    "properties": {
-                      "version": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["version"],
-                    "additionalProperties": false
-                  }
-                },
-                "required": ["id", "type", "properties"],
-                "additionalProperties": false
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "pattern": "^evt_"
-                  },
-                  "type": {
-                    "type": "string",
-                    "enum": ["installation.update-available"]
-                  },
-                  "properties": {
-                    "type": "object",
-                    "properties": {
-                      "version": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["version"],
-                    "additionalProperties": false
-                  }
-                },
-                "required": ["id", "type", "properties"],
-                "additionalProperties": false
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "pattern": "^evt_"
-                  },
-                  "type": {
-                    "type": "string",
                     "enum": ["file.edited"]
                   },
                   "properties": {
@@ -19714,7 +19269,6 @@
                             "enum": [
                               "session.list",
                               "session.new",
-                              "session.share",
                               "session.interrupt",
                               "session.compact",
                               "session.page.up",
@@ -21156,25 +20710,6 @@
               ]
             }
           },
-          "share": {
-            "type": "string",
-            "enum": ["manual", "auto", "disabled"]
-          },
-          "autoshare": {
-            "type": "boolean"
-          },
-          "autoupdate": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "string",
-                "enum": ["notify"]
-              }
-            ],
-            "description": "Automatically update to the latest version. Set to true to auto-update, false to disable, or 'notify' to show update notifications"
-          },
           "disabled_providers": {
             "type": "array",
             "items": {
@@ -21390,15 +20925,6 @@
           },
           "attachment": {
             "$ref": "#/components/schemas/AttachmentConfig"
-          },
-          "enterprise": {
-            "type": "object",
-            "properties": {
-              "url": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
           },
           "tool_output": {
             "type": "object",
@@ -21786,37 +21312,6 @@
           }
         },
         "required": ["backgroundSubagents"],
-        "additionalProperties": false
-      },
-      "ConsoleState": {
-        "type": "object",
-        "properties": {
-          "consoleManagedProviders": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "activeOrgName": {
-            "type": "string"
-          },
-          "switchableOrgCount": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "required": ["consoleManagedProviders", "switchableOrgCount"],
-        "additionalProperties": false
-      },
-      "effect_HttpApiError_InternalServerError": {
-        "type": "object",
-        "properties": {
-          "_tag": {
-            "type": "string",
-            "enum": ["InternalServerError"]
-          }
-        },
-        "required": ["_tag"],
         "additionalProperties": false
       },
       "ToolListItem": {
@@ -23202,7 +22697,6 @@
                     "enum": [
                       "session.list",
                       "session.new",
-                      "session.share",
                       "session.interrupt",
                       "session.compact",
                       "session.page.up",
@@ -24061,12 +23555,6 @@
             "$ref": "#/components/schemas/SessionError"
           },
           {
-            "$ref": "#/components/schemas/InstallationUpdated"
-          },
-          {
-            "$ref": "#/components/schemas/InstallationUpdate-available"
-          },
-          {
             "$ref": "#/components/schemas/FileEdited"
           },
           {
@@ -24290,7 +23778,6 @@
                     "enum": [
                       "session.list",
                       "session.new",
-                      "session.share",
                       "session.interrupt",
                       "session.compact",
                       "session.page.up",
@@ -31584,100 +31071,6 @@
         "required": ["id", "type", "data"],
         "additionalProperties": false
       },
-      "InstallationUpdated": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^evt_"
-          },
-          "metadata": {
-            "type": "object"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["installation.updated"]
-          },
-          "durable": {
-            "type": "object",
-            "properties": {
-              "aggregateID": {
-                "type": "string"
-              },
-              "seq": {
-                "type": "integer"
-              },
-              "version": {
-                "type": "integer"
-              }
-            },
-            "required": ["aggregateID", "seq", "version"],
-            "additionalProperties": false
-          },
-          "location": {
-            "$ref": "#/components/schemas/LocationRef"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "version": {
-                "type": "string"
-              }
-            },
-            "required": ["version"],
-            "additionalProperties": false
-          }
-        },
-        "required": ["id", "type", "data"],
-        "additionalProperties": false
-      },
-      "InstallationUpdate-available": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^evt_"
-          },
-          "metadata": {
-            "type": "object"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["installation.update-available"]
-          },
-          "durable": {
-            "type": "object",
-            "properties": {
-              "aggregateID": {
-                "type": "string"
-              },
-              "seq": {
-                "type": "integer"
-              },
-              "version": {
-                "type": "integer"
-              }
-            },
-            "required": ["aggregateID", "seq", "version"],
-            "additionalProperties": false
-          },
-          "location": {
-            "$ref": "#/components/schemas/LocationRef"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "version": {
-                "type": "string"
-              }
-            },
-            "required": ["version"],
-            "additionalProperties": false
-          }
-        },
-        "required": ["id", "type", "data"],
-        "additionalProperties": false
-      },
       "FileEdited": {
         "type": "object",
         "properties": {
@@ -32729,7 +32122,6 @@
                     "enum": [
                       "session.list",
                       "session.new",
-                      "session.share",
                       "session.interrupt",
                       "session.compact",
                       "session.page.up",
@@ -35459,56 +34851,6 @@
                 ]
               }
             },
-            "additionalProperties": false
-          }
-        },
-        "required": ["id", "type", "properties"],
-        "additionalProperties": false
-      },
-      "EventInstallationUpdated": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^evt_"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["installation.updated"]
-          },
-          "properties": {
-            "type": "object",
-            "properties": {
-              "version": {
-                "type": "string"
-              }
-            },
-            "required": ["version"],
-            "additionalProperties": false
-          }
-        },
-        "required": ["id", "type", "properties"],
-        "additionalProperties": false
-      },
-      "EventInstallationUpdate-available": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^evt_"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["installation.update-available"]
-          },
-          "properties": {
-            "type": "object",
-            "properties": {
-              "version": {
-                "type": "string"
-              }
-            },
-            "required": ["version"],
             "additionalProperties": false
           }
         },

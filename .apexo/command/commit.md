@@ -1,6 +1,5 @@
 ---
 description: git commit and push
-model: apexo/kimi-k2.5
 subtask: true
 ---
 

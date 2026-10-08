@@ -9,7 +9,6 @@ export const dict = {
   "desktop.menu.go": "Gå",
   "desktop.menu.window": "Vindu",
   "desktop.menu.help": "Hjelp",
-  "desktop.menu.checkForUpdates": "Søk etter oppdateringer...",
   "desktop.menu.settings": "Innstillinger",
   "desktop.menu.reloadWebview": "Last inn WebView på nytt",
   "desktop.menu.restart": "Start på nytt",
@@ -43,19 +42,9 @@ export const dict = {
   "desktop.menu.minimize": "Minimer",
   "desktop.menu.maximize": "Maksimer",
   "desktop.menu.documentation": "Apexo-dokumentasjon",
-  "desktop.menu.supportForum": "Brukerstøtteforum",
   "desktop.menu.shareFeedback": "Del tilbakemelding",
   "desktop.menu.reportBug": "Rapporter en feil",
   "desktop.menu.ariaLabel": "Apexo-meny",
-
-  "desktop.updater.dialog.checkFailed.message": "Søket etter oppdateringer mislyktes.",
-  "desktop.updater.dialog.checkFailed.title": "Oppdateringsfeil",
-  "desktop.updater.dialog.upToDate.message": "Du har den nyeste versjonen.",
-  "desktop.updater.dialog.upToDate.title": "Ingen oppdateringer",
-  "desktop.updater.dialog.ready.message": "Oppdateringen {{version}} er lastet ned. Vil du starte på nytt nå?",
-  "desktop.updater.dialog.ready.title": "Oppdateringen er klar",
-  "desktop.updater.dialog.restart": "Start på nytt",
-  "desktop.updater.dialog.later": "Senere",
 
   "desktop.recovery.action.relaunch": "Start appen på nytt",
   "desktop.recovery.action.exportLogs": "Eksporter logger",
@@ -186,10 +175,6 @@ export const dict = {
   "command.session.compact.description": "Oppsummer sesjonen for å redusere kontekststørrelsen",
   "command.session.fork": "Forgren fra melding",
   "command.session.fork.description": "Opprett en ny sesjon fra en tidligere melding",
-  "command.session.share": "Del sesjon",
-  "command.session.share.description": "Del denne sesjonen og kopier URL-en til utklippstavlen",
-  "command.session.unshare": "Slutt å dele sesjon",
-  "command.session.unshare.description": "Slutt å dele denne sesjonen",
 
   "command.session.export": "Eksporter sesjon",
   "command.session.export.description": "Eksporter hele sesjonsutskriften som JSON",
@@ -206,9 +191,6 @@ export const dict = {
   "dialog.provider.group.other": "Andre",
   "dialog.provider.custom.label": "Egendefinert OpenAI-kompatibel leverandør",
   "dialog.provider.tag.recommended": "Anbefalt",
-  "dialog.provider.apexo.note": "Utvalgte modeller inkludert Claude, GPT, Gemini og mer",
-  "dialog.provider.apexo.tagline": "Pålitelige, optimaliserte modeller",
-  "dialog.provider.apexoGo.tagline": "Rimelig abonnement for alle",
   "dialog.provider.anthropic.note": "Direkte tilgang til Claude-modeller, inkludert Pro og Max",
   "dialog.provider.copilot.note": "AI-modeller for kodeassistanse via GitHub Copilot",
   "dialog.provider.openai.note": "GPT-modeller for raske, dyktige generelle AI-oppgaver",
@@ -466,8 +448,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description": "Kjører etter at et nytt arbeidsområde (worktree) er opprettet.",
   "dialog.project.edit.worktree.startup.placeholder": "f.eks. bun install",
 
-  "dialog.usageExceeded.dontShowAgain": "Ikke vis igjen",
-
   "context.breakdown.title": "Kontekstfordeling",
   "context.breakdown.note":
     'Omtrentlig fordeling av inndatatokener. "Annet" inkluderer verktøydefinisjoner og overhead.',
@@ -548,17 +528,6 @@ export const dict = {
   "toast.context.noLineSelection.title": "Ingen linjevalg",
   "toast.context.noLineSelection.description": "Velg først et linjeområde i en filfane.",
 
-  "toast.session.share.copyFailed.title": "Kunne ikke kopiere URL til utklippstavlen",
-  "toast.session.share.success.title": "Sesjon delt",
-  "toast.session.share.success.description": "Delings-URL kopiert til utklippstavlen!",
-  "toast.session.share.failed.title": "Kunne ikke dele sesjon",
-  "toast.session.share.failed.description": "Det oppstod en feil under deling av sesjonen",
-
-  "toast.session.unshare.success.title": "Deling av sesjon stoppet",
-  "toast.session.unshare.success.description": "Sesjonen deles ikke lenger!",
-  "toast.session.unshare.failed.title": "Kunne ikke stoppe deling av sesjon",
-  "toast.session.unshare.failed.description": "Det oppstod en feil da delingen av sesjonen skulle stoppes",
-
   "toast.session.export.success.title": "Sesjon eksportert",
   "toast.session.export.success.description": "Sesjonen ble lagret i {{filename}}",
   "toast.session.export.failed.title": "Kunne ikke eksportere sesjon",
@@ -566,22 +535,13 @@ export const dict = {
 
   "toast.session.listFailed.title": "Kunne ikke laste sesjoner for {{project}}",
 
-  "toast.update.title": "Oppdatering tilgjengelig",
-  "toast.update.description": "En ny versjon av Apexo ({{version}}) er nå tilgjengelig for installasjon.",
-  "toast.update.action.installRestart": "Installer og start på nytt",
-  "toast.update.action.notYet": "Ikke nå",
-
   "error.page.title": "Noe gikk galt",
   "error.page.description": "Det oppstod en feil under lasting av applikasjonen.",
   "error.page.details.label": "Feildetaljer",
   "error.page.action.restart": "Start på nytt",
   "error.page.action.report": "Rapporter feil",
   "error.page.action.reported": "Feil rapportert",
-  "error.page.action.checking": "Sjekker...",
-  "error.page.action.checkUpdates": "Se etter oppdateringer",
-  "error.page.action.updateTo": "Oppdater til {{version}}",
   "error.page.report.prefix": "Vennligst rapporter denne feilen til Apexo-teamet",
-  "error.page.report.discord": "på Discord",
   "error.page.version": "Versjon: {{version}}",
 
   "error.dev.rootNotFound":
@@ -688,19 +648,7 @@ export const dict = {
   "status.popover.tab.plugins": "Programtillegg",
   "status.popover.action.manageServers": "Administrer servere",
 
-  "session.share.popover.title": "Publiser på nett",
-  "session.share.popover.description.shared":
-    "Denne sesjonen er offentlig på nettet. Den er tilgjengelig for alle med lenken.",
-  "session.share.popover.description.unshared":
-    "Del sesjonen offentlig på nettet. Den vil være tilgjengelig for alle med lenken.",
-  "session.share.action.share": "Del",
-  "session.share.action.publish": "Publiser",
-  "session.share.action.publishing": "Publiserer...",
-  "session.share.action.unpublish": "Avpubliser",
-  "session.share.action.unpublishing": "Avpubliserer...",
-  "session.share.action.view": "Vis",
   "session.share.copy.copied": "Kopiert",
-  "session.share.copy.copyLink": "Kopier lenke",
 
   "lsp.tooltip.none": "Ingen LSP-servere",
   "lsp.label.connected": "{{count}} LSP",
@@ -716,9 +664,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "Tilkoblingsbilletten for PTY ble avvist av opprinnelses- eller CSRF-kontroller. Kontroller serverens CORS-konfigurasjon.",
   "terminal.connectTicket.statusError": "Tilkoblingsbilletten for PTY mislyktes med {{status}}",
-
-  "titlebar.update": "Oppdater",
-  "titlebar.updateVersion": "Oppdater {{version}}",
 
   "common.closeTab": "Lukk fane",
   "common.dismiss": "Avvis",
@@ -760,7 +705,6 @@ export const dict = {
 
   "settings.general.section.appearance": "Utseende",
   "settings.general.section.notifications": "Systemvarsler",
-  "settings.general.section.updates": "Oppdateringer",
   "settings.general.section.sounds": "Lydeffekter",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Skjerm",
@@ -796,17 +740,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "På Linux med skjermer med blandet oppdateringsfrekvens kan direkte Wayland-støtte være mer stabilt.",
 
-  "settings.general.row.releaseNotes.title": "Utgivelsesnotater",
-  "settings.general.row.releaseNotes.description": 'Vis "Hva er nytt"-vinduer etter oppdateringer',
-
-  "settings.updates.row.startup.title": "Se etter oppdateringer ved oppstart",
-  "settings.updates.row.startup.description": "Se automatisk etter oppdateringer når Apexo starter",
-  "settings.updates.row.check.title": "Se etter oppdateringer",
-  "settings.updates.row.check.description": "Se etter oppdateringer manuelt og installer hvis tilgjengelig",
-  "settings.updates.action.checkNow": "Sjekk nå",
-  "settings.updates.action.checking": "Sjekker...",
-  "settings.updates.toast.latest.title": "Apexo er oppdatert",
-  "settings.updates.toast.latest.description": "Du bruker den nyeste versjonen av Apexo.",
   "sound.option.none": "Ingen",
   "sound.option.alert01": "Varsel 01",
   "sound.option.alert02": "Varsel 02",
@@ -975,10 +908,6 @@ export const dict = {
   "workspace.reset.archived.many": "{{count}} sesjoner vil bli arkivert.",
   "workspace.reset.note": "Dette vil tilbakestille arbeidsområdet til å samsvare med standardgrenen.",
   "common.open": "Åpne",
-  "dialog.releaseNotes.action.getStarted": "Kom i gang",
-  "dialog.releaseNotes.action.next": "Neste",
-  "dialog.releaseNotes.action.hideFuture": "Ikke vis disse igjen",
-  "dialog.releaseNotes.media.alt": "Forhåndsvisning av utgivelse",
   "toast.project.reloadFailed.title": "Kunne ikke laste inn {{project}} på nytt",
   "error.server.invalidConfiguration": "Ugyldig konfigurasjon",
   "common.moreCountSuffix": " (+{{count}} mer)",
@@ -1255,6 +1184,4 @@ export const dict = {
   "settings.general.row.newInterfaceNotice.dismiss": "Avvis",
   "settings.general.row.pinchZoom.title": "Knip for å zoome",
   "settings.general.row.pinchZoom.description": "Tillat knipebevegelser på styreflaten og Ctrl-rulling for å zoome",
-  "settings.updates.action.downloading": "Laster ned...",
-  "settings.updates.action.installing": "Installerer...",
 } satisfies Partial<Record<Keys, string>>

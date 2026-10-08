@@ -10,7 +10,7 @@
 //   - APEXO_TEST_HOME           : pins os.homedir() → tmpdir
 //   - APEXO_DISABLE_PROJECT_CONFIG : skip walking up for apexo.json
 //   - APEXO_PURE                : skip external plugin discovery + install
-//   - APEXO_DISABLE_AUTOUPDATE / AUTOCOMPACT / MODELS_FETCH : no background work
+//   - APEXO_DISABLE_AUTOCOMPACT / MODELS_FETCH : no background work
 // Plus HOME / XDG_* pointing at the tmpdir for belt-and-suspenders isolation.
 //
 // Today only `apexo.run` is fully wired. The shape supports adding more
@@ -70,7 +70,6 @@ function isolatedEnv(home: string, configJson: string): Record<string, string> {
     APEXO_CONFIG_CONTENT: configJson,
     APEXO_DISABLE_PROJECT_CONFIG: "1",
     APEXO_PURE: "1",
-    APEXO_DISABLE_AUTOUPDATE: "1",
     APEXO_DISABLE_AUTOCOMPACT: "1",
     APEXO_DISABLE_MODELS_FETCH: "1",
     APEXO_AUTH_CONTENT: "{}",

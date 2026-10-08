@@ -2,16 +2,14 @@ import { PermissionV1 } from "@apexo/core/v1/permission"
 import type { Auth } from "@/auth"
 import { SessionV1 } from "@apexo/core/v1/session"
 import type { RuntimeFlags } from "@/effect/runtime-flags"
-import { InstanceState } from "@/effect/instance-state"
 import { Permission } from "@/permission"
 import type { Agent } from "@/agent/agent"
-import type { MessageV2 } from "../message-v2"
 import type { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
 import { SystemPrompt } from "../system"
 import { InstallationVersion } from "@apexo/core/installation/version"
 import { Effect, Record } from "effect"
-import { jsonSchema, tool as aiTool, type ModelMessage, type Tool } from "ai"
+import { type ModelMessage, type Tool } from "ai"
 import type { Plugin } from "@/plugin"
 import { mergeDeep } from "remeda"
 
@@ -139,10 +137,6 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
     for (const key of Object.keys(tools)) tools[key] = { ...tools[key], strict: false }
   }
 
-  const apexoProjectID = input.model.providerID.startsWith("apexo")
-    ? (yield* InstanceState.context).project.id
-    : undefined
-
   return {
     system,
     messages,
@@ -152,19 +146,9 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
     headers: {
       "x-apexo-session-id": input.sessionID,
       ...(input.parentSessionID ? { "x-apexo-parent-session-id": input.parentSessionID } : {}),
-      ...(input.model.providerID.startsWith("apexo")
-        ? {
-            ...(apexoProjectID ? { "x-apexo-project": apexoProjectID } : {}),
-            "x-apexo-session": input.sessionID,
-            "x-apexo-request": input.user.id,
-            "x-apexo-client": input.flags.client,
-            "User-Agent": USER_AGENT,
-          }
-        : {
-            "x-session-affinity": input.sessionID,
-            "X-Session-Id": input.sessionID,
-            "User-Agent": USER_AGENT,
-          }),
+      "x-session-affinity": input.sessionID,
+      "X-Session-Id": input.sessionID,
+      "User-Agent": USER_AGENT,
       ...(input.parentSessionID ? { "x-parent-session-id": input.parentSessionID } : {}),
       ...input.model.headers,
       ...headers,

@@ -1,6 +1,6 @@
 import { Config as EffectConfig, Context, Effect, Layer } from "effect"
 import { HttpApiBuilder, OpenApi } from "effect/unstable/httpapi"
-import { HttpClient, HttpMiddleware, HttpRouter, HttpServer, HttpServerResponse } from "effect/unstable/http"
+import { HttpMiddleware, HttpRouter, HttpServer, HttpServerResponse } from "effect/unstable/http"
 import * as Socket from "effect/unstable/socket/Socket"
 import { FSUtil } from "@apexo/core/fs-util"
 import * as Observability from "@apexo/core/observability"
@@ -38,8 +38,6 @@ import { Session } from "@/session/session"
 import { SessionStatus } from "@/session/status"
 import { SessionSummary } from "@/session/summary"
 import { Todo } from "@/session/todo"
-import { SessionShare } from "@/share/session"
-import { ShareNext } from "@/share/share-next"
 import { Skill } from "@/skill"
 import { Discovery } from "@/skill/discovery"
 import { Snapshot } from "@/snapshot"
@@ -255,8 +253,6 @@ const app = LayerNode.group([
   Workspace.node,
   Worktree.node,
   Installation.node,
-  ShareNext.node,
-  SessionShare.node,
   InstanceStore.node,
   httpClient,
   EventV2.node,

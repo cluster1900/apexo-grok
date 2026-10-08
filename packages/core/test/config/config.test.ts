@@ -9,7 +9,6 @@ import { AppNodeBuilder } from "@apexo/core/effect/app-node-builder"
 import { LayerNode } from "@apexo/core/effect/layer-node"
 import { ConfigMigrateV1 } from "@apexo/core/v1/config/migrate"
 import { ConfigV1 } from "@apexo/core/v1/config/config"
-import { FSUtil } from "@apexo/core/fs-util"
 import { Global } from "@apexo/core/global"
 import { Location } from "@apexo/core/location"
 import { Policy } from "@apexo/core/policy"
@@ -278,9 +277,6 @@ describe("Config", () => {
                 shell: "/bin/bash",
                 model: "anthropic/claude",
                 default_agent: "reviewer",
-                autoupdate: "notify",
-                share: "disabled",
-                enterprise: { url: "https://share.example.com" },
                 username: "test-user",
                 permissions: [
                   { action: "bash", resource: "*", effect: "ask" },
@@ -364,9 +360,6 @@ describe("Config", () => {
             expect(documents[0]?.info.shell).toBe("/bin/bash")
             expect(documents[0]?.info.model).toBe("anthropic/claude")
             expect(documents[0]?.info.default_agent).toBe("reviewer")
-            expect(documents[0]?.info.autoupdate).toBe("notify")
-            expect(documents[0]?.info.share).toBe("disabled")
-            expect(documents[0]?.info.enterprise).toEqual({ url: "https://share.example.com" })
             expect(documents[0]?.info.username).toBe("test-user")
             expect(documents[0]?.info.permissions).toEqual([
               { action: "bash", resource: "*", effect: "ask" },
@@ -502,7 +495,6 @@ describe("Config", () => {
                 shell: "/bin/zsh",
                 default_agent: "reviewer",
                 snapshot: false,
-                autoshare: true,
                 permission: {
                   bash: "ask",
                   edit: { "*.md": "allow", "*": "deny" },
@@ -516,10 +508,7 @@ describe("Config", () => {
                     permission: { read: "allow" },
                   },
                 },
-                plugin: [
-                  "apexo-helicone-session",
-                  ["@my-org/audit-plugin", { endpoint: "https://audit.example.com" }],
-                ],
+                plugin: ["apexo-helicone-session", ["@my-org/audit-plugin", { endpoint: "https://audit.example.com" }]],
                 skills: { paths: ["./skills"], urls: ["https://example.com/.well-known/skills/"] },
                 references: {
                   docs: { path: "../docs", description: "Use for product documentation", hidden: true },
@@ -582,7 +571,6 @@ describe("Config", () => {
             expect(documents[0]?.info.shell).toBe("/bin/zsh")
             expect(documents[0]?.info.default_agent).toBe("reviewer")
             expect(documents[0]?.info.snapshots).toBe(false)
-            expect(documents[0]?.info.share).toBe("auto")
             expect(documents[0]?.info.permissions).toEqual([
               { action: "bash", resource: "*", effect: "ask" },
               { action: "edit", resource: "*.md", effect: "allow" },
@@ -747,10 +735,7 @@ describe("Config", () => {
               fs.writeFile(path.join(parent, "apexo.jsonc"), JSON.stringify({ $schema: "parent" })),
               fs.writeFile(path.join(directory, "apexo.json"), JSON.stringify({ $schema: "directory" })),
               fs.writeFile(path.join(root, ".apexo", "apexo.json"), JSON.stringify({ $schema: "root-dot" })),
-              fs.writeFile(
-                path.join(directory, ".apexo", "apexo.jsonc"),
-                JSON.stringify({ $schema: "directory-dot" }),
-              ),
+              fs.writeFile(path.join(directory, ".apexo", "apexo.jsonc"), JSON.stringify({ $schema: "directory-dot" })),
             ])
           })
 

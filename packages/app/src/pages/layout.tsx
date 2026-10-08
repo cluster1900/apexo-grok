@@ -29,7 +29,7 @@ import { getFilename } from "@apexo/core/util/path"
 import { Session } from "@apexo/sdk/v2/client"
 import { usePlatform } from "@/context/platform"
 import { useSettings } from "@/context/settings"
-import { createStore, produce, reconcile } from "solid-js/store"
+import { createStore, produce } from "solid-js/store"
 import { DragDropProvider, DragDropSensors, DragOverlay, SortableProvider, closestCenter } from "@thisbeyond/solid-dnd"
 import type { DragEvent } from "@thisbeyond/solid-dnd"
 import { useProviders } from "@/hooks/use-providers"
@@ -41,7 +41,6 @@ import { pickSessionCacheEvictions } from "@/context/global-sync/session-cache"
 import { useNotification } from "@/context/notification"
 import { usePermission } from "@/context/permission"
 import { Binary } from "@apexo/core/util/binary"
-import { retry } from "@apexo/core/util/retry"
 import { playSoundById } from "@/utils/sound"
 import { createAim } from "@/utils/aim"
 import { Worktree as WorktreeState } from "@/utils/worktree"
@@ -55,7 +54,7 @@ import { useCommand, type CommandOption } from "@/context/command"
 import { ConstrainDragXAxis, getDraggableId } from "@/utils/solid-dnd"
 import { DebugBar } from "@/components/debug-bar"
 import { TabsInfoPopup } from "@/components/help-button"
-import { Titlebar, type TitlebarUpdate } from "@/components/titlebar"
+import { Titlebar } from "@/components/titlebar"
 import { useDirectoryPicker } from "@/components/directory-picker"
 import { ServerConnection, useServer } from "@/context/server"
 import { useLanguage, type Locale } from "@/context/language"
@@ -157,18 +156,6 @@ export default function LegacyLayout(props: ParentProps) {
     peeked: false,
     debugTools: true,
   })
-
-  const updateVersion = () => {
-    const state = platform.updater?.state()
-    if (state?.status !== "ready") return
-    return state.version
-  }
-  const installUpdate = () => void platform.updater?.install()
-  const titlebarUpdate: TitlebarUpdate = {
-    version: updateVersion,
-    installing: () => platform.updater?.state().status === "installing",
-    install: installUpdate,
-  }
 
   const editor = createInlineEditorController()
   const setBusy = (directory: string, value: boolean) => {
@@ -2246,16 +2233,12 @@ export default function LegacyLayout(props: ParentProps) {
     <div class="relative bg-background-base flex-1 min-h-0 min-w-0 flex flex-col select-none [&_input]:select-text [&_textarea]:select-text [&_[contenteditable]]:select-text">
       {autoselecting() ?? ""}
       <Titlebar
-        update={titlebarUpdate}
         debugTools={
           import.meta.env.DEV && import.meta.env.VITE_DISABLE_DEBUG_BAR !== "1"
             ? { visible: state.debugTools, toggle: () => setState("debugTools", (value) => !value) }
             : undefined
         }
       />
-      <Show when={updateVersion() !== undefined}>
-        <UpdateAvailableToast version={updateVersion() ?? ""} install={installUpdate} language={language} />
-      </Show>
       <div class="flex-1 min-h-0 min-w-0 flex">
         <div class="flex-1 min-h-0 relative">
           <div class="size-full relative overflow-x-hidden">
@@ -2404,38 +2387,4 @@ export default function LegacyLayout(props: ParentProps) {
       <ToastRegion v2={false} />
     </div>
   )
-}
-
-function UpdateAvailableToast(props: {
-  version: string
-  install: () => void
-  language: ReturnType<typeof useLanguage>
-}) {
-  let toastId: number | undefined
-
-  onMount(() => {
-    toastId = showToast({
-      persistent: true,
-      icon: "download",
-      title: props.language.t("toast.update.title"),
-      description: props.language.t("toast.update.description", { version: props.version }),
-      actions: [
-        {
-          label: props.language.t("toast.update.action.installRestart"),
-          onClick: props.install,
-        },
-        {
-          label: props.language.t("toast.update.action.notYet"),
-          onClick: "dismiss",
-        },
-      ],
-    })
-  })
-
-  onCleanup(() => {
-    if (toastId === undefined) return
-    dismissToast(toastId)
-  })
-
-  return null
 }

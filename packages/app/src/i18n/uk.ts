@@ -6,7 +6,6 @@ export const dict = {
   "desktop.menu.go": "Перехід",
   "desktop.menu.window": "Вікно",
   "desktop.menu.help": "Довідка",
-  "desktop.menu.checkForUpdates": "Перевірити наявність оновлень...",
   "desktop.menu.settings": "Налаштування",
   "desktop.menu.reloadWebview": "Перезавантажити вебподання",
   "desktop.menu.restart": "Перезапустити",
@@ -40,19 +39,9 @@ export const dict = {
   "desktop.menu.minimize": "Згорнути",
   "desktop.menu.maximize": "Розгорнути",
   "desktop.menu.documentation": "Документація Apexo",
-  "desktop.menu.supportForum": "Форум підтримки",
   "desktop.menu.shareFeedback": "Надіслати відгук",
   "desktop.menu.reportBug": "Повідомити про помилку",
   "desktop.menu.ariaLabel": "Меню Apexo",
-
-  "desktop.updater.dialog.checkFailed.message": "Не вдалося перевірити наявність оновлень.",
-  "desktop.updater.dialog.checkFailed.title": "Помилка оновлення",
-  "desktop.updater.dialog.upToDate.message": "У вас найновіша версія.",
-  "desktop.updater.dialog.upToDate.title": "Оновлень немає",
-  "desktop.updater.dialog.ready.message": "Оновлення {{version}} завантажено. Перезапустити зараз?",
-  "desktop.updater.dialog.ready.title": "Оновлення готове",
-  "desktop.updater.dialog.restart": "Перезапустити",
-  "desktop.updater.dialog.later": "Пізніше",
 
   "desktop.recovery.action.relaunch": "Запустити повторно",
   "desktop.recovery.action.exportLogs": "Експортувати журнали",
@@ -188,10 +177,6 @@ export const dict = {
   "command.session.compact.description": "Підсумувати сесію, щоб зменшити розмір контексту",
   "command.session.fork": "Відгалузити від повідомлення",
   "command.session.fork.description": "Створити нову сесію з попереднього повідомлення",
-  "command.session.share": "Поділитися сесією",
-  "command.session.share.description": "Поділитися цією сесією та скопіювати URL у буфер обміну",
-  "command.session.unshare": "Припинити поширення сесії",
-  "command.session.unshare.description": "Припинити поширення цієї сесії",
 
   "command.session.export": "Експортувати сесію",
   "command.session.export.description": "Експортувати повну історію сесії у форматі JSON",
@@ -208,9 +193,6 @@ export const dict = {
   "dialog.provider.group.other": "Інші",
   "dialog.provider.custom.label": "Користувацький провайдер, сумісний з OpenAI",
   "dialog.provider.tag.recommended": "Рекомендовані",
-  "dialog.provider.apexo.note": "Відібрані моделі, включаючи Claude, GPT, Gemini та інші",
-  "dialog.provider.apexo.tagline": "Надійні оптимізовані моделі",
-  "dialog.provider.apexoGo.tagline": "Недорога підписка для всіх",
   "dialog.provider.anthropic.note": "Прямий доступ до моделей Claude, включаючи Pro та Max",
   "dialog.provider.copilot.note": "Моделі ШІ для допомоги в кодуванні через GitHub Copilot",
   "dialog.provider.openai.note": "Моделі GPT для швидких і універсальних завдань ШІ",
@@ -569,13 +551,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description": "Виконується після створення нової робочої області (worktree).",
   "dialog.project.edit.worktree.startup.placeholder": "напр. bun install",
 
-  "dialog.releaseNotes.action.getStarted": "Розпочати",
-  "dialog.releaseNotes.action.next": "Далі",
-  "dialog.releaseNotes.action.hideFuture": "Не показувати це в майбутньому",
-  "dialog.releaseNotes.media.alt": "Попередній перегляд релізу",
-
-  "dialog.usageExceeded.dontShowAgain": "Більше не показувати",
-
   "context.breakdown.title": "Розподіл контексту",
   "context.breakdown.note":
     'Приблизний розподіл вхідних токенів. "Інше" включає визначення інструментів і накладні витрати.',
@@ -657,17 +632,6 @@ export const dict = {
   "toast.context.noLineSelection.title": "Не вибрано рядків",
   "toast.context.noLineSelection.description": "Спочатку виберіть діапазон рядків у вкладці файлу.",
 
-  "toast.session.share.copyFailed.title": "Не вдалося скопіювати URL у буфер обміну",
-  "toast.session.share.success.title": "Сесію опубліковано",
-  "toast.session.share.success.description": "Посилання скопійовано в буфер обміну!",
-  "toast.session.share.failed.title": "Не вдалося опублікувати сесію",
-  "toast.session.share.failed.description": "Під час публікації сесії сталася помилка",
-
-  "toast.session.unshare.success.title": "Поширення сесії припинено",
-  "toast.session.unshare.success.description": "Поширення сесії успішно припинено!",
-  "toast.session.unshare.failed.title": "Не вдалося припинити поширення сесії",
-  "toast.session.unshare.failed.description": "Під час припинення поширення сесії сталася помилка",
-
   "toast.session.export.success.title": "Сесію експортовано",
   "toast.session.export.success.description": "Сесію збережено у файл {{filename}}",
   "toast.session.export.failed.title": "Не вдалося експортувати сесію",
@@ -675,11 +639,6 @@ export const dict = {
 
   "toast.session.listFailed.title": "Не вдалося завантажити сесії для {{project}}",
   "toast.project.reloadFailed.title": "Не вдалося перезавантажити {{project}}",
-
-  "toast.update.title": "Доступне оновлення",
-  "toast.update.description": "Нова версія Apexo ({{version}}) тепер доступна для встановлення.",
-  "toast.update.action.installRestart": "Встановити та перезапустити",
-  "toast.update.action.notYet": "Не зараз",
 
   "error.page.title": "Щось пішло не так",
   "error.page.description": "Під час завантаження програми сталася помилка.",
@@ -689,12 +648,8 @@ export const dict = {
   "error.page.action.report": "Повідомити про помилку",
   "error.page.action.reported": "Про помилку повідомлено",
   "error.page.action.exportLogs": "Експортувати журнали",
-  "error.page.action.checking": "Перевірка...",
-  "error.page.action.checkUpdates": "Перевірити оновлення",
-  "error.page.action.updateTo": "Оновити до {{version}}",
   "error.page.circular": "[Циклічне]",
   "error.page.report.prefix": "Будь ласка, повідомте про цю помилку команді Apexo",
-  "error.page.report.discord": "у Discord",
   "error.page.version": "Версія: {{version}}",
 
   "error.dev.rootNotFound":
@@ -719,8 +674,7 @@ export const dict = {
   "error.chain.didYouMean": "Можливо, ви мали на увазі: {{suggestions}}",
   "error.chain.modelNotFound": "Модель не знайдено: {{provider}}/{{model}}",
   "error.chain.checkConfig": "Перевірте назви провайдерів/моделей у конфігурації (apexo.json)",
-  "error.chain.mcpFailed":
-    'Сервер MCP "{{name}}" не працює. Зверніть увагу, Apexo ще не підтримує автентифікацію MCP.',
+  "error.chain.mcpFailed": 'Сервер MCP "{{name}}" не працює. Зверніть увагу, Apexo ще не підтримує автентифікацію MCP.',
   "error.chain.providerAuthFailed": "Автентифікація провайдера не вдалася ({{provider}}): {{message}}",
   "error.chain.providerInitFailed":
     'Не вдалося ініціалізувати провайдера "{{provider}}". Перевірте облікові дані та конфігурацію.',
@@ -875,19 +829,7 @@ export const dict = {
   "status.popover.tab.plugins": "Плагіни",
   "status.popover.action.manageServers": "Керувати серверами",
 
-  "session.share.popover.title": "Опублікувати в інтернеті",
-  "session.share.popover.description.shared":
-    "Ця сесія є публічною в інтернеті. Вона доступна будь-кому за посиланням.",
-  "session.share.popover.description.unshared":
-    "Опублікуйте сесію публічно в інтернеті. Вона буде доступна будь-кому за посиланням.",
-  "session.share.action.share": "Поділитися",
-  "session.share.action.publish": "Опублікувати",
-  "session.share.action.publishing": "Публікація...",
-  "session.share.action.unpublish": "Скасувати публікацію",
-  "session.share.action.unpublishing": "Скасування публікації...",
-  "session.share.action.view": "Переглянути",
   "session.share.copy.copied": "Скопійовано",
-  "session.share.copy.copyLink": "Копіювати посилання",
 
   "lsp.tooltip.none": "Немає серверів LSP",
   "lsp.label.connected": "{{count}} LSP",
@@ -904,9 +846,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "Квиток підключення PTY відхилено через перевірку джерела або CSRF. Перевірте конфігурацію CORS сервера.",
   "terminal.connectTicket.statusError": "Помилка квитка підключення PTY зі статусом {{status}}",
-
-  "titlebar.update": "Оновити",
-  "titlebar.updateVersion": "Оновити {{version}}",
 
   "common.closeTab": "Закрити вкладку",
   "common.dismiss": "Відхилити",
@@ -1005,7 +944,6 @@ export const dict = {
   "settings.general.section.appearance": "Зовнішній вигляд",
   "settings.general.section.advanced": "Додатково",
   "settings.general.section.notifications": "Системні сповіщення",
-  "settings.general.section.updates": "Оновлення",
   "settings.general.section.sounds": "Звукові ефекти",
   "settings.general.section.feed": "Стрічка",
   "settings.general.section.display": "Дисплей",
@@ -1075,19 +1013,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "На Linux з моніторами з різною частотою оновлення нативний Wayland може бути більш стабільним.",
 
-  "settings.general.row.releaseNotes.title": "Нотатки до релізу",
-  "settings.general.row.releaseNotes.description": 'Показувати спливаючі вікна "Що нового" після оновлень',
-
-  "settings.updates.row.startup.title": "Перевіряти оновлення під час запуску",
-  "settings.updates.row.startup.description": "Автоматично перевіряти наявність оновлень під час запуску Apexo",
-  "settings.updates.row.check.title": "Перевірити оновлення",
-  "settings.updates.row.check.description": "Вручну перевірити наявність оновлень і встановити, якщо доступні",
-  "settings.updates.action.checkNow": "Перевірити зараз",
-  "settings.updates.action.checking": "Перевірка...",
-  "settings.updates.action.downloading": "Завантаження...",
-  "settings.updates.action.installing": "Встановлення...",
-  "settings.updates.toast.latest.title": "У вас актуальна версія",
-  "settings.updates.toast.latest.description": "Ви використовуєте останню версію Apexo.",
   "sound.option.none": "Немає",
   "sound.option.alert01": "Alert 01",
   "sound.option.alert02": "Alert 02",

@@ -37,17 +37,17 @@ already-loaded config until then.
 
 ## Where files live
 
-| Scope                         | Path                                                                                                                      |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Scope                         | Path                                                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | Project config                | `./apexo.json`, `./apexo.jsonc`, or `.apexo/apexo.json` (apexo walks up from the cwd to the worktree root) |
 | Global config                 | `~/.config/apexo/apexo.json` or `~/.config/apexo/apexo.jsonc` (NOT `~/.apexo/`)                            |
-| Project agents                | `.apexo/agent/<name>.md` or `.apexo/agents/<name>.md`                                                               |
-| Global agents                 | `~/.config/apexo/agent(s)/<name>.md`                                                                                   |
-| Project commands              | `.apexo/command/<name>.md` or `.apexo/commands/<name>.md`                                                           |
-| Global commands               | `~/.config/apexo/command(s)/<name>.md`                                                                                 |
-| Project skills                | `.apexo/skill(s)/<name>/SKILL.md`                                                                                      |
-| Global skills                 | `~/.config/apexo/skill(s)/<name>/SKILL.md`                                                                             |
-| External skills (auto-loaded) | `~/.claude/skills/<name>/SKILL.md`, `~/.agents/skills/<name>/SKILL.md`                                                    |
+| Project agents                | `.apexo/agent/<name>.md` or `.apexo/agents/<name>.md`                                                      |
+| Global agents                 | `~/.config/apexo/agent(s)/<name>.md`                                                                       |
+| Project commands              | `.apexo/command/<name>.md` or `.apexo/commands/<name>.md`                                                  |
+| Global commands               | `~/.config/apexo/command(s)/<name>.md`                                                                     |
+| Project skills                | `.apexo/skill(s)/<name>/SKILL.md`                                                                          |
+| Global skills                 | `~/.config/apexo/skill(s)/<name>/SKILL.md`                                                                 |
+| External skills (auto-loaded) | `~/.claude/skills/<name>/SKILL.md`, `~/.agents/skills/<name>/SKILL.md`                                     |
 
 Configs from each scope are deep-merged. Project overrides global. Unknown
 top-level keys in `apexo.json` are rejected with `ConfigInvalidError`.
@@ -65,8 +65,6 @@ Every field is optional.
   "default_agent": "agent-name",
   "shell": "/bin/zsh",
   "logLevel": "DEBUG" | "INFO" | "WARN" | "ERROR",
-  "share": "manual" | "auto" | "disabled",
-  "autoupdate": true | false | "notify",
   "snapshot": true,
   "instructions": ["AGENTS.md", "docs/style.md"],
 

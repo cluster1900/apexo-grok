@@ -10,7 +10,6 @@ export const dict = {
   "desktop.menu.go": "Git",
   "desktop.menu.window": "Pencere",
   "desktop.menu.help": "Yardım",
-  "desktop.menu.checkForUpdates": "Güncellemeleri kontrol et...",
   "desktop.menu.settings": "Ayarlar",
   "desktop.menu.reloadWebview": "Web görünümünü yeniden yükle",
   "desktop.menu.restart": "Yeniden başlat",
@@ -44,19 +43,9 @@ export const dict = {
   "desktop.menu.minimize": "Simge durumuna küçült",
   "desktop.menu.maximize": "Ekranı kapla",
   "desktop.menu.documentation": "Apexo belgeleri",
-  "desktop.menu.supportForum": "Destek forumu",
   "desktop.menu.shareFeedback": "Geri bildirim paylaş",
   "desktop.menu.reportBug": "Hata bildir",
   "desktop.menu.ariaLabel": "Apexo menüsü",
-
-  "desktop.updater.dialog.checkFailed.message": "Güncellemeler kontrol edilemedi.",
-  "desktop.updater.dialog.checkFailed.title": "Güncelleme hatası",
-  "desktop.updater.dialog.upToDate.message": "En son sürümü kullanıyorsunuz.",
-  "desktop.updater.dialog.upToDate.title": "Güncelleme yok",
-  "desktop.updater.dialog.ready.message": "{{version}} güncellemesi indirildi. Şimdi yeniden başlatılsın mı?",
-  "desktop.updater.dialog.ready.title": "Güncelleme hazır",
-  "desktop.updater.dialog.restart": "Yeniden başlat",
-  "desktop.updater.dialog.later": "Daha sonra",
 
   "desktop.recovery.action.relaunch": "Uygulamayı yeniden başlat",
   "desktop.recovery.action.exportLogs": "Günlükleri dışa aktar",
@@ -192,10 +181,6 @@ export const dict = {
   "command.session.compact.description": "Bağlam boyutunu azaltmak için oturumu özetle",
   "command.session.fork": "Mesajdan dallandır",
   "command.session.fork.description": "Önceki bir mesajdan yeni oturum oluştur",
-  "command.session.share": "Oturumu paylaş",
-  "command.session.share.description": "Bu oturumu paylaş ve URL'yi panoya kopyala",
-  "command.session.unshare": "Paylaşımı kaldır",
-  "command.session.unshare.description": "Bu oturumun paylaşımını durdur",
 
   "command.session.export": "Oturumu dışa aktar",
   "command.session.export.description": "Oturumun tam dökümünü JSON olarak dışa aktar",
@@ -212,9 +197,6 @@ export const dict = {
   "dialog.provider.group.other": "Diğer",
   "dialog.provider.custom.label": "Özel OpenAI uyumlu sağlayıcı",
   "dialog.provider.tag.recommended": "Önerilen",
-  "dialog.provider.apexo.note": "Claude, GPT, Gemini ve daha fazlasını içeren seçilmiş modeller",
-  "dialog.provider.apexo.tagline": "Güvenilir, optimize edilmiş modeller",
-  "dialog.provider.apexoGo.tagline": "Herkes için düşük maliyetli abonelik",
   "dialog.provider.anthropic.note": "Pro ve Max dahil Claude modellerine doğrudan erişim",
   "dialog.provider.copilot.note": "GitHub Copilot üzerinden kodlama yardımı için yapay zekâ modelleri",
   "dialog.provider.openai.note": "Hızlı ve yetenekli genel yapay zekâ görevleri için GPT modelleri",
@@ -565,8 +547,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description": "Yeni bir çalışma alanı (worktree) oluşturduktan sonra çalışır.",
   "dialog.project.edit.worktree.startup.placeholder": "örneğin bun install",
 
-  "dialog.usageExceeded.dontShowAgain": "Bir daha gösterme",
-
   "context.breakdown.title": "Bağlam Dökümü",
   "context.breakdown.note": 'Girdi tokenlerinin yaklaşık dökümü. "Diğer" araç tanımları ve ek yükleri içerir.',
   "context.breakdown.system": "Sistem",
@@ -647,28 +627,12 @@ export const dict = {
   "toast.context.noLineSelection.title": "Satır seçimi yok",
   "toast.context.noLineSelection.description": "Önce bir dosya sekmesinde satır aralığı seçin.",
 
-  "toast.session.share.copyFailed.title": "URL panoya kopyalanamadı",
-  "toast.session.share.success.title": "Oturum paylaşıldı",
-  "toast.session.share.success.description": "Paylaşım URL'si panoya kopyalandı!",
-  "toast.session.share.failed.title": "Oturum paylaşılamadı",
-  "toast.session.share.failed.description": "Oturum paylaşılırken bir hata oluştu",
-
-  "toast.session.unshare.success.title": "Oturum paylaşımı kaldırıldı",
-  "toast.session.unshare.success.description": "Oturum paylaşımı başarıyla kaldırıldı!",
-  "toast.session.unshare.failed.title": "Oturum paylaşımı kaldırılamadı",
-  "toast.session.unshare.failed.description": "Oturum paylaşımı kaldırılırken bir hata oluştu",
-
   "toast.session.export.success.title": "Oturum dışa aktarıldı",
   "toast.session.export.success.description": "Oturum {{filename}} dosyasına kaydedildi",
   "toast.session.export.failed.title": "Oturum dışa aktarılamadı",
   "toast.session.export.failed.description": "Oturum dışa aktarılırken bir hata oluştu",
 
   "toast.session.listFailed.title": "{{project}} için oturumlar yüklenemedi",
-
-  "toast.update.title": "Güncelleme mevcut",
-  "toast.update.description": "Apexo'un yeni bir sürümü ({{version}}) yüklemeye hazır.",
-  "toast.update.action.installRestart": "Yükle ve yeniden başlat",
-  "toast.update.action.notYet": "Şimdi değil",
 
   "error.page.title": "Bir şeyler yanlış gitti",
   "error.page.description": "Uygulama yüklenirken bir hata oluştu.",
@@ -678,11 +642,7 @@ export const dict = {
   "error.page.action.report": "Hatayı Bildir",
   "error.page.action.reported": "Hata Bildirildi",
   "error.page.action.exportLogs": "Günlükleri Dışa Aktar",
-  "error.page.action.checking": "Kontrol ediliyor...",
-  "error.page.action.checkUpdates": "Güncellemeleri kontrol et",
-  "error.page.action.updateTo": "{{version}} sürümüne güncelle",
   "error.page.report.prefix": "Lütfen bu hatayı Apexo ekibine",
-  "error.page.report.discord": "Discord üzerinden bildirin",
   "error.page.version": "Sürüm: {{version}}",
 
   "error.dev.rootNotFound":
@@ -829,18 +789,7 @@ export const dict = {
   "status.popover.tab.plugins": "Eklentiler",
   "status.popover.action.manageServers": "Sunucuları yönet",
 
-  "session.share.popover.title": "Web'de yayınla",
-  "session.share.popover.description.shared": "Bu oturum web'de herkese açıktır. Bağlantıya sahip herkes erişebilir.",
-  "session.share.popover.description.unshared":
-    "Oturumu web'de herkese açık olarak paylaşın. Bağlantıya sahip herkes erişebilecek.",
-  "session.share.action.share": "Paylaş",
-  "session.share.action.publish": "Yayınla",
-  "session.share.action.publishing": "Yayınlanıyor...",
-  "session.share.action.unpublish": "Yayından kaldır",
-  "session.share.action.unpublishing": "Yayından kaldırılıyor...",
-  "session.share.action.view": "Görüntüle",
   "session.share.copy.copied": "Kopyalandı",
-  "session.share.copy.copyLink": "Bağlantıyı kopyala",
 
   "lsp.tooltip.none": "LSP sunucusu yok",
   "lsp.label.connected": "{{count}} LSP",
@@ -856,9 +805,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "PTY bağlantı bileti, kaynak veya CSRF denetimleri tarafından reddedildi. Sunucunun CORS yapılandırmasını kontrol edin.",
   "terminal.connectTicket.statusError": "PTY bağlantı bileti {{status}} durumuyla başarısız oldu",
-
-  "titlebar.update": "Güncelle",
-  "titlebar.updateVersion": "Güncelle {{version}}",
 
   "common.closeTab": "Sekmeyi kapat",
   "common.dismiss": "Kapat",
@@ -903,7 +849,6 @@ export const dict = {
   "settings.general.section.appearance": "Görünüm",
   "settings.general.section.advanced": "Gelişmiş",
   "settings.general.section.notifications": "Sistem bildirimleri",
-  "settings.general.section.updates": "Güncellemeler",
   "settings.general.section.sounds": "Ses efektleri",
   "settings.general.section.feed": "Akış",
   "settings.general.section.display": "Ekran",
@@ -973,20 +918,6 @@ export const dict = {
     "Wayland'da X11 geri dönüşünü devre dışı bırak. Yeniden başlatma gerektirir.",
   "settings.general.row.wayland.tooltip":
     "Farklı yenileme hızlarına sahip monitörlerin kullanıldığı Linux sistemlerinde yerel Wayland daha kararlı olabilir.",
-
-  "settings.general.row.releaseNotes.title": "Sürüm notları",
-  "settings.general.row.releaseNotes.description": "Güncellemelerden sonra Yenilikler bildirimlerini göster",
-
-  "settings.updates.row.startup.title": "Başlangıçta güncellemeleri kontrol et",
-  "settings.updates.row.startup.description": "Apexo başladığında otomatik güncelleme kontrolü yap",
-  "settings.updates.row.check.title": "Güncellemeleri kontrol et",
-  "settings.updates.row.check.description": "Elle güncelleme kontrolü yap ve varsa yükle",
-  "settings.updates.action.checkNow": "Şimdi kontrol et",
-  "settings.updates.action.checking": "Kontrol ediliyor...",
-  "settings.updates.action.downloading": "İndiriliyor...",
-  "settings.updates.action.installing": "Kuruluyor...",
-  "settings.updates.toast.latest.title": "Güncelsiniz",
-  "settings.updates.toast.latest.description": "Apexo'un en son sürümünü kullanıyorsunuz.",
 
   "sound.option.none": "Yok",
   "sound.option.alert01": "Uyarı 01",
@@ -1155,10 +1086,6 @@ export const dict = {
   "workspace.reset.archived.many": "{{count}} oturum arşivlenecek.",
   "workspace.reset.note": "Bu işlem çalışma alanını varsayılan dalla eşleşecek şekilde sıfırlayacak.",
   "common.open": "Aç",
-  "dialog.releaseNotes.action.getStarted": "Başla",
-  "dialog.releaseNotes.action.next": "İleri",
-  "dialog.releaseNotes.action.hideFuture": "Bunu gelecekte bir daha gösterme",
-  "dialog.releaseNotes.media.alt": "Sürüm önizlemesi",
   "toast.project.reloadFailed.title": "{{project}} yeniden yüklenemedi",
   "error.server.invalidConfiguration": "Geçersiz yapılandırma",
   "common.moreCountSuffix": " (+{{count}} daha)",

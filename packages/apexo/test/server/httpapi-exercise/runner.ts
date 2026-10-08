@@ -3,9 +3,7 @@ import { ConfigV1 } from "@apexo/core/v1/config/config"
 import { SessionV1 } from "@apexo/core/v1/session"
 import { Cause, Duration, Effect, Layer, Scope } from "effect"
 import { TestLLMServer } from "../../lib/llm-server"
-import type { Config } from "../../../src/config/config"
 
-import type { MessageV2 } from "../../../src/session/message-v2"
 import { MessageID, PartID } from "../../../src/session/schema"
 import { call, callAuthProbe, disposeApps } from "./backend"
 import { original } from "./environment"
@@ -153,7 +151,7 @@ function withContext<A, E>(
                 time: { created: Date.now() },
                 agent: "build",
                 model: {
-                  providerID: ProviderV2.ID.apexo,
+                  providerID: ProviderV2.ID.make("test"),
                   modelID: ModelV2.ID.make("test"),
                 },
               }

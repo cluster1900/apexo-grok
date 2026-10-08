@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@babel/core": "7.28.4",
-    "@octokit/webhooks-types": "7.6.1",
     "@apexo/core": "workspace:*",
     "@apexo/http-recorder": "workspace:*",
     "@apexo/script": "workspace:*",
@@ -73,7 +72,6 @@
     "@effect/platform-node": "catalog:",
     "@ff-labs/fff-bun": "0.9.4",
     "@modelcontextprotocol/sdk": "1.29.0",
-    "@openauthjs/openauth": "catalog:",
     "@opentelemetry/api": "1.9.0",
     "@opentelemetry/context-async-hooks": "2.6.1",
     "@opentelemetry/exporter-trace-otlp-http": "0.214.0",

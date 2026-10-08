@@ -97,9 +97,7 @@ const scenarios: Scenario[] = [
         Effect.gen(function* () {
           object(body)
           check(body.username === "httpapi-global", "global config update should return patched config")
-          const text = yield* Effect.promise(() =>
-            Bun.file(path.join(exerciseConfigDirectory, "apexo.jsonc")).text(),
-          )
+          const text = yield* Effect.promise(() => Bun.file(path.join(exerciseConfigDirectory, "apexo.jsonc")).text())
           check(text.includes('"username": "httpapi-global"'), "global config update should write isolated config file")
         }),
       "status",
@@ -480,16 +478,6 @@ const scenarios: Scenario[] = [
     .get("/pty/{ptyID}/connect", "pty.connect")
     .at((ctx) => ({ path: route("/pty/{ptyID}/connect", { ptyID: "pty_httpapi_missing" }), headers: ctx.headers() }))
     .status(404, undefined, "none"),
-  http.protected.get("/experimental/console", "experimental.console.get").json(),
-  http.protected.get("/experimental/console/orgs", "experimental.console.listOrgs").json(),
-  http.protected
-    .post("/experimental/console/switch", "experimental.console.switchOrg")
-    .at((ctx) => ({
-      path: "/experimental/console/switch",
-      headers: ctx.headers(),
-      body: { accountID: "httpapi-account", orgID: "httpapi-org" },
-    }))
-    .status(400, undefined, "none"),
   http.protected.get("/experimental/workspace/adapter", "experimental.workspace.adapter.list").json(200, array),
   http.protected.get("/experimental/workspace", "experimental.workspace.list").json(200, array),
   http.protected.get("/experimental/workspace/status", "experimental.workspace.status").json(200, array),
@@ -1651,32 +1639,6 @@ const scenarios: Scenario[] = [
       body: { response: "once" },
     }))
     .json(404, object, "status"),
-  http.protected
-    .post("/session/{sessionID}/share", "session.share")
-    .mutating()
-    .seeded((ctx) => ctx.session({ title: "Share session" }))
-    .at((ctx) => ({ path: route("/session/{sessionID}/share", { sessionID: ctx.state.id }), headers: ctx.headers() }))
-    .json(
-      200,
-      (body, ctx) => {
-        object(body)
-        check(body.id === ctx.state.id, "share should return the session")
-      },
-      "status",
-    ),
-  http.protected
-    .delete("/session/{sessionID}/share", "session.unshare")
-    .mutating()
-    .seeded((ctx) => ctx.session({ title: "Unshare session" }))
-    .at((ctx) => ({ path: route("/session/{sessionID}/share", { sessionID: ctx.state.id }), headers: ctx.headers() }))
-    .json(
-      200,
-      (body, ctx) => {
-        object(body)
-        check(body.id === ctx.state.id, "unshare should return the session")
-      },
-      "status",
-    ),
   http.protected
     .post("/tui/append-prompt", "tui.appendPrompt")
     .at((ctx) => ({ path: "/tui/append-prompt", headers: ctx.headers(), body: { text: "hello" } }))

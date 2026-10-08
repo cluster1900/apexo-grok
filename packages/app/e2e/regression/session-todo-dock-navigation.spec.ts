@@ -42,8 +42,8 @@ test("animates todo lifecycle without replaying it across session tabs", async (
     provider: {
       all: [
         {
-          id: "apexo",
-          name: "Apexo",
+          id: "test",
+          name: "Test",
           models: {
             "claude-opus-4-6": {
               id: "claude-opus-4-6",
@@ -53,8 +53,8 @@ test("animates todo lifecycle without replaying it across session tabs", async (
           },
         },
       ],
-      connected: ["apexo"],
-      default: { providerID: "apexo", modelID: "claude-opus-4-6" },
+      connected: ["test"],
+      default: { providerID: "test", modelID: "claude-opus-4-6" },
     },
     sessions: [session(sourceID, sourceTitle, 1700000000000), session(otherID, otherTitle, 1700000001000)],
     sessionStatus: { [sourceID]: { type: "busy" } },

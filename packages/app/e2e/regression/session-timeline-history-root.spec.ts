@@ -64,8 +64,8 @@ for (const scenario of scenarios) {
       provider: {
         all: [
           {
-            id: "apexo",
-            name: "Apexo",
+            id: "test",
+            name: "Test",
             models: {
               "claude-opus-4-6": {
                 id: "claude-opus-4-6",
@@ -75,8 +75,8 @@ for (const scenario of scenarios) {
             },
           },
         ],
-        connected: ["apexo"],
-        default: { providerID: "apexo", modelID: "claude-opus-4-6" },
+        connected: ["test"],
+        default: { providerID: "test", modelID: "claude-opus-4-6" },
       },
       sessions: [session()],
       sessionStatus: { [sessionID]: { type: "busy" } },

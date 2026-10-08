@@ -21,7 +21,6 @@ export const Flag = {
   APEXO_GIT_BASH_PATH: process.env["APEXO_GIT_BASH_PATH"],
   APEXO_CONFIG: process.env["APEXO_CONFIG"],
   APEXO_CONFIG_CONTENT: process.env["APEXO_CONFIG_CONTENT"],
-  APEXO_DISABLE_AUTOUPDATE: truthy("APEXO_DISABLE_AUTOUPDATE"),
   APEXO_ALWAYS_NOTIFY_UPDATE: truthy("APEXO_ALWAYS_NOTIFY_UPDATE"),
   APEXO_DISABLE_PRUNE: truthy("APEXO_DISABLE_PRUNE"),
   APEXO_DISABLE_TERMINAL_TITLE: truthy("APEXO_DISABLE_TERMINAL_TITLE"),
@@ -35,9 +34,7 @@ export const Flag = {
   APEXO_DISABLE_FFF: fff === undefined ? process.platform === "win32" : truthy("APEXO_DISABLE_FFF"),
 
   // Experimental
-  APEXO_EXPERIMENTAL_FILEWATCHER: Config.boolean("APEXO_EXPERIMENTAL_FILEWATCHER").pipe(
-    Config.withDefault(false),
-  ),
+  APEXO_EXPERIMENTAL_FILEWATCHER: Config.boolean("APEXO_EXPERIMENTAL_FILEWATCHER").pipe(Config.withDefault(false)),
   APEXO_EXPERIMENTAL_DISABLE_FILEWATCHER: Config.boolean("APEXO_EXPERIMENTAL_DISABLE_FILEWATCHER").pipe(
     Config.withDefault(false),
   ),

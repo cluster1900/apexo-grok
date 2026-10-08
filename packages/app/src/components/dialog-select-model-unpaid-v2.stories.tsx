@@ -4,21 +4,14 @@ import { useDialog } from "@apexo/ui/context/dialog"
 import { createSignal, onMount } from "solid-js"
 import { DialogSelectModelUnpaidV2 } from "./dialog-select-model-unpaid-v2"
 
-const names = [
-  "MiMo V2.5 Free",
-  "Nemotron 3 Ultra Free",
-  "Deepseek V4 Flash Free",
-  "North Mini Code Free",
-  "Hy3 Free",
-  "Big Pickle",
-]
+const names = ["Llama 3.3 70B", "Qwen3 Coder 30B", "Gemma 3 27B", "Mistral Small 3.2", "Phi-4", "GPT-OSS 20B"]
 
 function SelectModelWithoutProviders() {
   const dialog = useDialog()
   const models = names.map((name, index) => ({
     id: name.toLowerCase().replaceAll(" ", "-"),
     name,
-    provider: { id: "apexo", name: "Apexo" },
+    provider: { id: "ollama", name: "Ollama (local)" },
     cost: { input: 0, output: 0 },
     limit: { context: 128_000 },
     capabilities: {

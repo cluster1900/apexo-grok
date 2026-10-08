@@ -7,7 +7,6 @@
 ## Do Not Translate (Locale Additions)
 
 - `Apexo` (preserve casing in prose; keep `apexo` only when it is part of commands, package names, paths, or code)
-- `Apexo Zen`
 - `Apexo CLI`
 - `CLI`, `TUI`, `MCP`, `OAuth`
 - `Model Context Protocol` (prefer the English expansion when introducing `MCP`)

@@ -394,35 +394,11 @@ describe("session.llm-native.request", () => {
     })
     expect(
       LLMNativeRuntime.status({
-        model: { ...baseModel, providerID: ProviderV2.ID.make("apexo") },
-        provider: { ...providerInfo, id: ProviderV2.ID.make("apexo") },
-        auth: undefined,
-      }),
-    ).toMatchObject({
-      type: "supported",
-      apiKey: "test-openai-key",
-    })
-    expect(
-      LLMNativeRuntime.status({
-        model: {
-          ...baseModel,
-          providerID: ProviderV2.ID.make("apexo"),
-          api: { ...baseModel.api, npm: "@ai-sdk/openai-compatible" },
-        },
-        provider: { ...providerInfo, id: ProviderV2.ID.make("apexo") },
-        auth: undefined,
-      }),
-    ).toMatchObject({
-      type: "supported",
-      apiKey: "test-openai-key",
-    })
-    expect(
-      LLMNativeRuntime.status({
         model: { ...baseModel, providerID: ProviderV2.ID.make("google") },
         provider: { ...providerInfo, id: ProviderV2.ID.make("google") },
         auth: undefined,
       }),
-    ).toEqual({ type: "unsupported", reason: "provider is not openai, apexo, or anthropic" })
+    ).toEqual({ type: "unsupported", reason: "provider is not openai or anthropic" })
     expect(
       LLMNativeRuntime.status({
         model: baseModel,
@@ -475,21 +451,20 @@ describe("session.llm-native.request", () => {
     ).toMatchObject({ type: "supported", apiKey: "test-anthropic-key" })
   })
 
-  test("prefers console provider api key over stored apexo auth", () => {
+  test("prefers the provider option api key over stored auth", () => {
     expect(
       LLMNativeRuntime.status({
-        model: { ...baseModel, providerID: ProviderV2.ID.make("apexo") },
+        model: baseModel,
         provider: {
           ...providerInfo,
-          id: ProviderV2.ID.make("apexo"),
-          options: { apiKey: "console-token" },
-          key: "zen-token",
+          options: { apiKey: "option-token" },
+          key: "stored-token",
         },
-        auth: { type: "api", key: "zen-token" },
+        auth: { type: "api", key: "stored-token" },
       }),
     ).toMatchObject({
       type: "supported",
-      apiKey: "console-token",
+      apiKey: "option-token",
     })
     expect(
       LLMNativeRuntime.status({

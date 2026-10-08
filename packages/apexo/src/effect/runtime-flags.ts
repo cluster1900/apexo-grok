@@ -14,7 +14,6 @@ const enabledByExperimental = (name: string) =>
   )
 
 export class Service extends ConfigService.Service<Service>()("@apexo/RuntimeFlags", {
-  autoShare: bool("APEXO_AUTO_SHARE"),
   pure: bool("APEXO_PURE"),
   disableDefaultPlugins: bool("APEXO_DISABLE_DEFAULT_PLUGINS"),
   disableEmbeddedWebUi: bool("APEXO_DISABLE_EMBEDDED_WEB_UI"),

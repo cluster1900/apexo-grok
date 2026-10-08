@@ -1,7 +1,6 @@
 import { describe, expect } from "bun:test"
 import { Catalog } from "@apexo/core/catalog"
 import { AppNodeBuilder } from "@apexo/core/effect/app-node-builder"
-import { LayerNode } from "@apexo/core/effect/layer-node"
 import { Location } from "@apexo/core/location"
 import { ModelV2 } from "@apexo/core/model"
 import { VariantPlugin } from "@apexo/core/plugin/variant"
@@ -23,10 +22,10 @@ describe("VariantPlugin", () => {
     Effect.gen(function* () {
       const service = yield* Catalog.Service
       yield* service.transform((catalog) => {
-        catalog.provider.update(ProviderV2.ID.apexo, (provider) => {
+        catalog.provider.update(ProviderV2.ID.make("test"), (provider) => {
           provider.api = { type: "aisdk", package: "@ai-sdk/openai-compatible" }
         })
-        catalog.model.update(ProviderV2.ID.apexo, ModelV2.ID.make("glm-5.2"), (model) => {
+        catalog.model.update(ProviderV2.ID.make("test"), ModelV2.ID.make("glm-5.2"), (model) => {
           model.api = {
             id: ModelV2.ID.make("glm-5.2"),
             type: "aisdk",
@@ -36,7 +35,7 @@ describe("VariantPlugin", () => {
       })
       yield* VariantPlugin.Plugin.effect(host({ catalog: catalogHost(service) }))
 
-      expect((yield* service.model.get(ProviderV2.ID.apexo, ModelV2.ID.make("glm-5.2")))?.variants).toEqual([
+      expect((yield* service.model.get(ProviderV2.ID.make("test"), ModelV2.ID.make("glm-5.2")))?.variants).toEqual([
         expect.objectContaining({ id: "high", body: { reasoning_effort: "high" } }),
         expect.objectContaining({ id: "max", body: { reasoning_effort: "max" } }),
       ])
@@ -47,7 +46,7 @@ describe("VariantPlugin", () => {
     Effect.gen(function* () {
       const service = yield* Catalog.Service
       yield* service.transform((catalog) => {
-        catalog.model.update(ProviderV2.ID.apexo, ModelV2.ID.make("glm-5.2"), (model) => {
+        catalog.model.update(ProviderV2.ID.make("test"), ModelV2.ID.make("glm-5.2"), (model) => {
           model.api = {
             id: ModelV2.ID.make("glm-5.2"),
             type: "aisdk",
@@ -58,7 +57,7 @@ describe("VariantPlugin", () => {
       })
       yield* VariantPlugin.Plugin.effect(host({ catalog: catalogHost(service) }))
 
-      expect((yield* service.model.get(ProviderV2.ID.apexo, ModelV2.ID.make("glm-5.2")))?.variants).toEqual([
+      expect((yield* service.model.get(ProviderV2.ID.make("test"), ModelV2.ID.make("glm-5.2")))?.variants).toEqual([
         expect.objectContaining({ id: "high", headers: { custom: "true" } }),
         expect.objectContaining({ id: "max", body: { reasoning_effort: "max" } }),
       ])

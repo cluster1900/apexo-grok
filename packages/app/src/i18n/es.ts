@@ -6,7 +6,6 @@ export const dict = {
   "desktop.menu.go": "Ir",
   "desktop.menu.window": "Ventana",
   "desktop.menu.help": "Ayuda",
-  "desktop.menu.checkForUpdates": "Buscar actualizaciones...",
   "desktop.menu.settings": "Ajustes",
   "desktop.menu.reloadWebview": "Volver a cargar la vista web",
   "desktop.menu.restart": "Reiniciar",
@@ -40,19 +39,9 @@ export const dict = {
   "desktop.menu.minimize": "Minimizar",
   "desktop.menu.maximize": "Maximizar",
   "desktop.menu.documentation": "Documentación de Apexo",
-  "desktop.menu.supportForum": "Foro de asistencia",
   "desktop.menu.shareFeedback": "Enviar comentarios",
   "desktop.menu.reportBug": "Informar de un error",
   "desktop.menu.ariaLabel": "Menú de Apexo",
-
-  "desktop.updater.dialog.checkFailed.message": "No se pudo buscar actualizaciones.",
-  "desktop.updater.dialog.checkFailed.title": "Error de actualización",
-  "desktop.updater.dialog.upToDate.message": "Estás al día.",
-  "desktop.updater.dialog.upToDate.title": "No hay actualizaciones",
-  "desktop.updater.dialog.ready.message": "Se ha descargado la actualización {{version}}. ¿Quieres reiniciar ahora?",
-  "desktop.updater.dialog.ready.title": "Actualización lista",
-  "desktop.updater.dialog.restart": "Reiniciar",
-  "desktop.updater.dialog.later": "Más tarde",
 
   "desktop.recovery.action.relaunch": "Volver a iniciar",
   "desktop.recovery.action.exportLogs": "Exportar registros",
@@ -188,10 +177,6 @@ export const dict = {
   "command.session.compact.description": "Resumir la sesión para reducir el tamaño del contexto",
   "command.session.fork": "Bifurcar desde mensaje",
   "command.session.fork.description": "Crear una nueva sesión desde un mensaje anterior",
-  "command.session.share": "Compartir sesión",
-  "command.session.share.description": "Compartir esta sesión y copiar la URL al portapapeles",
-  "command.session.unshare": "Dejar de compartir sesión",
-  "command.session.unshare.description": "Dejar de compartir esta sesión",
 
   "command.session.export": "Exportar sesión",
   "command.session.export.description": "Exportar la transcripción completa de la sesión como JSON",
@@ -208,9 +193,6 @@ export const dict = {
   "dialog.provider.group.other": "Otros",
   "dialog.provider.custom.label": "Proveedor personalizado compatible con OpenAI",
   "dialog.provider.tag.recommended": "Recomendado",
-  "dialog.provider.apexo.note": "Selección de modelos como Claude, GPT, Gemini y otros",
-  "dialog.provider.apexo.tagline": "Modelos optimizados y fiables",
-  "dialog.provider.apexoGo.tagline": "Suscripción económica para todos",
   "dialog.provider.anthropic.note": "Acceso directo a modelos Claude, incluidos Pro y Max",
   "dialog.provider.copilot.note": "Modelos de IA para asistencia de codificación a través de GitHub Copilot",
   "dialog.provider.openai.note": "Modelos GPT para tareas de IA generales rápidas y capaces",
@@ -563,8 +545,6 @@ export const dict = {
     "Se ejecuta después de crear un nuevo espacio de trabajo (árbol de trabajo).",
   "dialog.project.edit.worktree.startup.placeholder": "p. ej. bun install",
 
-  "dialog.usageExceeded.dontShowAgain": "No volver a mostrar",
-
   "context.breakdown.title": "Desglose del contexto",
   "context.breakdown.note":
     'Desglose aproximado de tokens de entrada. "Otro" incluye definiciones de herramientas y sobrecarga.',
@@ -646,28 +626,12 @@ export const dict = {
   "toast.context.noLineSelection.title": "Sin selección de líneas",
   "toast.context.noLineSelection.description": "Primero selecciona un rango de líneas en una pestaña de archivo.",
 
-  "toast.session.share.copyFailed.title": "Fallo al copiar URL al portapapeles",
-  "toast.session.share.success.title": "Sesión compartida",
-  "toast.session.share.success.description": "Enlace para compartir copiado al portapapeles.",
-  "toast.session.share.failed.title": "Fallo al compartir sesión",
-  "toast.session.share.failed.description": "Ocurrió un error al compartir la sesión",
-
-  "toast.session.unshare.success.title": "La sesión dejó de compartirse",
-  "toast.session.unshare.success.description": "La sesión dejó de compartirse correctamente.",
-  "toast.session.unshare.failed.title": "Fallo al dejar de compartir sesión",
-  "toast.session.unshare.failed.description": "Ocurrió un error al dejar de compartir la sesión",
-
   "toast.session.export.success.title": "Sesión exportada",
   "toast.session.export.success.description": "Sesión guardada en {{filename}}",
   "toast.session.export.failed.title": "No se pudo exportar la sesión",
   "toast.session.export.failed.description": "Se produjo un error al exportar la sesión",
 
   "toast.session.listFailed.title": "Fallo al cargar sesiones para {{project}}",
-
-  "toast.update.title": "Actualización disponible",
-  "toast.update.description": "Una nueva versión de Apexo ({{version}}) está disponible para instalar.",
-  "toast.update.action.installRestart": "Instalar y reiniciar",
-  "toast.update.action.notYet": "Todavía no",
 
   "error.page.title": "Algo salió mal",
   "error.page.description": "Ocurrió un error al cargar la aplicación.",
@@ -677,11 +641,7 @@ export const dict = {
   "error.page.action.report": "Informar del error",
   "error.page.action.reported": "Error notificado",
   "error.page.action.exportLogs": "Exportar registros",
-  "error.page.action.checking": "Comprobando...",
-  "error.page.action.checkUpdates": "Buscar actualizaciones",
-  "error.page.action.updateTo": "Actualizar a {{version}}",
   "error.page.report.prefix": "Informa de este error al equipo de Apexo",
-  "error.page.report.discord": "en Discord",
   "error.page.version": "Versión: {{version}}",
 
   "error.dev.rootNotFound":
@@ -828,19 +788,7 @@ export const dict = {
   "status.popover.tab.plugins": "Plugins",
   "status.popover.action.manageServers": "Gestionar servidores",
 
-  "session.share.popover.title": "Publicar en la web",
-  "session.share.popover.description.shared":
-    "Esta sesión es pública en la web. Es accesible para cualquiera con el enlace.",
-  "session.share.popover.description.unshared":
-    "Compartir sesión públicamente en la web. Será accesible para cualquiera con el enlace.",
-  "session.share.action.share": "Compartir",
-  "session.share.action.publish": "Publicar",
-  "session.share.action.publishing": "Publicando...",
-  "session.share.action.unpublish": "Despublicar",
-  "session.share.action.unpublishing": "Despublicando...",
-  "session.share.action.view": "Ver",
   "session.share.copy.copied": "Copiado",
-  "session.share.copy.copyLink": "Copiar enlace",
 
   "lsp.tooltip.none": "Sin servidores LSP",
   "lsp.label.connected": "{{count}} LSP",
@@ -856,9 +804,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "El ticket de conexión PTY fue rechazado por las comprobaciones de origen o CSRF. Comprueba la configuración CORS del servidor.",
   "terminal.connectTicket.statusError": "El ticket de conexión PTY falló con {{status}}",
-
-  "titlebar.update": "Actualizar",
-  "titlebar.updateVersion": "Actualizar {{version}}",
 
   "common.closeTab": "Cerrar pestaña",
   "common.dismiss": "Descartar",
@@ -903,7 +848,6 @@ export const dict = {
   "settings.general.section.appearance": "Apariencia",
   "settings.general.section.advanced": "Avanzado",
   "settings.general.section.notifications": "Notificaciones del sistema",
-  "settings.general.section.updates": "Actualizaciones",
   "settings.general.section.sounds": "Efectos de sonido",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Pantalla",
@@ -973,20 +917,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "En Linux con monitores de frecuencia de actualización mixta, Wayland nativo puede ser más estable.",
 
-  "settings.general.row.releaseNotes.title": "Notas de la versión",
-  "settings.general.row.releaseNotes.description":
-    'Mostrar ventanas emergentes de "Novedades" después de las actualizaciones',
-
-  "settings.updates.row.startup.title": "Buscar actualizaciones al iniciar",
-  "settings.updates.row.startup.description": "Buscar actualizaciones automáticamente cuando se inicia Apexo",
-  "settings.updates.row.check.title": "Buscar actualizaciones",
-  "settings.updates.row.check.description": "Buscar actualizaciones manualmente e instalarlas si hay alguna",
-  "settings.updates.action.checkNow": "Buscar ahora",
-  "settings.updates.action.checking": "Buscando...",
-  "settings.updates.action.downloading": "Descargando...",
-  "settings.updates.action.installing": "Instalando...",
-  "settings.updates.toast.latest.title": "Estás al día",
-  "settings.updates.toast.latest.description": "Estás usando la última versión de Apexo.",
   "sound.option.none": "Ninguno",
   "sound.option.alert01": "Alerta 01",
   "sound.option.alert02": "Alerta 02",
@@ -1156,10 +1086,6 @@ export const dict = {
   "workspace.reset.archived.many": "{{count}} sesiones serán archivadas.",
   "workspace.reset.note": "Esto restablecerá el espacio de trabajo para coincidir con la rama predeterminada.",
   "common.open": "Abrir",
-  "dialog.releaseNotes.action.getStarted": "Comenzar",
-  "dialog.releaseNotes.action.next": "Siguiente",
-  "dialog.releaseNotes.action.hideFuture": "No mostrar esto en el futuro",
-  "dialog.releaseNotes.media.alt": "Vista previa de la versión",
   "toast.project.reloadFailed.title": "Error al recargar {{project}}",
   "error.server.invalidConfiguration": "Configuración inválida",
   "common.moreCountSuffix": " (+{{count}} más)",

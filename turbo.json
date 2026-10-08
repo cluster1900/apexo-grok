@@ -1,12 +1,10 @@
 {
   "$schema": "https://v2-8-13.turborepo.dev/schema.json",
   "globalEnv": [
-    "CI",
-    "APEXO_DISABLE_SHARE"
+    "CI"
   ],
   "globalPassThroughEnv": [
-    "CI",
-    "APEXO_DISABLE_SHARE"
+    "CI"
   ],
   "tasks": {
     "typecheck": {},

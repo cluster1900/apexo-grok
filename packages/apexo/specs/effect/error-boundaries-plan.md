@@ -192,7 +192,6 @@ These should become `Schema.TaggedErrorClass` when touched:
 - [ ] `src/skill/index.ts` — `SkillInvalidError`,
       `SkillNameMismatchError`.
 - [ ] `src/lsp/client.ts` — `LSPInitializeError`.
-- [ ] `src/ide/index.ts` — install errors.
 - [ ] `src/config/error.ts`, `src/config/config.ts`,
       `src/config/markdown.ts` — config errors. These already render well
       in the CLI, so migrate carefully and preserve diagnostics.

@@ -5,7 +5,6 @@ import { selectWebSearchProvider, webSearchModelName, webSearchProviderLabel } f
 
 import { webSearchEnabled } from "../../src/tool/registry"
 import { it } from "../lib/effect"
-import { ProviderV2 } from "@apexo/core/provider"
 
 const SESSION_ID = "ses_0196aabbccddeeff001122334455"
 
@@ -38,11 +37,9 @@ describe("websearch provider", () => {
   })
 
   test("is enabled only by explicit websearch provider flags", () => {
-    expect(webSearchEnabled(ProviderV2.ID.apexo, { exa: false, parallel: false })).toBe(false)
-    expect(webSearchEnabled(ProviderV2.ID.make("apexo-go"), { exa: false, parallel: false })).toBe(false)
-    expect(webSearchEnabled(ProviderV2.ID.openai, { exa: false, parallel: false })).toBe(false)
-    expect(webSearchEnabled(ProviderV2.ID.openai, { exa: true, parallel: false })).toBe(true)
-    expect(webSearchEnabled(ProviderV2.ID.openai, { exa: false, parallel: true })).toBe(true)
+    expect(webSearchEnabled({ exa: false, parallel: false })).toBe(false)
+    expect(webSearchEnabled({ exa: true, parallel: false })).toBe(true)
+    expect(webSearchEnabled({ exa: false, parallel: true })).toBe(true)
   })
 
   test("uses branded labels", () => {

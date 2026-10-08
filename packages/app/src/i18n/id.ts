@@ -6,7 +6,6 @@ export const dict = {
   "desktop.menu.go": "Navigasi",
   "desktop.menu.window": "Jendela",
   "desktop.menu.help": "Bantuan",
-  "desktop.menu.checkForUpdates": "Periksa pembaruan...",
   "desktop.menu.settings": "Pengaturan",
   "desktop.menu.reloadWebview": "Muat ulang tampilan web",
   "desktop.menu.restart": "Mulai ulang",
@@ -40,19 +39,9 @@ export const dict = {
   "desktop.menu.minimize": "Minimalkan",
   "desktop.menu.maximize": "Maksimalkan",
   "desktop.menu.documentation": "Dokumentasi Apexo",
-  "desktop.menu.supportForum": "Forum dukungan",
   "desktop.menu.shareFeedback": "Bagikan umpan balik",
   "desktop.menu.reportBug": "Laporkan bug",
   "desktop.menu.ariaLabel": "Menu Apexo",
-
-  "desktop.updater.dialog.checkFailed.message": "Pemeriksaan pembaruan gagal.",
-  "desktop.updater.dialog.checkFailed.title": "Kesalahan pembaruan",
-  "desktop.updater.dialog.upToDate.message": "Versi Anda sudah terbaru.",
-  "desktop.updater.dialog.upToDate.title": "Tidak ada pembaruan",
-  "desktop.updater.dialog.ready.message": "Pembaruan {{version}} telah diunduh. Mulai ulang sekarang?",
-  "desktop.updater.dialog.ready.title": "Pembaruan siap",
-  "desktop.updater.dialog.restart": "Mulai ulang",
-  "desktop.updater.dialog.later": "Nanti",
 
   "desktop.recovery.action.relaunch": "Luncurkan ulang",
   "desktop.recovery.action.exportLogs": "Ekspor log",
@@ -188,10 +177,6 @@ export const dict = {
   "command.session.compact.description": "Ringkas sesi untuk mengurangi ukuran konteks",
   "command.session.fork": "Fork dari pesan",
   "command.session.fork.description": "Buat sesi baru dari pesan sebelumnya",
-  "command.session.share": "Bagikan sesi",
-  "command.session.share.description": "Bagikan sesi ini dan salin URL ke papan klip",
-  "command.session.unshare": "Hentikan berbagi",
-  "command.session.unshare.description": "Hentikan berbagi sesi ini",
 
   "command.session.export": "Ekspor sesi",
   "command.session.export.description": "Ekspor transkrip sesi lengkap sebagai JSON",
@@ -208,9 +193,6 @@ export const dict = {
   "dialog.provider.group.other": "Lainnya",
   "dialog.provider.custom.label": "Penyedia kustom yang kompatibel dengan OpenAI",
   "dialog.provider.tag.recommended": "Direkomendasikan",
-  "dialog.provider.apexo.note": "Model pilihan, termasuk Claude, GPT, Gemini, dan lainnya",
-  "dialog.provider.apexo.tagline": "Model andal yang dioptimalkan",
-  "dialog.provider.apexoGo.tagline": "Langganan terjangkau untuk semua orang",
   "dialog.provider.anthropic.note": "Akses langsung ke model Claude, termasuk Pro dan Max",
   "dialog.provider.copilot.note": "Model AI untuk bantuan pengodean melalui GitHub Copilot",
   "dialog.provider.openai.note": "Model GPT untuk tugas AI umum yang cepat dan mumpuni",
@@ -567,13 +549,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description": "Berjalan setelah membuat ruang kerja (worktree) baru.",
   "dialog.project.edit.worktree.startup.placeholder": "mis. bun install",
 
-  "dialog.releaseNotes.action.getStarted": "Mulai",
-  "dialog.releaseNotes.action.next": "Berikutnya",
-  "dialog.releaseNotes.action.hideFuture": "Jangan tampilkan ini di masa depan",
-  "dialog.releaseNotes.media.alt": "Pratinjau rilis",
-
-  "dialog.usageExceeded.dontShowAgain": "Jangan tampilkan lagi",
-
   "context.breakdown.title": "Rincian Konteks",
   "context.breakdown.note": 'Perkiraan rincian token masukan. "Lainnya" mencakup definisi alat dan beban tambahan.',
   "context.breakdown.system": "Sistem",
@@ -653,17 +628,6 @@ export const dict = {
   "toast.context.noLineSelection.title": "Tidak ada pilihan baris",
   "toast.context.noLineSelection.description": "Pilih rentang baris di tab berkas terlebih dahulu.",
 
-  "toast.session.share.copyFailed.title": "Gagal menyalin URL ke papan klip",
-  "toast.session.share.success.title": "Sesi dibagikan",
-  "toast.session.share.success.description": "URL berbagi disalin ke papan klip!",
-  "toast.session.share.failed.title": "Gagal membagikan sesi",
-  "toast.session.share.failed.description": "Terjadi kesalahan saat membagikan sesi",
-
-  "toast.session.unshare.success.title": "Berbagi sesi dihentikan",
-  "toast.session.unshare.success.description": "Berbagi sesi berhasil dihentikan!",
-  "toast.session.unshare.failed.title": "Gagal menghentikan berbagi sesi",
-  "toast.session.unshare.failed.description": "Terjadi kesalahan saat menghentikan berbagi sesi",
-
   "toast.session.export.success.title": "Sesi diekspor",
   "toast.session.export.success.description": "Sesi disimpan ke {{filename}}",
   "toast.session.export.failed.title": "Gagal mengekspor sesi",
@@ -671,11 +635,6 @@ export const dict = {
 
   "toast.session.listFailed.title": "Gagal memuat sesi untuk {{project}}",
   "toast.project.reloadFailed.title": "Gagal memuat ulang {{project}}",
-
-  "toast.update.title": "Pembaruan tersedia",
-  "toast.update.description": "Versi baru Apexo ({{version}}) sekarang tersedia untuk diinstal.",
-  "toast.update.action.installRestart": "Instal dan mulai ulang",
-  "toast.update.action.notYet": "Nanti saja",
 
   "error.page.title": "Terjadi kesalahan",
   "error.page.description": "Terjadi kesalahan saat memuat aplikasi.",
@@ -685,12 +644,8 @@ export const dict = {
   "error.page.action.report": "Laporkan Kesalahan",
   "error.page.action.reported": "Kesalahan Dilaporkan",
   "error.page.action.exportLogs": "Ekspor Log",
-  "error.page.action.checking": "Memeriksa...",
-  "error.page.action.checkUpdates": "Periksa pembaruan",
-  "error.page.action.updateTo": "Perbarui ke {{version}}",
   "error.page.circular": "[Sirkular]",
   "error.page.report.prefix": "Harap laporkan kesalahan ini ke tim Apexo",
-  "error.page.report.discord": "di Discord",
   "error.page.version": "Versi: {{version}}",
 
   "error.dev.rootNotFound":
@@ -865,18 +820,7 @@ export const dict = {
   "status.popover.tab.plugins": "Plugin",
   "status.popover.action.manageServers": "Kelola server",
 
-  "session.share.popover.title": "Publikasikan di web",
-  "session.share.popover.description.shared": "Sesi ini publik di web. Siapa pun dengan tautan dapat mengaksesnya.",
-  "session.share.popover.description.unshared":
-    "Bagikan sesi secara publik di web. Siapa pun dengan tautan dapat mengaksesnya.",
-  "session.share.action.share": "Bagikan",
-  "session.share.action.publish": "Publikasikan",
-  "session.share.action.publishing": "Mempublikasikan...",
-  "session.share.action.unpublish": "Batalkan publikasi",
-  "session.share.action.unpublishing": "Membatalkan publikasi...",
-  "session.share.action.view": "Lihat",
   "session.share.copy.copied": "Tersalin",
-  "session.share.copy.copyLink": "Salin tautan",
 
   "lsp.tooltip.none": "Tidak ada server LSP",
   "lsp.label.connected": "{{count}} LSP",
@@ -892,8 +836,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "Tiket koneksi PTY ditolak oleh pemeriksaan asal atau CSRF. Periksa konfigurasi CORS server.",
   "terminal.connectTicket.statusError": "Tiket koneksi PTY gagal dengan status {{status}}",
-  "titlebar.update": "Perbarui",
-  "titlebar.updateVersion": "Perbarui {{version}}",
 
   "common.closeTab": "Tutup tab",
   "common.dismiss": "Tutup",
@@ -991,7 +933,6 @@ export const dict = {
   "settings.general.section.appearance": "Tampilan",
   "settings.general.section.advanced": "Lanjutan",
   "settings.general.section.notifications": "Notifikasi sistem",
-  "settings.general.section.updates": "Pembaruan",
   "settings.general.section.sounds": "Efek suara",
   "settings.general.section.feed": "Umpan",
   "settings.general.section.display": "Tampilan",
@@ -1059,19 +1000,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "Di Linux dengan monitor berlaju penyegaran berbeda, Wayland asli bisa lebih stabil.",
 
-  "settings.general.row.releaseNotes.title": "Catatan rilis",
-  "settings.general.row.releaseNotes.description": "Tampilkan pop-up Apa yang Baru setelah pembaruan",
-
-  "settings.updates.row.startup.title": "Periksa pembaruan saat dimulai",
-  "settings.updates.row.startup.description": "Secara otomatis memeriksa pembaruan saat Apexo diluncurkan",
-  "settings.updates.row.check.title": "Periksa pembaruan",
-  "settings.updates.row.check.description": "Periksa pembaruan secara manual dan instal jika tersedia",
-  "settings.updates.action.checkNow": "Periksa sekarang",
-  "settings.updates.action.checking": "Memeriksa...",
-  "settings.updates.action.downloading": "Mengunduh...",
-  "settings.updates.action.installing": "Menginstal...",
-  "settings.updates.toast.latest.title": "Versi Anda sudah terbaru",
-  "settings.updates.toast.latest.description": "Anda menjalankan versi terbaru Apexo.",
   "sound.option.none": "Tidak ada",
   "sound.option.alert01": "Peringatan 01",
   "sound.option.alert02": "Peringatan 02",

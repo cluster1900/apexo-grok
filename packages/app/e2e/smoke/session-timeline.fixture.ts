@@ -26,7 +26,7 @@ const sourceID = "ses_smoke_source"
 const targetID = "ses_smoke_target"
 const directory = "C:/Apexo/SmokeProject"
 const projectID = "proj_smoke_timeline"
-const model = { providerID: "apexo", modelID: "claude-opus-4-6", variant: "max" }
+const model = { providerID: "test", modelID: "claude-opus-4-6", variant: "max" }
 
 type MessageInfo = Record<string, unknown> & { id: string; role: "user" | "assistant" }
 type MessagePart = Record<string, unknown> & { id: string; type: string; text?: string; tool?: string }
@@ -253,13 +253,13 @@ export const fixture = {
   provider: {
     all: [
       {
-        id: "apexo",
-        name: "Apexo",
+        id: "test",
+        name: "Test",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
     ],
-    connected: ["apexo"],
-    default: { providerID: "apexo", modelID: "claude-opus-4-6" },
+    connected: ["test"],
+    default: { providerID: "test", modelID: "claude-opus-4-6" },
   },
   sessions: [
     {

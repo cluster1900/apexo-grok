@@ -6,7 +6,6 @@ export const dict = {
   "desktop.menu.go": "Idi",
   "desktop.menu.window": "Prozor",
   "desktop.menu.help": "Pomoć",
-  "desktop.menu.checkForUpdates": "Provjeri ima li ažuriranja...",
   "desktop.menu.settings": "Postavke",
   "desktop.menu.reloadWebview": "Ponovo učitaj Webview",
   "desktop.menu.restart": "Ponovo pokreni",
@@ -40,20 +39,9 @@ export const dict = {
   "desktop.menu.minimize": "Minimiziraj",
   "desktop.menu.maximize": "Maksimiziraj",
   "desktop.menu.documentation": "Dokumentacija za Apexo",
-  "desktop.menu.supportForum": "Forum za podršku",
   "desktop.menu.shareFeedback": "Pošalji povratne informacije",
   "desktop.menu.reportBug": "Prijavi grešku",
   "desktop.menu.ariaLabel": "Apexo meni",
-
-  "desktop.updater.dialog.checkFailed.message": "Provjera ažuriranja nije uspjela.",
-  "desktop.updater.dialog.checkFailed.title": "Greška pri ažuriranju",
-  "desktop.updater.dialog.upToDate.message": "Sve je ažurno.",
-  "desktop.updater.dialog.upToDate.title": "Nema ažuriranja",
-  "desktop.updater.dialog.ready.message":
-    "Ažuriranje {{version}} je preuzeto. Želiš li sada ponovo pokrenuti aplikaciju?",
-  "desktop.updater.dialog.ready.title": "Ažuriranje je spremno",
-  "desktop.updater.dialog.restart": "Ponovo pokreni",
-  "desktop.updater.dialog.later": "Kasnije",
 
   "desktop.recovery.action.relaunch": "Ponovo pokreni",
   "desktop.recovery.action.exportLogs": "Izvezi zapisnike",
@@ -188,10 +176,6 @@ export const dict = {
   "command.session.compact.description": "Sažmi sesiju kako bi se smanjio kontekst",
   "command.session.fork": "Fork iz poruke",
   "command.session.fork.description": "Kreiraj novu sesiju iz prethodne poruke",
-  "command.session.share": "Podijeli sesiju",
-  "command.session.share.description": "Podijeli ovu sesiju i kopiraj URL u međuspremnik",
-  "command.session.unshare": "Ukini dijeljenje sesije",
-  "command.session.unshare.description": "Zaustavi dijeljenje ove sesije",
 
   "command.session.export": "Izvezi sesiju",
   "command.session.export.description": "Izvezi cijeli zapis sesije u JSON formatu",
@@ -208,9 +192,6 @@ export const dict = {
   "dialog.provider.group.other": "Ostalo",
   "dialog.provider.custom.label": "Prilagođeni provajder kompatibilan s OpenAI-jem",
   "dialog.provider.tag.recommended": "Preporučeno",
-  "dialog.provider.apexo.note": "Kurirani modeli uključujući Claude, GPT, Gemini i druge",
-  "dialog.provider.apexo.tagline": "Pouzdani optimizovani modeli",
-  "dialog.provider.apexoGo.tagline": "Povoljna pretplata za sve",
   "dialog.provider.anthropic.note": "Direktan pristup Claude modelima, uključujući Pro i Max",
   "dialog.provider.copilot.note": "AI modeli za pomoć pri kodiranju putem GitHub Copilot",
   "dialog.provider.openai.note": "GPT modeli za brze, sposobne opšte AI zadatke",
@@ -561,8 +542,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description": "Pokreće se nakon kreiranja novog radnog prostora (worktree).",
   "dialog.project.edit.worktree.startup.placeholder": "npr. bun install",
 
-  "dialog.usageExceeded.dontShowAgain": "Nemoj više prikazivati",
-
   "context.breakdown.title": "Razlaganje konteksta",
   "context.breakdown.note":
     'Približna raspodjela ulaznih tokena. "Ostalo" uključuje definicije alata i dodatno opterećenje.',
@@ -644,28 +623,12 @@ export const dict = {
   "toast.context.noLineSelection.title": "Nema odabranih linija",
   "toast.context.noLineSelection.description": "Prvo odaberi raspon linija u kartici datoteke.",
 
-  "toast.session.share.copyFailed.title": "Neuspjelo kopiranje URL-a u međuspremnik",
-  "toast.session.share.success.title": "Sesija podijeljena",
-  "toast.session.share.success.description": "URL za dijeljenje je kopiran u međuspremnik!",
-  "toast.session.share.failed.title": "Neuspjelo dijeljenje sesije",
-  "toast.session.share.failed.description": "Došlo je do greške prilikom dijeljenja sesije",
-
-  "toast.session.unshare.success.title": "Dijeljenje sesije ukinuto",
-  "toast.session.unshare.success.description": "Dijeljenje sesije je uspješno ukinuto!",
-  "toast.session.unshare.failed.title": "Neuspjelo ukidanje dijeljenja",
-  "toast.session.unshare.failed.description": "Došlo je do greške prilikom ukidanja dijeljenja",
-
   "toast.session.export.success.title": "Sesija izvezena",
   "toast.session.export.success.description": "Sesija je sačuvana kao {{filename}}",
   "toast.session.export.failed.title": "Izvoz sesije nije uspio",
   "toast.session.export.failed.description": "Došlo je do greške prilikom izvoza sesije",
 
   "toast.session.listFailed.title": "Neuspjelo učitavanje sesija za {{project}}",
-
-  "toast.update.title": "Dostupno ažuriranje",
-  "toast.update.description": "Nova verzija Apexo-a ({{version}}) je dostupna za instalaciju.",
-  "toast.update.action.installRestart": "Instaliraj i ponovo pokreni",
-  "toast.update.action.notYet": "Ne još",
 
   "error.page.title": "Nešto je pošlo po zlu",
   "error.page.description": "Došlo je do greške prilikom učitavanja aplikacije.",
@@ -675,11 +638,7 @@ export const dict = {
   "error.page.action.report": "Prijavi grešku",
   "error.page.action.reported": "Greška prijavljena",
   "error.page.action.exportLogs": "Izvezi logove",
-  "error.page.action.checking": "Provjera...",
-  "error.page.action.checkUpdates": "Provjeri ažuriranja",
-  "error.page.action.updateTo": "Ažuriraj na {{version}}",
   "error.page.report.prefix": "Molimo prijavi ovu grešku Apexo timu",
-  "error.page.report.discord": "na Discordu",
   "error.page.version": "Verzija: {{version}}",
 
   "error.dev.rootNotFound":
@@ -825,17 +784,7 @@ export const dict = {
   "status.popover.tab.plugins": "Plugini",
   "status.popover.action.manageServers": "Upravljaj serverima",
 
-  "session.share.popover.title": "Objavi na webu",
-  "session.share.popover.description.shared": "Ova sesija je javna na webu. Dostupna je svima koji imaju link.",
-  "session.share.popover.description.unshared": "Podijeli sesiju javno na webu. Biće dostupna svima koji imaju link.",
-  "session.share.action.share": "Podijeli",
-  "session.share.action.publish": "Objavi",
-  "session.share.action.publishing": "Objavljivanje...",
-  "session.share.action.unpublish": "Poništi objavu",
-  "session.share.action.unpublishing": "Poništavanje objave...",
-  "session.share.action.view": "Prikaži",
   "session.share.copy.copied": "Kopirano",
-  "session.share.copy.copyLink": "Kopiraj link",
 
   "lsp.tooltip.none": "Nema LSP servera",
   "lsp.label.connected": "{{count}} LSP",
@@ -851,9 +800,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "PTY tiket za povezivanje odbijen je zbog provjera porijekla ili CSRF-a. Provjeri CORS konfiguraciju servera.",
   "terminal.connectTicket.statusError": "PTY tiket za povezivanje nije uspio sa statusom {{status}}",
-
-  "titlebar.update": "Ažuriraj",
-  "titlebar.updateVersion": "Ažuriraj {{version}}",
 
   "common.closeTab": "Zatvori karticu",
   "common.dismiss": "Odbaci",
@@ -898,7 +844,6 @@ export const dict = {
   "settings.general.section.appearance": "Izgled",
   "settings.general.section.advanced": "Napredno",
   "settings.general.section.notifications": "Sistemske obavijesti",
-  "settings.general.section.updates": "Ažuriranja",
   "settings.general.section.sounds": "Zvučni efekti",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Prikaz",
@@ -967,19 +912,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "Na Linuxu sa monitorima miješanih stopa osvježavanja, nativni Wayland može biti stabilniji.",
 
-  "settings.general.row.releaseNotes.title": "Bilješke o izdanju",
-  "settings.general.row.releaseNotes.description": 'Prikaži iskačuće prozore "Šta je novo" nakon ažuriranja',
-
-  "settings.updates.row.startup.title": "Provjeri ažuriranja pri pokretanju",
-  "settings.updates.row.startup.description": "Automatski provjerava ažuriranja kada se Apexo pokrene",
-  "settings.updates.row.check.title": "Provjeri ažuriranja",
-  "settings.updates.row.check.description": "Ručno provjeri ažuriranja i instaliraj ako su dostupna",
-  "settings.updates.action.checkNow": "Provjeri sada",
-  "settings.updates.action.checking": "Provjera...",
-  "settings.updates.action.downloading": "Preuzimanje...",
-  "settings.updates.action.installing": "Instaliranje...",
-  "settings.updates.toast.latest.title": "Sve je ažurno",
-  "settings.updates.toast.latest.description": "Koristiš najnoviju verziju Apexo-a.",
   "sound.option.none": "Nijedan",
   "sound.option.alert01": "Upozorenje 01",
   "sound.option.alert02": "Upozorenje 02",
@@ -1148,10 +1080,6 @@ export const dict = {
   "workspace.reset.archived.many": "Biće arhivirano {{count}} sesija.",
   "workspace.reset.note": "Ovo će vratiti radni prostor na stanje podrazumijevane grane.",
   "common.open": "Otvori",
-  "dialog.releaseNotes.action.getStarted": "Započni",
-  "dialog.releaseNotes.action.next": "Sljedeće",
-  "dialog.releaseNotes.action.hideFuture": "Ne prikazuj ovo u budućnosti",
-  "dialog.releaseNotes.media.alt": "Pregled izdanja",
   "toast.project.reloadFailed.title": "Nije uspjelo ponovno učitavanje {{project}}",
   "error.server.invalidConfiguration": "Nevažeća konfiguracija",
   "common.moreCountSuffix": " (+{{count}} više)",

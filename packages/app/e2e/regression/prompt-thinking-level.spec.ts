@@ -21,8 +21,8 @@ test("shows the V2 thinking level control while relevant", async ({ page }) => {
     provider: {
       all: [
         {
-          id: "apexo",
-          name: "Apexo",
+          id: "test",
+          name: "Test",
           models: {
             "thinking-model": {
               id: "thinking-model",
@@ -33,8 +33,8 @@ test("shows the V2 thinking level control while relevant", async ({ page }) => {
           },
         },
       ],
-      connected: ["apexo"],
-      default: { providerID: "apexo", modelID: "thinking-model" },
+      connected: ["test"],
+      default: { providerID: "test", modelID: "thinking-model" },
     },
     sessions: [
       {

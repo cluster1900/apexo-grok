@@ -1,6 +1,5 @@
 ---
 description: "find issue(s) on github"
-model: apexo/claude-haiku-4-5
 ---
 
 Search through existing issues in cluster1900/apexo-grok using the gh cli to find issues matching this query:

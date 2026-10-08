@@ -1,15 +1,6 @@
 const model_id = "claude-3-7-sonnet"
 
-export const popularProviders = [
-  "apexo",
-  "apexo-go",
-  "anthropic",
-  "github-copilot",
-  "openai",
-  "google",
-  "openrouter",
-  "vercel",
-]
+export const popularProviders = ["xai", "openai", "anthropic", "google"]
 
 const provider = {
   id: "anthropic",
@@ -25,8 +16,7 @@ const provider = {
 }
 
 const popular = [
-  { id: "apexo", name: "Apexo Zen", models: {} },
-  { id: "apexo-go", name: "Apexo Go", models: {} },
+  { id: "xai", name: "xAI", models: {} },
   { id: "openai", name: "OpenAI", models: {} },
   provider,
   { id: "google", name: "Google", models: {} },

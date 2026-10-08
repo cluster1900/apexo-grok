@@ -91,10 +91,6 @@ export const dict = {
   "command.session.compact.description": "Summarize the session to reduce context size",
   "command.session.fork": "Fork from message",
   "command.session.fork.description": "Create a new session from a previous message",
-  "command.session.share": "Share session",
-  "command.session.share.description": "Share this session and copy the URL to clipboard",
-  "command.session.unshare": "Unshare session",
-  "command.session.unshare.description": "Stop sharing this session",
   "command.session.export": "Export session",
   "command.session.export.description": "Export the full session transcript as JSON",
 
@@ -110,9 +106,6 @@ export const dict = {
   "dialog.provider.group.other": "Other",
   "dialog.provider.custom.label": "Custom OpenAI-compatible provider",
   "dialog.provider.tag.recommended": "Recommended",
-  "dialog.provider.apexo.note": "Curated models including Claude, GPT, Gemini and more",
-  "dialog.provider.apexo.tagline": "Reliable optimized models",
-  "dialog.provider.apexoGo.tagline": "Low cost subscription for everyone",
   "dialog.provider.anthropic.note": "Direct access to Claude models, including Pro and Max",
   "dialog.provider.copilot.note": "AI models for coding assistance via GitHub Copilot",
   "dialog.provider.openai.note": "GPT models for fast, capable general AI tasks",
@@ -469,12 +462,6 @@ export const dict = {
   "dialog.project.edit.worktree.startup.description": "Runs after creating a new workspace (worktree).",
   "dialog.project.edit.worktree.startup.placeholder": "e.g. bun install",
 
-  "dialog.releaseNotes.action.getStarted": "Get started",
-  "dialog.releaseNotes.action.next": "Next",
-  "dialog.releaseNotes.action.hideFuture": "Don't show these in the future",
-  "dialog.releaseNotes.media.alt": "Release preview",
-  "dialog.usageExceeded.dontShowAgain": "Don't show again",
-
   "context.breakdown.title": "Context Breakdown",
   "context.breakdown.note": 'Approximate breakdown of input tokens. "Other" includes tool definitions and overhead.',
   "context.breakdown.system": "System",
@@ -554,17 +541,6 @@ export const dict = {
   "toast.context.noLineSelection.title": "No line selection",
   "toast.context.noLineSelection.description": "Select a line range in a file tab first.",
 
-  "toast.session.share.copyFailed.title": "Failed to copy URL to clipboard",
-  "toast.session.share.success.title": "Session shared",
-  "toast.session.share.success.description": "Share URL copied to clipboard!",
-  "toast.session.share.failed.title": "Failed to share session",
-  "toast.session.share.failed.description": "An error occurred while sharing the session",
-
-  "toast.session.unshare.success.title": "Session unshared",
-  "toast.session.unshare.success.description": "Session unshared successfully!",
-  "toast.session.unshare.failed.title": "Failed to unshare session",
-  "toast.session.unshare.failed.description": "An error occurred while unsharing the session",
-
   "toast.session.export.success.title": "Session exported",
   "toast.session.export.success.description": "Saved session to {{filename}}",
   "toast.session.export.failed.title": "Failed to export session",
@@ -572,11 +548,6 @@ export const dict = {
 
   "toast.session.listFailed.title": "Failed to load sessions for {{project}}",
   "toast.project.reloadFailed.title": "Failed to reload {{project}}",
-
-  "toast.update.title": "Update available",
-  "toast.update.description": "A new version of Apexo ({{version}}) is now available to install.",
-  "toast.update.action.installRestart": "Install and restart",
-  "toast.update.action.notYet": "Not yet",
 
   "error.page.title": "Something went wrong",
   "error.page.description": "An error occurred while loading the application.",
@@ -586,12 +557,8 @@ export const dict = {
   "error.page.action.report": "Report Error",
   "error.page.action.reported": "Error Reported",
   "error.page.action.exportLogs": "Export Logs",
-  "error.page.action.checking": "Checking...",
-  "error.page.action.checkUpdates": "Check for updates",
-  "error.page.action.updateTo": "Update to {{version}}",
   "error.page.circular": "[Circular]",
   "error.page.report.prefix": "Please report this error to the Apexo team",
-  "error.page.report.discord": "on Discord",
   "error.page.version": "Version: {{version}}",
 
   "error.dev.rootNotFound":
@@ -764,19 +731,7 @@ export const dict = {
   "status.popover.tab.plugins": "Plugins",
   "status.popover.action.manageServers": "Manage servers",
 
-  "session.share.popover.title": "Publish on web",
-  "session.share.popover.description.shared":
-    "This session is public on the web. It is accessible to anyone with the link.",
-  "session.share.popover.description.unshared":
-    "Share session publicly on the web. It will be accessible to anyone with the link.",
-  "session.share.action.share": "Share",
-  "session.share.action.publish": "Publish",
-  "session.share.action.publishing": "Publishing...",
-  "session.share.action.unpublish": "Unpublish",
-  "session.share.action.unpublishing": "Unpublishing...",
-  "session.share.action.view": "View",
   "session.share.copy.copied": "Copied",
-  "session.share.copy.copyLink": "Copy link",
 
   "lsp.tooltip.none": "No LSP servers",
   "lsp.label.connected": "{{count}} LSP",
@@ -793,9 +748,6 @@ export const dict = {
   "terminal.connectTicket.csrfError":
     "PTY connect ticket rejected by origin or CSRF checks. Check the server CORS config.",
   "terminal.connectTicket.statusError": "PTY connect ticket failed with {{status}}",
-
-  "titlebar.update": "Update",
-  "titlebar.updateVersion": "Update {{version}}",
 
   "common.closeTab": "Close tab",
   "common.dismiss": "Dismiss",
@@ -841,7 +793,8 @@ export const dict = {
   "sidebar.workspaces.disable": "Disable workspaces",
   "sidebar.gettingStarted.title": "Getting started",
   "sidebar.gettingStarted.line1": "Apexo includes free models so you can start immediately.",
-  "sidebar.gettingStarted.line2": "Connect xAI (SuperGrok / X Premium or API key), OpenAI, Anthropic or Google to start.",
+  "sidebar.gettingStarted.line2":
+    "Connect xAI (SuperGrok / X Premium or API key), OpenAI, Anthropic or Google to start.",
   "sidebar.project.recentSessions": "Recent sessions",
   "sidebar.project.viewAllSessions": "View all sessions",
   "sidebar.project.clearNotifications": "Clear notifications",
@@ -893,7 +846,6 @@ export const dict = {
   "settings.general.section.appearance": "Appearance",
   "settings.general.section.advanced": "Advanced",
   "settings.general.section.notifications": "System notifications",
-  "settings.general.section.updates": "Updates",
   "settings.general.section.sounds": "Sound effects",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Display",
@@ -959,19 +911,6 @@ export const dict = {
   "settings.general.row.wayland.tooltip":
     "On Linux with mixed refresh-rate monitors, native Wayland can be more stable.",
 
-  "settings.general.row.releaseNotes.title": "Release notes",
-  "settings.general.row.releaseNotes.description": "Show What's New popups after updates",
-
-  "settings.updates.row.startup.title": "Check for updates on startup",
-  "settings.updates.row.startup.description": "Automatically check for updates when Apexo launches",
-  "settings.updates.row.check.title": "Check for updates",
-  "settings.updates.row.check.description": "Manually check for updates and install if available",
-  "settings.updates.action.checkNow": "Check now",
-  "settings.updates.action.checking": "Checking...",
-  "settings.updates.action.downloading": "Downloading...",
-  "settings.updates.action.installing": "Installing...",
-  "settings.updates.toast.latest.title": "You're up to date",
-  "settings.updates.toast.latest.description": "You're running the latest version of Apexo.",
   "sound.option.none": "None",
   "sound.option.alert01": "Alert 01",
   "sound.option.alert02": "Alert 02",
