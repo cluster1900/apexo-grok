@@ -58,13 +58,13 @@ bun install
 bun run --cwd packages/apexo build --single
 
 # The binary lands in packages/apexo/dist/apexo-<os>-<arch>/bin/apexo
-install -m755 packages/apexo/dist/apexo-*/bin/apexo ~/.local/bin/apexo
+install -D -m755 packages/apexo/dist/apexo-*/bin/apexo ~/.local/bin/apexo
 apexo --version
 ```
 
-Once release binaries are published on
-[GitHub Releases](https://github.com/cluster1900/apexo-grok/releases), the install script can
-fetch them instead (`--version X.Y.Z` pins a release):
+Pushing a `vX.Y.Z` tag runs `.github/workflows/release.yml`, which builds every target and
+attaches the archives to a [GitHub Release](https://github.com/cluster1900/apexo-grok/releases).
+Once a release exists, the install script can fetch it instead (`--version X.Y.Z` pins a release):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/cluster1900/apexo-grok/main/install | bash
@@ -95,12 +95,12 @@ themes, and `ctrl+p` opens the command palette. Start a prompt with `!` to run a
 
 ### Providers
 
-| Provider | How to connect | Environment variable |
-| --- | --- | --- |
-| **xAI Grok** (primary) | `apexo auth login`, then xAI -> SuperGrok Subscription (device-code OAuth), or an API key | `XAI_API_KEY` |
-| OpenAI | API key | `OPENAI_API_KEY` |
-| Anthropic (Claude) | API key | `ANTHROPIC_API_KEY` |
-| Google (Gemini) | API key | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| Provider               | How to connect                                                                            | Environment variable           |
+| ---------------------- | ----------------------------------------------------------------------------------------- | ------------------------------ |
+| **xAI Grok** (primary) | `apexo auth login`, then xAI -> SuperGrok Subscription (device-code OAuth), or an API key | `XAI_API_KEY`                  |
+| OpenAI                 | API key                                                                                   | `OPENAI_API_KEY`               |
+| Anthropic (Claude)     | API key                                                                                   | `ANTHROPIC_API_KEY`            |
+| Google (Gemini)        | API key                                                                                   | `GOOGLE_GENERATIVE_AI_API_KEY` |
 
 A generic OpenAI-compatible "custom provider" entry is still available for self-hosted endpoints.
 
@@ -113,19 +113,19 @@ bun run --cwd packages/desktop dev        # development build
 bun run --cwd packages/desktop build      # production bundle (packaging uses electron-builder)
 ```
 
-The auto-updater is disabled because Apexo has no release feed yet.
+The desktop app has no auto-updater; rebuild it (or install a newer release) to update.
 
 ## Configuration
 
 Apexo reads JSON/JSONC config files:
 
-| What | Location |
-| --- | --- |
-| Global config | `~/.config/apexo/apexo.jsonc` (`apexo.json` also works) |
-| Data / state / cache | `~/.local/share/apexo`, `~/.local/state/apexo`, `~/.cache/apexo` |
-| Project config | `apexo.json` / `apexo.jsonc` in the project (searched up to the git root) |
-| Project directory | `.apexo/` (agents, commands, plugins, themes, tools) |
-| Environment variables | `APEXO_*` (for example `APEXO_CONFIG`, `APEXO_CONFIG_CONTENT`) |
+| What                  | Location                                                                  |
+| --------------------- | ------------------------------------------------------------------------- |
+| Global config         | `~/.config/apexo/apexo.jsonc` (`apexo.json` also works)                   |
+| Data / state / cache  | `~/.local/share/apexo`, `~/.local/state/apexo`, `~/.cache/apexo`          |
+| Project config        | `apexo.json` / `apexo.jsonc` in the project (searched up to the git root) |
+| Project directory     | `.apexo/` (agents, commands, plugins, themes, tools)                      |
+| Environment variables | `APEXO_*` (for example `APEXO_CONFIG`, `APEXO_CONFIG_CONTENT`)            |
 
 Example `apexo.json`:
 
@@ -133,7 +133,7 @@ Example `apexo.json`:
 {
   "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
   "model": "xai/grok-4.7",
-  "theme": "grove"
+  "theme": "grove",
 }
 ```
 

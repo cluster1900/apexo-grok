@@ -37,7 +37,6 @@ Production imports from `packages/apexo/src/storage/db.ts` are concentrated in 2
 - `packages/apexo/src/session/prompt.ts`
 - `packages/apexo/src/session/session.ts`
 - `packages/apexo/src/session/todo.ts`
-- `packages/apexo/src/share/share-next.ts`
 - `packages/apexo/src/storage/db.ts`
 - `packages/apexo/src/sync/index.ts`
 - `packages/apexo/src/worktree/index.ts`
@@ -116,14 +115,13 @@ Files:
 - `packages/apexo/src/account/repo.ts`
 - `packages/apexo/src/project/project.ts`
 - `packages/apexo/src/control-plane/workspace.ts`
-- `packages/apexo/src/share/share-next.ts`
 
 Current usage:
 
 - These modules already expose Effect services or Effect functions, but internally wrap `Database.use` with local `db(...)` helpers or `Effect.try`.
 - `account/repo.ts` uses both `Database.use` and `Database.transaction` through a repository interface.
 - `project/project.ts` has the largest mixed usage: Effect service methods use a local `db(...)` helper, while legacy top-level functions still call `Database.use` directly.
-- `control-plane/workspace.ts` and `share/share-next.ts` have local Effect wrappers around `Database.use`.
+- `control-plane/workspace.ts` has a local Effect wrapper around `Database.use`.
 
 Why this group is tractable:
 
@@ -139,7 +137,7 @@ Target shape:
 Suggested order:
 
 - Start with `account/repo.ts`; it has a clear repository interface and few call sites.
-- Then migrate `share/share-next.ts` and `control-plane/workspace.ts` local wrappers.
+- Then migrate the `control-plane/workspace.ts` local wrapper.
 - Leave `project/project.ts` for last in this group because it mixes project resolution, VCS, global bus emission, migration, and legacy top-level helpers.
 
 ## Group 4: Session And Message Read Models

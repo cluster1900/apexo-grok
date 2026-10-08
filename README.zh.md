@@ -53,11 +53,12 @@ bun install
 bun run --cwd packages/apexo build --single
 
 # 产物位于 packages/apexo/dist/apexo-<os>-<arch>/bin/apexo
-install -m755 packages/apexo/dist/apexo-*/bin/apexo ~/.local/bin/apexo
+install -D -m755 packages/apexo/dist/apexo-*/bin/apexo ~/.local/bin/apexo
 apexo --version
 ```
 
-当 [GitHub Releases](https://github.com/cluster1900/apexo-grok/releases) 发布二进制后，也可以用安装脚本获取
+推送 `vX.Y.Z` 标签会触发 `.github/workflows/release.yml`，构建所有平台并把压缩包附加到
+[GitHub Releases](https://github.com/cluster1900/apexo-grok/releases)。发布之后，也可以用安装脚本获取
 （`--version X.Y.Z` 指定版本）：
 
 ```bash
@@ -89,12 +90,12 @@ apexo acp                 # 作为 ACP 智能体运行，供 Zed 等编辑器接
 
 ### 提供商
 
-| 提供商 | 连接方式 | 环境变量 |
-| --- | --- | --- |
-| **xAI Grok**（主要） | `apexo auth login` -> xAI -> SuperGrok Subscription（设备码 OAuth），或 API key | `XAI_API_KEY` |
-| OpenAI | API key | `OPENAI_API_KEY` |
-| Anthropic（Claude） | API key | `ANTHROPIC_API_KEY` |
-| Google（Gemini） | API key | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| 提供商               | 连接方式                                                                        | 环境变量                       |
+| -------------------- | ------------------------------------------------------------------------------- | ------------------------------ |
+| **xAI Grok**（主要） | `apexo auth login` -> xAI -> SuperGrok Subscription（设备码 OAuth），或 API key | `XAI_API_KEY`                  |
+| OpenAI               | API key                                                                         | `OPENAI_API_KEY`               |
+| Anthropic（Claude）  | API key                                                                         | `ANTHROPIC_API_KEY`            |
+| Google（Gemini）     | API key                                                                         | `GOOGLE_GENERATIVE_AI_API_KEY` |
 
 仍保留通用的 OpenAI 兼容“自定义提供商”入口，可接入自建服务。
 
@@ -107,19 +108,19 @@ bun run --cwd packages/desktop dev        # 开发模式
 bun run --cwd packages/desktop build      # 生产构建（打包使用 electron-builder）
 ```
 
-由于 Apexo 暂无发布源，自动更新已关闭。
+桌面应用没有自动更新；如需更新，请重新构建（或安装更新的发布版本）。
 
 ## 配置
 
 Apexo 读取 JSON/JSONC 配置文件：
 
-| 项目 | 位置 |
-| --- | --- |
-| 全局配置 | `~/.config/apexo/apexo.jsonc`（也可用 `apexo.json`） |
+| 项目               | 位置                                                             |
+| ------------------ | ---------------------------------------------------------------- |
+| 全局配置           | `~/.config/apexo/apexo.jsonc`（也可用 `apexo.json`）             |
 | 数据 / 状态 / 缓存 | `~/.local/share/apexo`、`~/.local/state/apexo`、`~/.cache/apexo` |
-| 项目配置 | 项目中的 `apexo.json` / `apexo.jsonc`（向上查找到 git 根目录） |
-| 项目目录 | `.apexo/`（agents、commands、plugins、themes、tools） |
-| 环境变量 | `APEXO_*`（如 `APEXO_CONFIG`、`APEXO_CONFIG_CONTENT`） |
+| 项目配置           | 项目中的 `apexo.json` / `apexo.jsonc`（向上查找到 git 根目录）   |
+| 项目目录           | `.apexo/`（agents、commands、plugins、themes、tools）            |
+| 环境变量           | `APEXO_*`（如 `APEXO_CONFIG`、`APEXO_CONFIG_CONTENT`）           |
 
 `apexo.json` 示例：
 
@@ -127,7 +128,7 @@ Apexo 读取 JSON/JSONC 配置文件：
 {
   "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
   "model": "xai/grok-4.7",
-  "theme": "grove"
+  "theme": "grove",
 }
 ```
 

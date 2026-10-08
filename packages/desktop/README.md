@@ -21,7 +21,7 @@ bun run build && bun run package
 
 Notes:
 
-- The auto-updater is disabled because Apexo has no release feed yet.
+- There is no auto-updater; rebuild or install a newer release to update.
 - The app ID (`com.apexolab.desktop*`) is unchanged so existing user data and OS integrations
   keep working.
 - Linux `.deb` packaging needs a maintainer email (`author.email` in `package.json`), which is

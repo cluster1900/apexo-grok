@@ -11,7 +11,7 @@ This document breaks the legacy configuration schema into small review groups. W
 
 ## Schema Scope
 
-Use one v2 config schema for now. Some fields, such as `autoupdate`, are intended for global/user configuration, but there is not yet enough benefit to enforce that with separate global and location schemas. Revisit this if more scope-sensitive fields survive the review.
+Use one v2 config schema for now. Some fields may be intended only for global/user configuration, but there is not yet enough benefit to enforce that with separate global and location schemas. Revisit this if more scope-sensitive fields survive the review.
 
 V2 core discovers config documents named `apexo.json` or `apexo.jsonc` in the global config directory, ancestor project directories, and `.apexo` config directories. The legacy `config.json` filename is not supported in V2.
 
@@ -27,12 +27,12 @@ Small fields describing the config file itself rather than application behavior.
 
 Settings that affect process startup, shell execution, or network serving. Review global-only versus location-specific scope carefully.
 
-| Field        | Current Purpose                                     | Status | Notes                                                                          |
-| ------------ | --------------------------------------------------- | ------ | ------------------------------------------------------------------------------ |
-| `shell`      | Default shell for terminal and shell tool execution | keep   | Port as effective config; shared shell choice is used throughout apexo.     |
-| `logLevel`   | Intended logging level configuration                | remove | Do not port: no config consumer exists and logging initializes from CLI input. |
-| `server`     | Hostname, port, mDNS, and CORS settings             | remove | Do not port: location config is loaded after the server is already running.    |
-| `autoupdate` | Automatic update or notification behavior           | keep   | Global-only user preference; keep `true`, `false`, and `"notify"`.             |
+| Field        | Current Purpose                                     | Status  | Notes                                                                          |
+| ------------ | --------------------------------------------------- | ------- | ------------------------------------------------------------------------------ |
+| `shell`      | Default shell for terminal and shell tool execution | keep    | Port as effective config; shared shell choice is used throughout apexo.        |
+| `logLevel`   | Intended logging level configuration                | remove  | Do not port: no config consumer exists and logging initializes from CLI input. |
+| `server`     | Hostname, port, mDNS, and CORS settings             | remove  | Do not port: location config is loaded after the server is already running.    |
+| `autoupdate` | Automatic update or notification behavior           | removed | Self-update was removed from Apexo; the key is ignored.                        |
 
 ## Group 3: Commands And Project Resources
 
@@ -147,21 +147,19 @@ Rename legacy `attachment` to `attachments` in v2. This setting controls process
 
 Settings affecting sharing behavior or user/account identity rather than model execution.
 
-| Field        | Current Purpose                                 | Status | Notes                                                                                                                  |
-| ------------ | ----------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `share`      | Session sharing behavior                        | keep   | Keep `"manual" \| "auto" \| "disabled"`; it controls manual sharing permission and automatic sharing of new sessions.  |
-| `autoshare`  | Legacy automatic sharing flag                   | remove | Do not port deprecated alias; use `share: "auto"`.                                                                     |
-| `enterprise` | Enterprise URL configuration                    | keep   | Keep `{ url?: string }`; currently selects the legacy sharing service endpoint when no organization account is active. |
-| `username`   | Display username in conversations and telemetry | keep   | Keep string identity override; runtime may otherwise resolve an operating-system username.                             |
+| Field        | Current Purpose                                 | Status  | Notes                                                                                      |
+| ------------ | ----------------------------------------------- | ------- | ------------------------------------------------------------------------------------------ |
+| `share`      | Session sharing behavior                        | removed | Hosted session sharing was removed from Apexo; the key is ignored.                         |
+| `autoshare`  | Legacy automatic sharing flag                   | removed | Hosted session sharing was removed from Apexo; the key is ignored.                         |
+| `enterprise` | Enterprise URL configuration                    | removed | Only selected the hosted sharing endpoint; the key is ignored.                             |
+| `username`   | Display username in conversations and telemetry | keep    | Keep string identity override; runtime may otherwise resolve an operating-system username. |
 
-Retain `share` as the single session-sharing setting. `"manual"` permits explicit sharing, `"auto"` shares newly created top-level sessions, and `"disabled"` prevents sharing. Legacy `autoshare: true` is only an alias for `share: "auto"`, so v2 does not expose it.
+Session sharing (`share`, `autoshare`, `enterprise`) is gone; existing configs that still set those keys keep loading because unknown keys are ignored.
 
-Retain `enterprise.url` for legacy enterprise share hosting selection and `username` as a user-facing identity override. These remain separate from server authentication credentials; `username` identifies the user in conversation and telemetry behavior rather than HTTP basic-auth configuration.
+Retain `username` as a user-facing identity override. It stays separate from server authentication credentials; `username` identifies the user in conversation and telemetry behavior rather than HTTP basic-auth configuration.
 
 ```jsonc
 {
-  "share": "disabled",
-  "enterprise": { "url": "https://share.example.com" },
   "username": "developer",
 }
 ```
@@ -306,8 +304,8 @@ Rename legacy `permission` to `permissions` and expose the normalized ordered ru
 
 External protocol and server integration configuration.
 
-| Field | Current Purpose                       | Status   | Notes                                                                                                                                                      |
-| ----- | ------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Field | Current Purpose                       | Status   | Notes                                                                                                                                                   |
+| ----- | ------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mcp` | MCP server definitions and enablement | redesign | Keep apexo's explicit local/remote server entry format, nested under `mcp.servers`; use `disabled` for inactive entries and move timeout defaults here. |
 
 Keep the apexo MCP server entry format instead of adopting the common `mcpServers` copy/paste shape. Local servers remain explicit `type: "local"` entries with command arrays and `environment`; remote servers remain explicit `type: "remote"` entries with `url`, `headers`, and optional `oauth`. Nest the server map under `mcp.servers` so protocol-wide settings such as timeout defaults can live under the same subsystem.
