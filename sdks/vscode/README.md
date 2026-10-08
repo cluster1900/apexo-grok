@@ -15,6 +15,10 @@ install steps.
 - **Context Awareness**: Automatically share your current selection or tab with Apexo.
 - **File Reference Shortcuts**: Use `Cmd+Option+K` (Mac) or `Alt+Ctrl+K` (Linux/Windows) to insert file references. For example, `@File#L37-42`.
 
+## Support
+
+Please report issues at https://github.com/cluster1900/apexo-grok/issues.
+
 ## Development
 
 1. `code sdks/vscode` - Open the `sdks/vscode` directory in VS Code. **Do not open from repo root.**

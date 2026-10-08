@@ -4,7 +4,8 @@
   "version": "1.18.35",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://apexolab.com",
+  "homepage": "https://github.com/cluster1900/apexo-grok",
+  "bugs": "https://github.com/cluster1900/apexo-grok/issues",
   "author": {
     "name": "Apexo"
   },

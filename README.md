@@ -51,7 +51,7 @@ Apexo is not published to package managers yet. To build it you need
 [Bun](https://bun.sh) 1.3.x (the repo pins `bun@1.3.14`) and git.
 
 ```bash
-git clone <your-apexo-repo-url> apexo && cd apexo
+git clone https://github.com/cluster1900/apexo-grok.git apexo && cd apexo
 bun install
 
 # Build a single native binary for this machine (the web UI is embedded)
@@ -154,6 +154,10 @@ bun turbo typecheck --concurrency=3
 
 Internal package names (`@opencode-ai/*`) and source directories (`packages/opencode`) keep
 their upstream names on purpose, to keep merges from upstream manageable.
+
+## Feedback
+
+Report bugs and ideas at [github.com/cluster1900/apexo-grok/issues](https://github.com/cluster1900/apexo-grok/issues).
 
 ## License
 

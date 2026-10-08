@@ -353,7 +353,7 @@ export const ErrorPage: Component<ErrorPageProps> = (props) => {
             <button
               type="button"
               class="flex items-center text-text-interactive-base gap-1"
-              onClick={() => platform.openExternal("https://github.com/anomalyco/opencode/issues/new?template=bug_report.yml")}
+              onClick={() => platform.openExternal("https://github.com/cluster1900/apexo-grok/issues/new?template=bug-report.yml")}
             >
               <div>GitHub</div>
             </button>

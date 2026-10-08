@@ -46,7 +46,7 @@ Apexo 是 **Grok** 的 UI 外壳。它的核心目标是支持 SpaceXAI 官方�
 Apexo 暂未发布到任何包管理器。构建前需要安装 [Bun](https://bun.sh) 1.3.x（仓库固定为 `bun@1.3.14`）和 git。
 
 ```bash
-git clone <你的 apexo 仓库地址> apexo && cd apexo
+git clone https://github.com/cluster1900/apexo-grok.git apexo && cd apexo
 bun install
 
 # 为当前机器构建单个原生二进制（内嵌 Web UI）
@@ -144,6 +144,10 @@ bun turbo typecheck --concurrency=3
 ```
 
 内部包名（`@opencode-ai/*`）和源码目录（`packages/opencode`）刻意保留上游名称，方便日后合并上游更新。
+
+## 反馈
+
+问题和建议请提交到 [github.com/cluster1900/apexo-grok/issues](https://github.com/cluster1900/apexo-grok/issues)。
 
 ## 许可证
 

@@ -26,3 +26,5 @@ Notes:
   keep working.
 - Linux `.deb` packaging needs a maintainer email (`author.email` in `package.json`), which is
   not set.
+
+Report desktop issues at https://github.com/cluster1900/apexo-grok/issues.

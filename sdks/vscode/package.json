@@ -6,8 +6,10 @@
   "publisher": "sst-dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anomalyco/opencode"
+    "url": "https://github.com/cluster1900/apexo-grok"
   },
+  "homepage": "https://github.com/cluster1900/apexo-grok",
+  "bugs": "https://github.com/cluster1900/apexo-grok/issues",
   "license": "MIT",
   "icon": "images/icon.png",
   "galleryBanner": {
