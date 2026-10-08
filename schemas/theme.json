@@ -1,0 +1,1129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/theme.json",
+  "title": "Apexo TUI theme",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "defs": {
+      "type": "object",
+      "description": "Named colors that theme entries can reference by name",
+      "additionalProperties": {
+        "$ref": "#/$defs/colorRef"
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "secondary": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "accent": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "error": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "warning": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "success": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "info": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "text": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "textMuted": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "background": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "backgroundPanel": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "backgroundElement": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "border": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "borderActive": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "borderSubtle": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffAdded": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffRemoved": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffContext": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffHunkHeader": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffHighlightAdded": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffHighlightRemoved": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffAddedBg": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffRemovedBg": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffContextBg": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffLineNumber": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffAddedLineNumberBg": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "diffRemovedLineNumberBg": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownText": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownHeading": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownLink": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownLinkText": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownCode": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownBlockQuote": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownEmph": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownStrong": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownHorizontalRule": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownListItem": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownListEnumeration": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownImage": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownImageText": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "markdownCodeBlock": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxComment": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxKeyword": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxFunction": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxVariable": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxString": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxNumber": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxType": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxOperator": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "syntaxPunctuation": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "selectedListItemText": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "backgroundMenu": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/colorRef"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dark": {
+                  "$ref": "#/$defs/colorRef"
+                },
+                "light": {
+                  "$ref": "#/$defs/colorRef"
+                }
+              },
+              "required": ["dark", "light"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "thinkingOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "primary",
+        "secondary",
+        "accent",
+        "error",
+        "warning",
+        "success",
+        "info",
+        "text",
+        "textMuted",
+        "background",
+        "backgroundPanel",
+        "backgroundElement",
+        "border",
+        "borderActive",
+        "borderSubtle",
+        "diffAdded",
+        "diffRemoved",
+        "diffContext",
+        "diffHunkHeader",
+        "diffHighlightAdded",
+        "diffHighlightRemoved",
+        "diffAddedBg",
+        "diffRemovedBg",
+        "diffContextBg",
+        "diffLineNumber",
+        "diffAddedLineNumberBg",
+        "diffRemovedLineNumberBg",
+        "markdownText",
+        "markdownHeading",
+        "markdownLink",
+        "markdownLinkText",
+        "markdownCode",
+        "markdownBlockQuote",
+        "markdownEmph",
+        "markdownStrong",
+        "markdownHorizontalRule",
+        "markdownListItem",
+        "markdownListEnumeration",
+        "markdownImage",
+        "markdownImageText",
+        "markdownCodeBlock",
+        "syntaxComment",
+        "syntaxKeyword",
+        "syntaxFunction",
+        "syntaxVariable",
+        "syntaxString",
+        "syntaxNumber",
+        "syntaxType",
+        "syntaxOperator",
+        "syntaxPunctuation"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["theme"],
+  "additionalProperties": false,
+  "$defs": {
+    "colorRef": {
+      "type": "string",
+      "description": "A hex color (\"#rrggbb\"), \"none\", or the name of a color in \"defs\""
+    }
+  }
+}
