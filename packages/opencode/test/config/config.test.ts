@@ -310,7 +310,8 @@ it.effect("creates global jsonc config with schema when no global configs exist"
     Effect.gen(function* () {
       yield* Config.use.get().pipe(provideInstanceEffect(dir))
 
-      const content = yield* FSUtil.use.readFileString(path.join(dir, "opencode.jsonc"))
+      // New (non-legacy) config directories get apexo.jsonc.
+      const content = yield* FSUtil.use.readFileString(path.join(dir, "apexo.jsonc"))
       expect(content).toContain('"$schema": "https://opencode.ai/config.json"')
     }).pipe(Effect.provide(testInstanceStoreLayer), Effect.provide(LayerNode.compile(CrossSpawnSpawner.node))),
   ),
@@ -327,9 +328,33 @@ it.effect("does not create global config when OPENCODE_CONFIG_DIR is set", () =>
           yield* Config.use.get().pipe(provideInstanceEffect(dir))
 
           expect(yield* FSUtil.use.existsSafe(path.join(dir, "opencode.jsonc"))).toBe(false)
+          expect(yield* FSUtil.use.existsSafe(path.join(dir, "apexo.jsonc"))).toBe(false)
         }).pipe(Effect.provide(testInstanceStoreLayer), Effect.provide(LayerNode.compile(CrossSpawnSpawner.node))),
       ),
     )
+  }),
+)
+
+it.effect("apexo.json overrides legacy opencode.json in the same project directory", () =>
+  Effect.gen(function* () {
+    const dir = yield* tmpdirScoped()
+    yield* writeConfigEffect(dir, { $schema: "https://opencode.ai/config.json", model: "legacy/model", username: "legacy" })
+    yield* writeConfigEffect(dir, { $schema: "https://opencode.ai/config.json", username: "apexo-user" }, "apexo.json")
+    const config = yield* withInstanceDir(dir, Config.use.get())
+    expect(config.username).toBe("apexo-user")
+    expect(config.model).toBe("legacy/model")
+  }),
+)
+
+it.effect("loads config from a .apexo directory", () =>
+  Effect.gen(function* () {
+    const dir = yield* tmpdirScoped()
+    yield* writeConfigEffect(path.join(dir, ".apexo"), {
+      $schema: "https://opencode.ai/config.json",
+      username: "from-dot-apexo",
+    }, "apexo.json")
+    const config = yield* withInstanceDir(dir, Config.use.get())
+    expect(config.username).toBe("from-dot-apexo")
   }),
 )
 

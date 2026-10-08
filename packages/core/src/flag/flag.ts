@@ -1,3 +1,4 @@
+import "./apexo-env"
 import { Config } from "effect"
 
 export function truthy(key: string) {

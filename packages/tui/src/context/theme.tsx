@@ -39,6 +39,7 @@ const themeSource: ThemeSource = {
     const directories = [Global.Path.config]
     for (let current = process.cwd(); ; current = path.dirname(current)) {
       directories.push(path.join(current, ".opencode"))
+      directories.push(path.join(current, ".apexo"))
       if (path.dirname(current) === current) break
     }
     return discoverThemes(directories)

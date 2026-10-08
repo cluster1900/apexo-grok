@@ -14,3 +14,19 @@ describe("global paths", () => {
     expect((await fs.stat(Global.Path.tmp)).isDirectory()).toBe(true)
   })
 })
+
+describe("apexo app directories", () => {
+  test("prefers apexo, falls back to an existing legacy opencode directory", async () => {
+    const base = await fs.mkdtemp(path.join(os.tmpdir(), "apexo-dirs-"))
+    try {
+      expect(Global.resolveAppDir(base, "")).toBe(path.join(base, "apexo"))
+      await fs.mkdir(path.join(base, "opencode"))
+      expect(Global.resolveAppDir(base, "")).toBe(path.join(base, "opencode"))
+      await fs.mkdir(path.join(base, "apexo"))
+      expect(Global.resolveAppDir(base, "")).toBe(path.join(base, "apexo"))
+      expect(Global.resolveAppDir(base, "custom")).toBe(path.join(base, "custom"))
+    } finally {
+      await fs.rm(base, { recursive: true, force: true })
+    }
+  })
+})

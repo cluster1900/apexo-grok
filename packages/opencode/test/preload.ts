@@ -6,6 +6,9 @@ import fs from "fs/promises"
 import { setTimeout as sleep } from "node:timers/promises"
 import { afterAll } from "bun:test"
 
+// Keep the legacy "opencode" directory layout that test fixtures expect.
+process.env["OPENCODE_APP_DIR_NAME"] = "opencode"
+
 // Set XDG env vars FIRST, before any src/ imports
 const dir = path.join(os.tmpdir(), "opencode-test-data-" + process.pid)
 await fs.mkdir(dir, { recursive: true })

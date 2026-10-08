@@ -1,3 +1,4 @@
+import "@opencode-ai/core/flag/apexo-env"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { RunCommand } from "./cli/cmd/run"
@@ -73,6 +74,7 @@ const cli = yargs(args)
 
     process.env.AGENT = "1"
     process.env.OPENCODE = "1"
+    process.env.APEXO = "1"
     process.env.OPENCODE_PID = String(process.pid)
   })
   .usage("")

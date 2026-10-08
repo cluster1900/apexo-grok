@@ -1,5 +1,6 @@
 import path from "path"
 import fs from "fs/promises"
+import { existsSync } from "fs"
 import { xdgData, xdgCache, xdgConfig, xdgState } from "xdg-basedir"
 import os from "os"
 import { Context, Effect, Layer } from "effect"
@@ -7,12 +8,27 @@ import { Flock } from "./util/flock"
 import { Flag } from "./flag/flag"
 import { makeGlobalNode } from "./effect/app-node"
 
-const app = "opencode"
-const data = path.join(xdgData!, app)
-const cache = path.join(xdgCache!, app)
-const config = path.join(xdgConfig!, app)
-const state = path.join(xdgState!, app)
-const tmp = path.join(os.tmpdir(), app)
+// Apexo stores its files under "apexo" directories. Existing OpenCode installs keep
+// working: if an "apexo" directory does not exist yet but a legacy "opencode" one does,
+// the legacy directory is used so sessions, auth and config are not lost.
+// OPENCODE_APP_DIR_NAME (or APEXO_APP_DIR_NAME) forces a specific directory name.
+export const APP_DIR_NAME = "apexo"
+export const LEGACY_APP_DIR_NAME = "opencode"
+
+export function resolveAppDir(base: string, forced = process.env.OPENCODE_APP_DIR_NAME) {
+  if (forced) return path.join(base, forced)
+  const next = path.join(base, APP_DIR_NAME)
+  if (existsSync(next)) return next
+  const legacy = path.join(base, LEGACY_APP_DIR_NAME)
+  if (existsSync(legacy)) return legacy
+  return next
+}
+
+const data = resolveAppDir(xdgData!)
+const cache = resolveAppDir(xdgCache!)
+const config = resolveAppDir(xdgConfig!)
+const state = resolveAppDir(xdgState!)
+const tmp = path.join(os.tmpdir(), process.env.OPENCODE_APP_DIR_NAME || APP_DIR_NAME)
 
 const paths = {
   get home() {

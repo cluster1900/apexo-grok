@@ -1,3 +1,4 @@
+import "@opencode-ai/core/flag/apexo-env"
 import { Server } from "@/server/server"
 import { InstanceRuntime } from "@/project/instance-runtime"
 import { Rpc } from "@/util/rpc"

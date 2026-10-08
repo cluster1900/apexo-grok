@@ -2,6 +2,7 @@
 
 import { $ } from "bun"
 import path from "path"
+import fs from "fs"
 import { fileURLToPath } from "url"
 import { createSolidTransformPlugin } from "@opentui/solid/bun-plugin"
 
@@ -175,7 +176,7 @@ for (const item of targets) {
       autoloadTsconfig: true,
       autoloadPackageJson: true,
       target: name.replace(pkg.name, "bun") as any,
-      outfile: `dist/${name}/bin/opencode`,
+      outfile: `dist/${name}/bin/apexo`,
       execArgv: [`--user-agent=opencode/${Script.version}`, "--use-system-ca", "--"],
       windows: {},
     },
@@ -204,12 +205,22 @@ for (const item of targets) {
   // Embedding the bundle invalidates the linker's ad-hoc signature, and macOS 27+
   // SIGKILLs binaries with invalid pages. Re-sign ad-hoc; release CI re-signs with Developer ID.
   if (item.os === "darwin" && process.platform === "darwin") {
-    await $`codesign --force --sign - dist/${name}/bin/opencode`
+    await $`codesign --force --sign - dist/${name}/bin/apexo`
+  }
+
+  // Backward compatibility: ship the same binary as `opencode` too, so existing
+  // packaging (desktop sidecar, npm wrapper, nix, Docker) keeps working.
+  {
+    const exe = item.os === "win32" ? ".exe" : ""
+    const primary = `dist/${name}/bin/apexo${exe}`
+    const legacy = `dist/${name}/bin/opencode${exe}`
+    await fs.promises.rm(legacy, { force: true })
+    await fs.promises.link(primary, legacy).catch(() => fs.promises.copyFile(primary, legacy))
   }
 
   // Smoke test: only run if binary is for current platform
   if (item.os === process.platform && item.arch === process.arch && !item.abi) {
-    const binaryPath = `dist/${name}/bin/opencode`
+    const binaryPath = `dist/${name}/bin/apexo`
     console.log(`Running smoke test: ${binaryPath} --version`)
     try {
       const versionOutput = await $`${binaryPath} --version`.text()
