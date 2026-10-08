@@ -2,9 +2,25 @@ name: nix-eval
 
 on:
   push:
-    branches: [dev]
+    branches: [main]
+    paths:
+      - "flake.nix"
+      - "flake.lock"
+      - "nix/**"
+      - "bun.lock"
+      - "package.json"
+      - "packages/*/package.json"
+      - ".github/workflows/nix-eval.yml"
   pull_request:
-    branches: [dev]
+    branches: [main]
+    paths:
+      - "flake.nix"
+      - "flake.lock"
+      - "nix/**"
+      - "bun.lock"
+      - "package.json"
+      - "packages/*/package.json"
+      - ".github/workflows/nix-eval.yml"
   workflow_dispatch:
 
 concurrency:
@@ -16,7 +32,7 @@ permissions:
 
 jobs:
   nix-eval:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout repository
@@ -40,7 +56,7 @@ jobs:
           SYSTEMS="x86_64-linux aarch64-linux x86_64-darwin aarch64-darwin"
           PACKAGES="apexo"
           # TODO: move 'desktop' to PACKAGES when #11755 is fixed
-          OPTIONAL_PACKAGES="desktop"
+          OPTIONAL_PACKAGES="apexo-desktop"
 
           echo ""
           echo "=== Evaluating packages for all systems ==="
