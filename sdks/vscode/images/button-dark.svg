@@ -1,1 +1,5 @@
-../../../packages/identity/mark.svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <g transform="translate(0 2.5)">
+    <path d="M9 6H23V9H9ZM20 9H23V12H20ZM9 12H23V15H9ZM9 15H12V18H9ZM20 15H23V18H20ZM9 18H23V21H9Z" fill="#17181C"/>
+  </g>
+</svg>

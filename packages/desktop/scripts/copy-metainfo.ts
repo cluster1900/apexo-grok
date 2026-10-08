@@ -17,13 +17,13 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   <name>${productName}</name>
   <summary>${summary}</summary>
 
-  <developer id="ly.anoma">
-    <name>Anomaly Innovations Inc.</name>
+  <developer id="com.apexolab">
+    <name>Apexo</name>
   </developer>
 
   <description>
     <p>
-      Apexo is an open source agent that helps you write and run code with any AI model.
+      Apexo is an open source, Grok-first coding agent that helps you write and run code.
     </p>
   </description>
 
