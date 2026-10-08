@@ -55,18 +55,25 @@ git clone https://github.com/cluster1900/apexo-grok.git apexo && cd apexo
 bun install
 
 # Build a single native binary for this machine (the web UI is embedded)
-bun run --cwd packages/opencode build --single
+bun run --cwd packages/apexo build --single
 
-# The binary lands in packages/opencode/dist/opencode-<os>-<arch>/bin/apexo
-# (an identical "opencode" binary is placed next to it for compatibility)
-install -m755 packages/opencode/dist/opencode-*/bin/apexo ~/.local/bin/apexo
+# The binary lands in packages/apexo/dist/apexo-<os>-<arch>/bin/apexo
+install -m755 packages/apexo/dist/apexo-*/bin/apexo ~/.local/bin/apexo
 apexo --version
+```
+
+Once release binaries are published on
+[GitHub Releases](https://github.com/cluster1900/apexo-grok/releases), the install script can
+fetch them instead (`--version X.Y.Z` pins a release):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cluster1900/apexo-grok/main/install | bash
 ```
 
 To run from source without building:
 
 ```bash
-bun dev            # same as: bun run --cwd packages/opencode src/index.ts
+bun dev            # same as: bun run --cwd packages/apexo src/index.ts
 bun dev --help
 ```
 
@@ -110,29 +117,33 @@ The auto-updater is disabled because Apexo has no release feed yet.
 
 ## Configuration
 
-Apexo reads JSON/JSONC config files. Apexo names are preferred and the OpenCode names are still
-read, so existing setups keep working:
+Apexo reads JSON/JSONC config files:
 
-| What | Apexo | Also read (legacy) |
-| --- | --- | --- |
-| Global config dir | `~/.config/apexo/` (`apexo.jsonc`) | `~/.config/opencode/` (used if it exists and `apexo/` does not) |
-| Data / state / cache | `~/.local/share/apexo`, `~/.local/state/apexo`, `~/.cache/apexo` | the matching `opencode` directories |
-| Project config | `apexo.json` / `apexo.jsonc` | `opencode.json` / `opencode.jsonc` |
-| Project directory | `.apexo/` (agents, commands, plugins, themes, tools) | `.opencode/` |
-| Environment variables | `APEXO_*` (for example `APEXO_CONFIG`, `APEXO_CONFIG_CONTENT`) | `OPENCODE_*` |
+| What | Location |
+| --- | --- |
+| Global config | `~/.config/apexo/apexo.jsonc` (`apexo.json` also works) |
+| Data / state / cache | `~/.local/share/apexo`, `~/.local/state/apexo`, `~/.cache/apexo` |
+| Project config | `apexo.json` / `apexo.jsonc` in the project (searched up to the git root) |
+| Project directory | `.apexo/` (agents, commands, plugins, themes, tools) |
+| Environment variables | `APEXO_*` (for example `APEXO_CONFIG`, `APEXO_CONFIG_CONTENT`) |
 
-When both exist in the same directory, `apexo.json` wins over `opencode.json`, and `APEXO_*`
-wins over `OPENCODE_*`. Example `apexo.json`:
+Example `apexo.json`:
 
 ```jsonc
 {
+  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
   "model": "xai/grok-4.7",
   "theme": "grove"
 }
 ```
 
-The config format is the same as upstream OpenCode, so the
-[OpenCode config reference](https://github.com/anomalyco/opencode/blob/dev/packages/web/src/content/docs/config.mdx) applies.
+JSON schemas for editor completion live in [`schemas/`](schemas): `config.json` (apexo.json),
+`tui.json`, `theme.json` (TUI themes) and `desktop-theme.json` (app themes). Regenerate them with
+`bun script/schemas.ts`.
+
+Files, directories and environment variables from an existing install of the upstream project
+are still read as fallbacks (Apexo names win), so earlier setups keep working. The compatibility
+names are kept in one place: [`packages/core/src/legacy-compat.ts`](packages/core/src/legacy-compat.ts).
 
 ## Themes
 
@@ -146,14 +157,14 @@ The config format is the same as upstream OpenCode, so the
 
 ```bash
 bun install
-bun turbo typecheck --concurrency=3
+bun turbo typecheck --concurrency=1
 (cd packages/core && bun test)
-(cd packages/opencode && bun test)
+(cd packages/apexo && bun test)
 (cd packages/tui && bun test)
 ```
 
-Internal package names (`@opencode-ai/*`) and source directories (`packages/opencode`) keep
-their upstream names on purpose, to keep merges from upstream manageable.
+Workspace packages use the `@apexo/*` scope; the CLI and server live in
+`packages/apexo`.
 
 ## Feedback
 

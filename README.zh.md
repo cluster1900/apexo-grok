@@ -50,18 +50,24 @@ git clone https://github.com/cluster1900/apexo-grok.git apexo && cd apexo
 bun install
 
 # 为当前机器构建单个原生二进制（内嵌 Web UI）
-bun run --cwd packages/opencode build --single
+bun run --cwd packages/apexo build --single
 
-# 产物位于 packages/opencode/dist/opencode-<os>-<arch>/bin/apexo
-# （旁边还有一个相同的 "opencode" 二进制，用于兼容）
-install -m755 packages/opencode/dist/opencode-*/bin/apexo ~/.local/bin/apexo
+# 产物位于 packages/apexo/dist/apexo-<os>-<arch>/bin/apexo
+install -m755 packages/apexo/dist/apexo-*/bin/apexo ~/.local/bin/apexo
 apexo --version
+```
+
+当 [GitHub Releases](https://github.com/cluster1900/apexo-grok/releases) 发布二进制后，也可以用安装脚本获取
+（`--version X.Y.Z` 指定版本）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cluster1900/apexo-grok/main/install | bash
 ```
 
 不构建、直接从源码运行：
 
 ```bash
-bun dev            # 等同于 bun run --cwd packages/opencode src/index.ts
+bun dev            # 等同于 bun run --cwd packages/apexo src/index.ts
 bun dev --help
 ```
 
@@ -105,27 +111,31 @@ bun run --cwd packages/desktop build      # 生产构建（打包使用 electron
 
 ## 配置
 
-Apexo 读取 JSON/JSONC 配置文件。优先使用 Apexo 命名，同时继续读取 OpenCode 命名，旧配置无需修改：
+Apexo 读取 JSON/JSONC 配置文件：
 
-| 项目 | Apexo | 兼容读取（旧） |
-| --- | --- | --- |
-| 全局配置目录 | `~/.config/apexo/`（`apexo.jsonc`） | `~/.config/opencode/`（`apexo/` 不存在且它存在时使用） |
-| 数据 / 状态 / 缓存 | `~/.local/share/apexo`、`~/.local/state/apexo`、`~/.cache/apexo` | 对应的 `opencode` 目录 |
-| 项目配置 | `apexo.json` / `apexo.jsonc` | `opencode.json` / `opencode.jsonc` |
-| 项目目录 | `.apexo/`（agents、commands、plugins、themes、tools） | `.opencode/` |
-| 环境变量 | `APEXO_*`（如 `APEXO_CONFIG`、`APEXO_CONFIG_CONTENT`） | `OPENCODE_*` |
+| 项目 | 位置 |
+| --- | --- |
+| 全局配置 | `~/.config/apexo/apexo.jsonc`（也可用 `apexo.json`） |
+| 数据 / 状态 / 缓存 | `~/.local/share/apexo`、`~/.local/state/apexo`、`~/.cache/apexo` |
+| 项目配置 | 项目中的 `apexo.json` / `apexo.jsonc`（向上查找到 git 根目录） |
+| 项目目录 | `.apexo/`（agents、commands、plugins、themes、tools） |
+| 环境变量 | `APEXO_*`（如 `APEXO_CONFIG`、`APEXO_CONFIG_CONTENT`） |
 
-同一目录下两者都存在时，`apexo.json` 优先于 `opencode.json`，`APEXO_*` 优先于 `OPENCODE_*`。
 `apexo.json` 示例：
 
 ```jsonc
 {
+  "$schema": "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
   "model": "xai/grok-4.7",
   "theme": "grove"
 }
 ```
 
-配置格式与上游 OpenCode 相同，可参考 [OpenCode 配置文档](https://github.com/anomalyco/opencode/blob/dev/packages/web/src/content/docs/config.mdx)。
+编辑器补全用的 JSON Schema 位于 [`schemas/`](schemas)：`config.json`（apexo.json）、`tui.json`、
+`theme.json`（TUI 主题）和 `desktop-theme.json`（应用主题）。可用 `bun script/schemas.ts` 重新生成。
+
+上游项目已有安装中的配置文件、目录和环境变量仍会作为后备读取（Apexo 命名优先），旧配置无需修改。
+这些兼容名称集中在 [`packages/core/src/legacy-compat.ts`](packages/core/src/legacy-compat.ts)。
 
 ## 主题
 
@@ -137,13 +147,13 @@ Apexo 读取 JSON/JSONC 配置文件。优先使用 Apexo 命名，同时继续�
 
 ```bash
 bun install
-bun turbo typecheck --concurrency=3
+bun turbo typecheck --concurrency=1
 (cd packages/core && bun test)
-(cd packages/opencode && bun test)
+(cd packages/apexo && bun test)
 (cd packages/tui && bun test)
 ```
 
-内部包名（`@opencode-ai/*`）和源码目录（`packages/opencode`）刻意保留上游名称，方便日后合并上游更新。
+工作区包使用 `@apexo/*` 作用域，CLI 与服务端位于 `packages/apexo`。
 
 ## 反馈
 
