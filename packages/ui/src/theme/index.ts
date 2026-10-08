@@ -64,6 +64,7 @@ export {
   oneDarkTheme,
   oneDarkProTheme,
   opencodeTheme,
+  groveTheme,
   orngTheme,
   osakaJadeTheme,
   palenightTheme,

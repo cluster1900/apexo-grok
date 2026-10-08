@@ -45,6 +45,7 @@ function knownThemes() {
 
 const names: Record<string, string> = {
   "oc-2": "OC-2",
+  grove: "Grove",
   amoled: "AMOLED",
   aura: "Aura",
   ayu: "Ayu",
@@ -83,6 +84,10 @@ const names: Record<string, string> = {
   zenburn: "Zenburn",
 }
 const oc2Theme = oc2ThemeJson as DesktopTheme
+
+// Default theme for new installs: "grove" (warm dark / green, inspired by agentic-IDE styling).
+// "oc-2" stays available and keeps its special baked-in handling.
+export const DEFAULT_THEME_ID = "grove"
 
 function normalize(id: string | null | undefined) {
   return id === "oc-1" ? "oc-2" : id
@@ -177,7 +182,7 @@ export const { use: useTheme, provider: ThemeProvider } = createSimpleContext({
     defaultTheme?: string
     onThemeApplied?: (theme: DesktopTheme, mode: "light" | "dark", scheme: ColorScheme) => void
   }) => {
-    const themeId = normalize(read(STORAGE_KEYS.THEME_ID) ?? props.defaultTheme) ?? "oc-2"
+    const themeId = normalize(read(STORAGE_KEYS.THEME_ID) ?? props.defaultTheme ?? DEFAULT_THEME_ID) ?? "oc-2"
     const colorScheme = (read(STORAGE_KEYS.COLOR_SCHEME) as ColorScheme | null) ?? "system"
     const mode = colorScheme === "system" ? getSystemMode() : colorScheme
     const [store, setStore] = createStore({
@@ -263,7 +268,7 @@ export const { use: useTheme, provider: ThemeProvider } = createSimpleContext({
       makeEventListener(mediaQuery, "change", onMedia)
 
       const rawTheme = read(STORAGE_KEYS.THEME_ID)
-      const savedTheme = normalize(rawTheme ?? props.defaultTheme) ?? "oc-2"
+      const savedTheme = normalize(rawTheme ?? props.defaultTheme ?? DEFAULT_THEME_ID) ?? "oc-2"
       const savedScheme = (read(STORAGE_KEYS.COLOR_SCHEME) as ColorScheme | null) ?? "system"
       if (rawTheme && rawTheme !== savedTheme) {
         write(STORAGE_KEYS.THEME_ID, savedTheme)

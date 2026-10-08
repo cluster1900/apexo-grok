@@ -71,8 +71,11 @@ function View(props: { api: TuiPluginApi }) {
       paddingRight={2}
       flexDirection="row"
       flexShrink={0}
-      gap={2}
+      gap={1}
     >
+      <text flexShrink={0} fg={props.api.theme.current.primary}>
+        ●
+      </text>
       <Directory api={props.api} />
       <Mcp api={props.api} />
       <box flexGrow={1} />

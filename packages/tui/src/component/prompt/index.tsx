@@ -1366,8 +1366,13 @@ export function Prompt(props: PromptProps) {
             flexGrow={1}
             width="100%"
           >
+            <box flexDirection="row" width="100%">
+            {/* Input-mode marker: ">" for chat, "!" for shell mode. */}
+            <text flexShrink={0} fg={store.mode === "shell" ? theme.warning : theme.primary} selectable={false}>
+              <b>{store.mode === "shell" ? "! " : "> "}</b>
+            </text>
             <textarea
-              width="100%"
+              flexGrow={1}
               placeholder={placeholderText()}
               placeholderColor={theme.textMuted}
               textColor={leader() ? theme.textMuted : theme.text}
@@ -1441,6 +1446,7 @@ export function Prompt(props: PromptProps) {
               cursorStyle={tuiConfig.cursor}
               syntaxStyle={syntax()}
             />
+            </box>
             <box flexDirection="row" flexShrink={0} paddingTop={1} gap={1} justifyContent="space-between">
               <box flexDirection="row" gap={1}>
                 <Show when={local.agent.current()} fallback={<box height={1} />}>
