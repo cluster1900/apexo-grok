@@ -1018,6 +1018,8 @@ it.instance("subtask child inherits parent session external_directory allow", ()
 
 noLLMServer.instance("prompt tools replace previous prompt tool rules", () =>
   Effect.gen(function* () {
+    // A provider must be available to resolve the default model (no keyless hosted provider exists anymore).
+    yield* Env.use.set("ANTHROPIC_API_KEY", "test-key")
     const prompt = yield* SessionPrompt.Service
     const sessions = yield* Session.Service
     const session = yield* sessions.create({ title: "Prompt tools" })

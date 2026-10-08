@@ -57,17 +57,12 @@ export const V2 = {
 }
 
 export const ApiKey = {
-  render: renderConnection("openrouter", [{ type: "api", label: "API key" }]),
-}
-
-export const OpenCodeZen = {
-  render: renderConnection("opencode", [{ type: "api", label: "API key" }]),
+  render: renderConnection("openai", [{ type: "api", label: "API key" }]),
 }
 
 export const LoginMethods = {
-  render: renderConnection("openai", [
-    { type: "oauth", label: "ChatGPT Pro/Plus (browser)" },
-    { type: "oauth", label: "ChatGPT Pro/Plus (headless)" },
-    { type: "api", label: "API key" },
+  render: renderConnection("xai", [
+    { type: "oauth", label: "SuperGrok Subscription" },
+    { type: "api", label: "Manually enter API Key" },
   ]),
 }

@@ -13,7 +13,7 @@ import { useLanguage } from "@/context/language"
 import { ModelTooltip } from "./model-tooltip"
 
 type ModelState = ReturnType<typeof useLocal>["model"]
-const featuredProviders = ["opencode", "opencode-go", "openai", "anthropic", "google", "github-copilot"]
+const featuredProviders = ["xai", "openai", "anthropic", "google"]
 const displayModelName = (name: string) => name.replace(/\s+(?:\(free\)|free)$/i, "")
 
 export const DialogSelectModelUnpaidV2: Component<{ model?: ModelState }> = (props) => {
@@ -29,8 +29,8 @@ export const DialogSelectModelUnpaidV2: Component<{ model?: ModelState }> = (pro
     const c = model.current()
     return c ? `${c.provider.id}:${c.id}` : undefined
   })
-  const isFree = (item: ReturnType<ModelState["list"]>[number]) =>
-    item.provider.id === "opencode" && (!item.cost || item.cost.input === 0)
+  // The hosted OpenCode free tier was removed; free models only come from user-configured providers.
+  const isFree = (item: ReturnType<ModelState["list"]>[number]) => !!item.cost && item.cost.input === 0
   const freeModels = createMemo(() => model.list().filter(isFree))
 
   const openProviders = (provider?: string) => {
@@ -76,6 +76,7 @@ export const DialogSelectModelUnpaidV2: Component<{ model?: ModelState }> = (pro
       </DialogHeader>
       <DialogBody class="max-h-[calc(100vh_-_68px)] min-h-0 flex-none gap-0 overflow-y-auto px-2 pb-2">
         <div ref={listEl} class="flex min-h-0 flex-col">
+          <Show when={freeModels().length > 0}>
           <div data-section="free-models" class="flex w-full flex-col items-start pb-3">
             <div class="flex h-8 w-full flex-none select-none flex-row items-center px-3 pb-2">
               <div class="flex h-5 items-center text-[13px] font-[440] leading-5 tracking-[-0.04px] text-v2-text-text-muted [font-family:var(--v2-font-family-sans)] [font-variant-numeric:tabular-nums] [font-variation-settings:'slnt'_0]">
@@ -117,6 +118,7 @@ export const DialogSelectModelUnpaidV2: Component<{ model?: ModelState }> = (pro
               )}
             </For>
           </div>
+          </Show>
 
           <div class="flex w-full flex-col">
             <div class="flex w-full flex-col items-start rounded-lg border-[0.5px] border-v2-border-border-muted bg-v2-background-bg-layer-02 p-2.5 pt-2">
@@ -146,15 +148,6 @@ export const DialogSelectModelUnpaidV2: Component<{ model?: ModelState }> = (pro
                       <ProviderIcon id={provider.id} class="mt-0.5 size-4 shrink-0 text-v2-icon-icon-base" />
                       <span class="flex min-w-0 flex-col">
                         <span class="truncate">{provider.name}</span>
-                        <Show when={provider.id === "opencode" || provider.id === "opencode-go"}>
-                          <span class="truncate font-[440] text-v2-text-text-muted">
-                            {language.t(
-                              provider.id === "opencode"
-                                ? "dialog.provider.opencode.tagline"
-                                : "dialog.provider.opencodeGo.tagline",
-                            )}
-                          </span>
-                        </Show>
                       </span>
                     </button>
                   )}

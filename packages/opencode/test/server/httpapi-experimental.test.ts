@@ -215,7 +215,7 @@ describe("experimental HttpApi", () => {
   )
 
   it.instance(
-    "serves Console org switch through the default server app",
+    "rejects Console org switch (hosted console removed)",
     () =>
       Effect.gen(function* () {
         const tmp = yield* TestInstance
@@ -226,8 +226,7 @@ describe("experimental HttpApi", () => {
           body: JSON.stringify({ accountID, orgID: "org-test" }),
         })
 
-        expect(switched.status).toBe(200)
-        expect(yield* json(switched)).toBe(true)
+        expect(switched.status).toBe(400)
       }),
     { config: { formatter: false, lsp: false } },
   )

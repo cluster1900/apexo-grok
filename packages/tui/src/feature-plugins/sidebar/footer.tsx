@@ -9,11 +9,7 @@ const id = "internal:sidebar-footer"
 function View(props: { api: TuiPluginApi; sessionID: string }) {
   const paths = useTuiPaths()
   const theme = () => props.api.theme.current
-  const has = createMemo(() =>
-    props.api.state.provider.some(
-      (item) => item.id !== "opencode" || Object.values(item.models).some((model) => model.cost?.input !== 0),
-    ),
-  )
+  const has = createMemo(() => props.api.state.provider.length > 0)
   const done = createMemo(() => props.api.kv.get("dismissed_getting_started", false))
   const show = createMemo(() => !has() && !done())
   const path = createMemo(() => {

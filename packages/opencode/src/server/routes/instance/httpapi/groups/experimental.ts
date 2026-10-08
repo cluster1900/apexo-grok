@@ -1,4 +1,3 @@
-import { AccountID, OrgID } from "@/account/schema"
 import { MCP } from "@/mcp"
 
 import { Session } from "@/session/session"
@@ -43,8 +42,8 @@ const ConsoleOrgList = Schema.Struct({
 })
 
 export const ConsoleSwitchPayload = Schema.Struct({
-  accountID: AccountID,
-  orgID: OrgID,
+  accountID: Schema.String.pipe(Schema.brand("AccountID")),
+  orgID: Schema.String.pipe(Schema.brand("OrgID")),
 })
 
 const ToolIDs = Schema.Array(Schema.String).annotate({ identifier: "ToolIDs" })
