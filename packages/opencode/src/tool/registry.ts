@@ -57,8 +57,7 @@ import { McpCatalog } from "@/mcp/catalog"
 
 export function webSearchEnabled(providerID: ProviderV2.ID, flags = { exa: false, parallel: false }) {
   return (
-    providerID === ProviderV2.ID.opencode ||
-    providerID === ProviderV2.ID.make("opencode-go") ||
+    // Hosted web search was only bundled with the removed OpenCode Zen/Go providers.
     flags.exa ||
     flags.parallel
   )
