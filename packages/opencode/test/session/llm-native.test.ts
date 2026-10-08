@@ -360,7 +360,7 @@ describe("session.llm-native.request", () => {
     const compatible = LLMNative.model({
       model: {
         ...baseModel,
-        providerID: ProviderV2.ID.make("opencode"),
+        providerID: ProviderV2.ID.make("custom"),
         api: { ...baseModel.api, url: "https://ai.example.test/v1", npm: "@ai-sdk/openai-compatible" },
       },
       apiKey: "test-key",
@@ -369,13 +369,13 @@ describe("session.llm-native.request", () => {
     expect(compatible.route.id).toBe("openai-compatible-chat")
     expect(compatible.route.endpoint.baseURL).toBe("https://ai.example.test/v1")
 
-    const openrouter = LLMNative.model({
-      model: { ...baseModel, api: { ...baseModel.api, url: "", npm: "@openrouter/ai-sdk-provider" } },
+    const xai = LLMNative.model({
+      model: { ...baseModel, api: { ...baseModel.api, url: "", npm: "@ai-sdk/xai" } },
       apiKey: "test-key",
       messages: [],
     })
-    expect(openrouter.route.id).toBe("openrouter")
-    expect(openrouter.route.endpoint.baseURL).toBe("https://openrouter.ai/api/v1")
+    expect(xai.route.id).toBe("openai-responses")
+    expect(xai.route.endpoint.baseURL).toBe("https://api.x.ai/v1")
   })
 
   test("fails fast for unsupported provider packages", () => {

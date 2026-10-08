@@ -5,7 +5,7 @@ import { HttpRecorder } from "@opencode-ai/http-recorder"
 import { HttpRecorderInternal } from "@opencode-ai/http-recorder/internal"
 import { describe, expect, test } from "bun:test"
 import { tool, type ModelMessage, type JSONValue } from "ai"
-import { Effect, Layer, Option, Schema, Stream } from "effect"
+import { Effect, Layer, Stream } from "effect"
 import path from "node:path"
 import z from "zod"
 import { Auth } from "@/auth"
@@ -27,16 +27,6 @@ import { LayerNode } from "@opencode-ai/core/effect/layer-node"
 import { LayerNodePlatform } from "@opencode-ai/core/effect/app-node-platform"
 
 const FIXTURES_DIR = path.join(import.meta.dir, "../fixtures/recordings")
-
-const zenURL = (connection: string) => `https://console.opencode.ai/proxy/connections/${connection}/v1`
-
-const replayOpenAIOAuth = {
-  type: "oauth",
-  refresh: "fixture-refresh-token",
-  access: "fixture-access-token",
-  expires: Date.now() + 60 * 60 * 1000,
-  accountId: "fixture-account",
-} satisfies Auth.Info
 
 type RecordedScenario = {
   readonly id: string
@@ -66,29 +56,6 @@ const cloneModel = (model: ModelsDev.Provider["models"][string]) => {
 }
 
 const envValue = (...names: string[]) => names.map((name) => process.env[name]).find(Boolean)
-const decodeAuth = Schema.decodeUnknownOption(Auth.Info)
-const recordOpenAIOAuth = (() => {
-  let loaded = false
-  let auth: Auth.Info | undefined
-  return () => {
-    if (loaded) return auth
-    loaded = true
-    auth = decodeRecordOpenAIOAuth()
-    return auth
-  }
-})()
-
-function decodeRecordOpenAIOAuth() {
-  const value = process.env.OPENCODE_RECORD_OPENAI_AUTH
-  if (!value) return undefined
-  try {
-    const auth = Option.getOrUndefined(decodeAuth(JSON.parse(value)))
-    return auth?.type === "oauth" ? auth : undefined
-  } catch {
-    return undefined
-  }
-}
-
 const providerConfig = (input: {
   readonly providerID: ProviderV2.ID
   readonly name: string
@@ -132,52 +99,6 @@ const RECORDED_SCENARIOS = [
         options: {
           apiKey: envValue("OPENCODE_RECORD_OPENAI_API_KEY", "OPENAI_API_KEY") ?? "fixture-openai-key",
           baseURL: "https://api.openai.com/v1",
-        },
-      }),
-  },
-  {
-    id: "openai-oauth",
-    name: "OpenAI OAuth",
-    providerID: ProviderV2.ID.openai,
-    modelID: "gpt-5.5",
-    cassette: "session/native-openai-oauth-tool-loop",
-    protocol: "openai-responses",
-    tags: ["opencode", "native", "oauth", "tool-loop"],
-    canRecord: () => recordOpenAIOAuth() !== undefined,
-    recordAuth: recordOpenAIOAuth,
-    replayAuth: replayOpenAIOAuth,
-    stableID: "openai-oauth",
-    config: (model) =>
-      providerConfig({
-        providerID: ProviderV2.ID.openai,
-        name: "OpenAI",
-        env: ["OPENAI_API_KEY"],
-        npm: "@ai-sdk/openai",
-        api: "https://api.openai.com/v1",
-        model,
-        options: { baseURL: "https://api.openai.com/v1" },
-      }),
-  },
-  {
-    id: "opencode-proxy",
-    name: "OpenCode proxy",
-    providerID: ProviderV2.ID.opencode,
-    modelID: "gpt-5.2-codex",
-    cassette: "session/native-zen-tool-loop",
-    protocol: "openai-responses",
-    tags: ["opencode", "zen", "native", "tool-loop"],
-    canRecord: () => Boolean(process.env.OPENCODE_RECORD_CONSOLE_TOKEN && process.env.OPENCODE_RECORD_ZEN_ORG_ID),
-    config: (model) =>
-      providerConfig({
-        providerID: ProviderV2.ID.opencode,
-        name: "OpenCode Zen",
-        env: ["OPENCODE_CONSOLE_TOKEN"],
-        npm: "@ai-sdk/openai-compatible",
-        api: zenURL(process.env.OPENCODE_RECORD_ZEN_CONNECTION ?? "fixture"),
-        model,
-        options: {
-          apiKey: process.env.OPENCODE_RECORD_CONSOLE_TOKEN ?? "fixture-console-token",
-          headers: { "x-org-id": process.env.OPENCODE_RECORD_ZEN_ORG_ID ?? "fixture-org" },
         },
       }),
   },
@@ -226,10 +147,7 @@ const canRun = (scenario: RecordedScenario) =>
     ? scenario.canRecord()
     : HttpRecorderInternal.hasCassetteSync(scenario.cassette, { directory: FIXTURES_DIR })
 
-const recordError = (scenario: RecordedScenario) =>
-  scenario.id === "openai-oauth"
-    ? "Set OPENCODE_RECORD_OPENAI_AUTH to an OAuth auth JSON object in the recording environment."
-    : `Missing recording credentials for ${scenario.name}.`
+const recordError = (scenario: RecordedScenario) => `Missing recording credentials for ${scenario.name}.`
 
 const redactRecordedBody = (body: string) =>
   body
