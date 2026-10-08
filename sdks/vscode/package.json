@@ -3,7 +3,7 @@
   "displayName": "Apexo",
   "description": "Apexo (Grok-first coding agent) for VS Code",
   "version": "1.18.35",
-  "publisher": "sst-dev",
+  "publisher": "cluster1900",
   "repository": {
     "type": "git",
     "url": "https://github.com/cluster1900/apexo-grok"

@@ -23,14 +23,7 @@ type Diff = {
 }
 
 const repo = process.env.GH_REPO ?? "cluster1900/apexo-grok"
-const bot = ["actions-user", "github-actions[bot]", "apexo", "apexo-agent[bot]"]
-const team = [
-  ...(await Bun.file(new URL("../.github/TEAM_MEMBERS", import.meta.url))
-    .text()
-    .then((x) => x.split(/\r?\n/).map((x) => x.trim()))
-    .then((x) => x.filter((x) => x && !x.startsWith("#")))),
-  ...bot,
-]
+const team = ["actions-user", "github-actions[bot]", "apexo", "apexo-agent[bot]"]
 const order = ["Core", "TUI", "Desktop", "SDK", "Extensions"] as const
 const sections = {
   core: "Core",

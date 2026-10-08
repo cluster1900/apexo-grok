@@ -34,28 +34,19 @@ const IS_PREVIEW = CHANNEL !== "latest"
 const VERSION = await (async () => {
   if (env.APEXO_VERSION) return env.APEXO_VERSION
   if (IS_PREVIEW) return `0.0.0-${CHANNEL}-${new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "")}`
-  const version = await fetch("https://registry.npmjs.org/apexo-grok/latest")
-    .then((res) => {
-      if (!res.ok) throw new Error(res.statusText)
-      return res.json()
-    })
-    .then((data: any) => data.version)
+  // Latest released version comes from the newest `v*` git tag (releases are GitHub Releases only).
+  const tag = await $`git tag --list "v*" --sort=-v:refname`
+    .nothrow()
+    .quiet()
+    .text()
+    .then((x) => x.split("\n").find((line) => /^v\d+\.\d+\.\d+$/.test(line.trim())))
+  const version = tag?.trim().slice(1) ?? "0.0.0"
   const [major, minor, patch] = version.split(".").map((x: string) => Number(x) || 0)
   const t = env.APEXO_BUMP?.toLowerCase()
   if (t === "major") return `${major + 1}.0.0`
   if (t === "minor") return `${major}.${minor + 1}.0`
   return `${major}.${minor}.${patch + 1}`
 })()
-
-const bot = ["actions-user", "apexo", "apexo-agent[bot]"]
-const teamPath = path.resolve(import.meta.dir, "../../../.github/TEAM_MEMBERS")
-const team = [
-  ...(await Bun.file(teamPath)
-    .text()
-    .then((x) => x.split(/\r?\n/).map((x) => x.trim()))
-    .then((x) => x.filter((x) => x && !x.startsWith("#")))),
-  ...bot,
-]
 
 export const Script = {
   get channel() {
@@ -69,9 +60,6 @@ export const Script = {
   },
   get release(): boolean {
     return !!env.APEXO_RELEASE
-  },
-  get team() {
-    return team
   },
 }
 console.log(`apexo script`, JSON.stringify(Script, null, 2))

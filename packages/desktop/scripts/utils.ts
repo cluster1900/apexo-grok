@@ -1,9 +1,6 @@
 import { $ } from "bun"
-import { chmod, copyFile, mkdtemp, rm } from "node:fs/promises"
-import { tmpdir } from "node:os"
+import { chmod, copyFile } from "node:fs/promises"
 import { join } from "node:path"
-
-const CLI_VERSION = "0.0.0-next-16350"
 
 export type Channel = "dev" | "beta" | "prod"
 
@@ -13,82 +10,23 @@ export function resolveChannel(): Channel {
   return "dev"
 }
 
-export const CLI_BINARIES: Array<{ rustTarget: string; package: string; os: string; cpu: string }> = [
-  {
-    rustTarget: "aarch64-apple-darwin",
-    package: "@apexo/cli-darwin-arm64",
-    os: "darwin",
-    cpu: "arm64",
-  },
-  {
-    rustTarget: "x86_64-apple-darwin",
-    package: "@apexo/cli-darwin-x64-baseline",
-    os: "darwin",
-    cpu: "x64",
-  },
-  {
-    rustTarget: "aarch64-pc-windows-msvc",
-    package: "@apexo/cli-windows-arm64",
-    os: "win32",
-    cpu: "arm64",
-  },
-  {
-    rustTarget: "x86_64-pc-windows-msvc",
-    package: "@apexo/cli-windows-x64-baseline",
-    os: "win32",
-    cpu: "x64",
-  },
-  {
-    rustTarget: "x86_64-unknown-linux-gnu",
-    package: "@apexo/cli-linux-x64-baseline",
-    os: "linux",
-    cpu: "x64",
-  },
-  {
-    rustTarget: "aarch64-unknown-linux-gnu",
-    package: "@apexo/cli-linux-arm64",
-    os: "linux",
-    cpu: "arm64",
-  },
-]
-
-export const RUST_TARGET = Bun.env.RUST_TARGET
-
-function nativeTarget() {
-  const { platform, arch } = process
-  if (platform === "darwin") return arch === "arm64" ? "aarch64-apple-darwin" : "x86_64-apple-darwin"
-  if (platform === "win32") return arch === "arm64" ? "aarch64-pc-windows-msvc" : "x86_64-pc-windows-msvc"
-  if (platform === "linux") return arch === "arm64" ? "aarch64-unknown-linux-gnu" : "x86_64-unknown-linux-gnu"
-  throw new Error(`Unsupported platform: ${platform}/${arch}`)
-}
-
-export function getCurrentCli(target = RUST_TARGET ?? nativeTarget()) {
-  const binaryConfig = CLI_BINARIES.find((item) => item.rustTarget === target)
-  if (!binaryConfig) throw new Error(`CLI configuration not available for target '${target}'`)
-
-  return binaryConfig
-}
-
-export async function downloadCliToResources() {
-  const cli = getCurrentCli()
-  const directory = await mkdtemp(join(tmpdir(), "apexo-cli-"))
+// The experimental v2 sidecar (APEXO_SIDECAR_V2=1) runs the workspace CLI from packages/cli.
+// Build it from source for this machine and stage it as resources/apexo-cli; the default
+// v1 sidecar does not need it, so the step is skipped unless v2 is requested.
+export async function stageCliToResources() {
+  if (Bun.env.APEXO_SIDECAR_V2 !== "1") {
+    console.log("Skipping v2 CLI staging (set APEXO_SIDECAR_V2=1 to build it)")
+    return
+  }
+  const cliDir = join(import.meta.dir, "..", "..", "cli")
+  await $`bun run --cwd ${cliDir} build --single`
+  const os = process.platform === "win32" ? "windows" : process.platform
+  const source = windowsify(join(cliDir, "dist", `cli-${os}-${process.arch}`, "bin", "lildax"))
   const dest = windowsify("resources/apexo-cli")
-  try {
-    await $`bun install --no-save --cwd ${directory} ${`${cli.package}@${CLI_VERSION}`} ${`--os=${cli.os}`} ${`--cpu=${cli.cpu}`}`
-    await copyFile(
-      join(directory, "node_modules", cli.package, "bin", cli.os === "win32" ? "apexo2.exe" : "apexo2"),
-      dest,
-    )
-  } finally {
-    await rm(directory, { recursive: true, force: true })
-  }
+  await copyFile(source, dest)
   if (process.platform !== "win32") await chmod(dest, 0o755)
-  if (process.platform === "win32" && process.env.GITHUB_ACTIONS === "true") {
-    await $`pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File ../../script/sign-windows.ps1 ${dest}`
-  }
   if (process.platform === "darwin") await $`codesign --force --sign - ${dest}`
-
-  console.log(`Copied ${cli.package} to ${dest}`)
+  console.log(`Staged ${source} to ${dest}`)
 }
 
 export function windowsify(path: string) {
