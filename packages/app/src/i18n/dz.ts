@@ -181,12 +181,8 @@ export const dict: Record<string, string> = {
   "dialog.provider.custom.label": "སྲོལ་སྒྲིག OpenAI-མཐུན་འགྱུར་སྤྲོད་མཁན།",
   "dialog.provider.tag.recommended": "རྒྱབ་སྣོན་འབད་ཡི",
   "dialog.provider.anthropic.note": "པྲོ་དང་མེགསི་ཚུ་རྩིས་ཏེ་ Claudeདཔེ་ཚད་ཚུ་ལུ་ཐད་ཀར་དུ་འཛུལ་སྤྱོད།",
-  "dialog.provider.copilot.note": "GitHub Copilot བརྒྱུད་དེ་ ཀོ་ཌིང་གྲོགས་རམ་གྱི་དོན་ལུ་ AI དཔེ་ཚད།",
   "dialog.provider.openai.note": "GPT མགྱོགས་དྲགས་དང་ལྕོགས་གྲུབ་ཅན་གྱི་སྤྱིར་བཏང་ཨེ་ཨའི་ལས་འགན་ཚུ་གི་དོན་ལུ་དཔེ་ཚད།",
   "dialog.provider.google.note": "Gemini མགྱོགས་དྲགས་དང་སྒྲིག་བཀོད་ཅན་གྱི་ལན་འདེབས་ཀྱི་དཔེ་ཚད།",
-  "dialog.provider.openrouter.note": "བྱིན་མི་གཅིག་ལས་ རྒྱབ་སྐྱོར་འབད་ཡོད་པའི་དཔེ་ཚད་ཚུ་ཆ་མཉམ་འཛུལ་སྤྱོད་འབད།",
-  "dialog.provider.vercel.note":
-    "རིག་རྩལ་ཅན་གྱི་འགྲུལ་ལམ་དང་གཅིག་ཁར་ བཅོས་མའི་བློ་རིག་དཔེ་ཚད་ཚུ་ལུ་ མཉམ་བསྡོམས་འཛུལ་སྤྱོད་འབད་ནི།",
   "dialog.model.select.title": "དཔེ་ཚད་སེལ་འཐུ་འབད།",
   "dialog.model.search.placeholder": "དཔེ་ཚད་འཚོལ་ཞིབ་འབད།",
   "dialog.model.empty": "དཔེ་ཚད་གྲུབ་འབྲས་མེད།",

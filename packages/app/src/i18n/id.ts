@@ -194,11 +194,8 @@ export const dict = {
   "dialog.provider.custom.label": "Penyedia kustom yang kompatibel dengan OpenAI",
   "dialog.provider.tag.recommended": "Direkomendasikan",
   "dialog.provider.anthropic.note": "Akses langsung ke model Claude, termasuk Pro dan Max",
-  "dialog.provider.copilot.note": "Model AI untuk bantuan pengodean melalui GitHub Copilot",
   "dialog.provider.openai.note": "Model GPT untuk tugas AI umum yang cepat dan mumpuni",
   "dialog.provider.google.note": "Model Gemini untuk respons cepat dan terstruktur",
-  "dialog.provider.openrouter.note": "Akses semua model yang didukung dari satu penyedia",
-  "dialog.provider.vercel.note": "Akses terpadu ke model AI dengan perutean cerdas",
 
   "dialog.model.select.title": "Pilih model",
   "dialog.model.search.placeholder": "Cari model",

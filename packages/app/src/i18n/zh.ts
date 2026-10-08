@@ -219,11 +219,8 @@ export const dict = {
   "dialog.provider.custom.label": "自定义 OpenAI 兼容提供商",
   "dialog.provider.tag.recommended": "推荐",
   "dialog.provider.anthropic.note": "直接使用 Claude 模型，包括 Pro 和 Max",
-  "dialog.provider.copilot.note": "通过 GitHub Copilot 使用辅助编程 AI 模型",
   "dialog.provider.openai.note": "适合快速处理各类 AI 任务的 GPT 模型",
   "dialog.provider.google.note": "可快速生成结构化回复的 Gemini 模型",
-  "dialog.provider.openrouter.note": "通过一个提供商使用所有受支持的模型",
-  "dialog.provider.vercel.note": "通过智能路由统一使用 AI 模型",
 
   "dialog.model.select.title": "选择模型",
   "dialog.model.search.placeholder": "搜索模型",
