@@ -11,7 +11,7 @@
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  node_modules ? callPackage ./node-modules.nix { },
+  node_modules ? callPackage ./node_modules.nix { },
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apexo";
