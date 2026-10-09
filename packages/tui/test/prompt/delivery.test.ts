@@ -20,11 +20,15 @@ describe("deliverPrompt", () => {
     const requests: Array<{ path: string; body: unknown }> = []
     const client = createApexoClient({
       baseUrl: "http://localhost",
-      fetch: async (request: Request) => {
-        requests.push({ path: new URL(request.url).pathname, body: await request.json() })
-        if (requests.length === 3) return Response.json({ message: "offline" }, { status: 503 })
-        return Response.json({})
-      },
+      fetch: Object.assign(
+        async (input: RequestInfo | URL, init?: RequestInit) => {
+          const request = new Request(input, init)
+          requests.push({ path: new URL(request.url).pathname, body: await request.json() })
+          if (requests.length === 3) return Response.json({ message: "offline" }, { status: 503 })
+          return Response.json({})
+        },
+        { preconnect: () => undefined },
+      ),
     })
     const draft: PromptDraft = {
       sessionID: "session-1",
