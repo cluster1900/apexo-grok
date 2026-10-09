@@ -18,7 +18,6 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "bun run test:unit && bun run test:browser",
     "test:unit": "bun test --conditions=solid --only-failures --preload ./happydom.ts ./src",
     "test:browser": "bun test --conditions=browser --preload ./happydom.ts ./test-browser",
     "test:unit:watch": "bun test --conditions=solid --watch --preload ./happydom.ts ./src",

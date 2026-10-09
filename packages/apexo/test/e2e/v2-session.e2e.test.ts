@@ -26,6 +26,7 @@ const it = testEffect(
 )
 const SessionResponse = Schema.Struct({ data: Schema.Struct({ id: Schema.String }) })
 const MessagesResponse = Schema.Struct({ data: Schema.Array(SessionMessage.Message) })
+const ActiveResponse = Schema.Struct({ data: Schema.Record(Schema.String, Schema.Unknown) })
 const post = (url: string, body: unknown) =>
   HttpClientRequest.post(url).pipe(HttpClientRequest.bodyJson(body), Effect.flatMap(HttpClient.execute))
 
@@ -158,6 +159,17 @@ describe("V2 HTTP end-to-end session execution", () => {
         )
         expect(queuedMessages.filter((message) => message.type === "user")).toHaveLength(2)
         expect(yield* llm.calls).toBe(2)
+        // The assistant message completes before the runner settles, so wait
+        // until the session leaves the active set before the idle interrupt.
+        yield* pollWithTimeout(
+          HttpClient.get("/api/session/active").pipe(
+            Effect.flatMap((response) => response.json),
+            Effect.flatMap(Schema.decodeUnknownEffect(ActiveResponse)),
+            Effect.map((response) => (session.id in response.data ? undefined : true)),
+          ),
+          "V2 runner did not become idle",
+          "15 seconds",
+        )
         const idleInterrupt = yield* post(`${route}/interrupt`, {})
         expect(idleInterrupt.status).toBe(204)
       }),
