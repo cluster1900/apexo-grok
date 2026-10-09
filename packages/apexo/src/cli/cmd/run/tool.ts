@@ -156,6 +156,10 @@ function text(v: unknown): string {
   return typeof v === "string" ? v : ""
 }
 
+function bashCommand(input: { readonly command?: unknown; readonly cmd?: unknown }) {
+  return typeof input.command === "string" ? input.command : text(input.cmd)
+}
+
 function num(v: unknown): number | undefined {
   if (typeof v !== "number" || !Number.isFinite(v)) {
     return undefined
@@ -622,7 +626,7 @@ function snapQuestion(p: ToolProps<typeof QuestionTool>): ToolSnapshot {
 }
 
 function scrollBashStart(p: ToolProps<typeof BashTool>): string {
-  const cmd = p.input.command ?? ""
+  const cmd = bashCommand(p.input)
   const wd = p.input.workdir ?? ""
   const formatted = wd && wd !== "." ? toolPath(wd) : ""
   const dir = formatted === "." ? "" : formatted
@@ -639,7 +643,7 @@ function scrollBashStart(p: ToolProps<typeof BashTool>): string {
 
 function scrollBashProgress(p: ToolProps<typeof BashTool>): string {
   const out = stripAnsi(p.frame.raw)
-  const cmd = (p.input.command ?? "").trim()
+  const cmd = bashCommand(p.input).trim()
   const fmt = (text: string) => {
     const body = text.replace(/^\n+/, "").replace(/\n+$/, "")
     return body ? `\n${body}` : ""
@@ -966,7 +970,7 @@ function permList(p: ToolPermissionProps): ToolPermissionInfo {
 }
 
 function permBash(p: ToolPermissionProps<typeof BashTool>): ToolPermissionInfo {
-  const cmd = p.input.command || ""
+  const cmd = bashCommand(p.input)
   return {
     icon: "#",
     title: "Shell command",
@@ -1272,7 +1276,7 @@ export function toolFrame(commit: StreamCommit, raw: string): ToolFrame {
 function runBash(p: ToolProps<typeof BashTool>): ToolInline {
   return {
     icon: "$",
-    title: p.input.command || "",
+    title: bashCommand(p.input),
     mode: "block",
     body: p.frame.status === "completed" ? text(p.frame.state.output).trim() : undefined,
   }

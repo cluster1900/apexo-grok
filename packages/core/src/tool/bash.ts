@@ -21,7 +21,8 @@ export const MAX_TIMEOUT_MS = 10 * 60 * 1_000
 export const MAX_CAPTURE_BYTES = 1024 * 1024
 
 export const Input = Schema.Struct({
-  command: Schema.String.annotate({ description: "Shell command string to execute" }),
+  command: Schema.optional(Schema.String).annotate({ description: "Shell command string to execute" }),
+  cmd: Schema.optional(Schema.String).annotate({ description: "Alternative parameter name for command" }),
   workdir: Schema.String.pipe(Schema.optional).annotate({
     description: "Working directory. Defaults to the active Location; relative paths resolve from that Location.",
   }),
@@ -30,7 +31,11 @@ export const Input = Schema.Struct({
     .annotate({
       description: `Timeout in milliseconds. Defaults to ${DEFAULT_TIMEOUT_MS} and may not exceed ${MAX_TIMEOUT_MS}.`,
     }),
-})
+}).check(
+  Schema.makeFilter((input) =>
+    input.command !== undefined || input.cmd !== undefined ? undefined : "command or cmd is required",
+  ),
+)
 
 const StructuredOutput = Schema.Struct({
   exit: Schema.Number.pipe(Schema.optional),
@@ -126,6 +131,8 @@ const layer = Layer.effectDiscard(
                 messageID: context.assistantMessageID,
                 callID: context.toolCallID,
               }
+              const rawCommand = input.command ?? input.cmd
+              if (rawCommand === undefined) return yield* new ToolFailure({ message: "command or cmd is required" })
               const target = yield* mutation.resolve({ path: input.workdir ?? ".", kind: "directory" })
               const external = target.externalDirectory
               if (external)
@@ -135,14 +142,14 @@ const layer = Layer.effectDiscard(
                   agent: context.agent,
                   source,
                 })
-              const warnings = (yield* externalCommandDirectories(fs, input.command, target.canonical)).map(
+              const warnings = (yield* externalCommandDirectories(fs, rawCommand, target.canonical)).map(
                 (directory) =>
                   `Command argument references external directory ${path.join(directory, "*").replaceAll("\\", "/")}. Bash runs with host-user filesystem, process, and network authority; this scan is advisory only.`,
               )
               yield* permission.assert({
                 action: name,
-                resources: [input.command],
-                save: [input.command],
+                resources: [rawCommand],
+                save: [rawCommand],
                 sessionID: context.sessionID,
                 agent: context.agent,
                 source,
@@ -155,7 +162,7 @@ const layer = Layer.effectDiscard(
               const shell =
                 Object.assign({}, ...entries.flatMap((entry) => (entry.type === "document" ? [entry.info] : [])))
                   .shell ?? defaultShell()
-              const command = ChildProcess.make(input.command, [], {
+              const command = ChildProcess.make(rawCommand, [], {
                 cwd: target.canonical,
                 shell,
                 stdin: "ignore",
@@ -193,7 +200,13 @@ const layer = Layer.effectDiscard(
                 truncated: result.outputTruncated === true,
                 ...(warnings.length ? { warnings } : {}),
               }
-            }).pipe(Effect.mapError(() => new ToolFailure({ message: `Unable to execute command: ${input.command}` }))),
+            }).pipe(
+              Effect.mapError((error) =>
+                error instanceof ToolFailure
+                  ? error
+                  : new ToolFailure({ message: `Unable to execute command: ${input.command ?? input.cmd}` }),
+              ),
+            ),
         }),
       })
       .pipe(Effect.orDie)

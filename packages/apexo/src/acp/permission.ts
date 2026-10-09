@@ -140,7 +140,12 @@ function permissionTitle(toolName: string, input: ToolInput) {
   const tool = toolName.toLocaleLowerCase()
   switch (tool) {
     case "external_directory":
-      return stringValue(input.description) ?? stringValue(input.command) ?? stringValue(input.parentDir)
+      return (
+        stringValue(input.description) ??
+        stringValue(input.command) ??
+        stringValue(input.cmd) ??
+        stringValue(input.parentDir)
+      )
 
     case "webfetch":
       return stringValue(input.url)

@@ -9,6 +9,7 @@ import { LLM } from "@apexo/llm"
 import { WriteTool } from "@apexo/core/tool/write"
 import { ReadTool } from "@apexo/core/tool/read"
 import { EditTool } from "@apexo/core/tool/edit"
+import { BashTool } from "@apexo/core/tool/bash"
 
 describe("Grok & xAI V2 Compatibility", () => {
   const grokProviderID = ProviderV2.ID.make("xai")
@@ -102,5 +103,21 @@ describe("Grok & xAI V2 Compatibility", () => {
       newString: "bar",
     })
     expect(decodedWithFilePath.filePath).toBe("hello.txt")
+  })
+
+  it("BashTool accepts cmd in addition to command", () => {
+    const decodedWithCommand = Schema.decodeUnknownSync(BashTool.Input)({
+      command: "echo 1",
+    })
+    expect(decodedWithCommand.command).toBe("echo 1")
+
+    const decodedWithCmd = Schema.decodeUnknownSync(BashTool.Input)({
+      cmd: "echo 1",
+    })
+    expect(decodedWithCmd.cmd).toBe("echo 1")
+  })
+
+  it("BashTool rejects input without a command", () => {
+    expect(() => Schema.decodeUnknownSync(BashTool.Input)({})).toThrow("command or cmd is required")
   })
 })

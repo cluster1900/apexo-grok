@@ -145,7 +145,7 @@ function inputLabel(input: Record<string, unknown>): string | undefined {
     return description
   }
 
-  const command = text(input.command)
+  const command = text(input.command) ?? text(input.cmd)
   if (command) {
     return command
   }
