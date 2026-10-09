@@ -209,11 +209,15 @@ const layer = Layer.effect(
             "x-apexo-session-id": session.id,
             ...(session.parentID ? { "x-apexo-parent-session-id": session.parentID } : {}),
             "x-session-affinity": session.id,
+            "x-grok-conv-id": session.id,
             "X-Session-Id": session.id,
             ...(session.parentID ? { "x-parent-session-id": session.parentID } : {}),
           },
         },
-        providerOptions: { openai: { promptCacheKey } },
+        providerOptions: {
+          openai: { promptCacheKey },
+          xai: { promptCacheKey },
+        },
         system: [agent.info?.system, system.baseline]
           .filter((part): part is string => part !== undefined && part.length > 0)
           .map(SystemPart.make),

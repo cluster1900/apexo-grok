@@ -87,14 +87,23 @@ const apiKey = (model: ModelV2.Info, credential?: Credential.Value) => {
   if (typeof value === "string") return Auth.value(value)
 }
 
+const defaultBaseURL = (model: ModelV2.Info) => {
+  const api = model.api
+  if (api.url) return api.url
+  if ((api.type === "aisdk" && api.package === "@ai-sdk/xai") || model.providerID === "xai")
+    return "https://api.x.ai/v1"
+  return undefined
+}
+
 const withDefaults = (model: ModelV2.Info, route: AnyRoute) => {
   const body = model.request.body
   const httpBody = Object.hasOwn(body, "apiKey")
     ? Object.fromEntries(Object.entries(body).filter(([key]) => key !== "apiKey"))
     : body
+  const baseURL = defaultBaseURL(model)
   return route.with({
     provider: model.providerID,
-    endpoint: model.api.url === undefined ? undefined : { baseURL: model.api.url },
+    endpoint: baseURL === undefined ? undefined : { baseURL },
     headers: model.request.headers,
     http: { body: httpBody },
     limits: { context: model.limit.context, output: model.limit.output },
@@ -146,6 +155,24 @@ export const fromCatalogModel = (
         .model({ id: resolved.api.id }),
     )
   }
+  if (
+    resolved.api.type === "aisdk" &&
+    (resolved.api.package === "@ai-sdk/xai" || resolved.providerID === "xai")
+  ) {
+    const baseURL = resolved.api.url ?? "https://api.x.ai/v1"
+    return Effect.succeed(
+      withDefaults(resolved, OpenAIResponses.route)
+        .with({
+          endpoint: { baseURL },
+          auth: key === undefined ? Auth.none : Auth.bearer(key),
+          providerOptions: {
+            xai: { store: false },
+            openai: { store: false },
+          },
+        })
+        .model({ id: resolved.api.id }),
+    )
+  }
   if (resolved.api.type === "aisdk" && resolved.api.package === "@ai-sdk/anthropic") {
     return Effect.succeed(
       withDefaults(resolved, AnthropicMessages.route)
@@ -175,6 +202,7 @@ export const resolve = (session: SessionSchema.Info, model: ModelV2.Info, creden
 export const supported = (model: ModelV2.Info) =>
   model.api.type === "aisdk" &&
   (model.api.package === "@ai-sdk/openai" ||
+    model.api.package === "@ai-sdk/xai" ||
     model.api.package === "@ai-sdk/anthropic" ||
     (model.api.package === "@ai-sdk/openai-compatible" && model.api.url !== undefined))
 

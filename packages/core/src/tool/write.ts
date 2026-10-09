@@ -18,11 +18,13 @@ import { Tools } from "./tools"
 
 export const name = "write"
 
-// TODO: Revisit whether model-facing mutation schemas should prefer absolute `filePath` naming for trained-in compatibility after evaluating model behavior.
 export const Input = Schema.Struct({
-  path: Schema.String.annotate({
+  path: Schema.optional(Schema.String).annotate({
     description:
       "File path to write. Relative paths resolve within the active Location. Absolute paths inside that Location are accepted; external absolute paths require external_directory approval.",
+  }),
+  filePath: Schema.optional(Schema.String).annotate({
+    description: "Alternative parameter name for path.",
   }),
   content: Schema.String.annotate({ description: "Content to write to the file" }),
 })
@@ -67,7 +69,9 @@ const layer = Layer.effectDiscard(
                   messageID: context.assistantMessageID,
                   callID: context.toolCallID,
                 }
-                const target = yield* mutation.resolve({ path: input.path, kind: "file" })
+                const path = input.path ?? input.filePath
+                if (!path) return yield* new ToolFailure({ message: "path or filePath is required" })
+                const target = yield* mutation.resolve({ path, kind: "file" })
                 const external = target.externalDirectory
                 if (external)
                   yield* permission.assert({
@@ -85,7 +89,9 @@ const layer = Layer.effectDiscard(
                   source,
                 })
                 return yield* files.writeTextPreservingBom({ target, content: input.content })
-              }).pipe(Effect.mapError(() => new ToolFailure({ message: `Unable to write ${input.path}` }))),
+              }).pipe(
+                Effect.mapError(() => new ToolFailure({ message: `Unable to write ${input.path ?? input.filePath}` })),
+              ),
           }),
           "edit",
         ),

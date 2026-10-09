@@ -16,7 +16,12 @@ import { Tools } from "./tools"
 export const name = "read"
 const SUPPORTED_IMAGE_MIMES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"])
 const LocationInput = Schema.Struct({
-  path: Schema.String,
+  path: Schema.optional(Schema.String).annotate({
+    description: "File or directory path to read. Relative paths resolve within the active Location.",
+  }),
+  filePath: Schema.optional(Schema.String).annotate({
+    description: "Alternative parameter name for path.",
+  }),
   offset: ReadToolFileSystem.PageInput.fields.offset.annotate({
     description: "The 1-based directory entry or text line offset to start reading from",
   }),
@@ -24,7 +29,7 @@ const LocationInput = Schema.Struct({
     description: "The maximum number of directory entries or text lines to read",
   }),
 })
-const Input = LocationInput
+export const Input = LocationInput
 const Output = Schema.Union([FileSystem.Content, ReadToolFileSystem.TextPage, ReadToolFileSystem.ListPage])
 
 const layer = Layer.effectDiscard(
@@ -47,7 +52,7 @@ const layer = Layer.effectDiscard(
               return []
             return [
               { type: "text", text: "Image read successfully" },
-              { type: "file", data: output.content, mime: output.mime, name: input.path },
+              { type: "file", data: output.content, mime: output.mime, name: input.path ?? input.filePath ?? "" },
             ]
           },
           execute: (input, context) => {
@@ -57,7 +62,9 @@ const layer = Layer.effectDiscard(
                 messageID: context.assistantMessageID,
                 callID: context.toolCallID,
               }
-              const target = yield* mutation.resolve({ path: input.path, kind: "directory" })
+              const path = input.path ?? input.filePath
+              if (!path) return yield* new ToolFailure({ message: "path or filePath is required" })
+              const target = yield* mutation.resolve({ path, kind: "directory" })
               const external = target.externalDirectory
               if (external)
                 yield* permission.assert({
@@ -99,7 +106,7 @@ const layer = Layer.effectDiscard(
                   error instanceof Image.DecodeError ||
                   error instanceof Image.SizeError
                     ? error.message
-                    : `Unable to read ${input.path}`
+                    : `Unable to read ${input.path ?? input.filePath}`
                 return new ToolFailure({ message })
               }),
             )

@@ -21,6 +21,7 @@ import {
 import { JsonObject, optionalArray, optionalNull, ProviderShared } from "./shared"
 import { isContextOverflow } from "../provider-error"
 import { OpenAIOptions } from "./utils/openai-options"
+export { OpenAIOptions } from "./utils/openai-options"
 import { Lifecycle } from "./utils/lifecycle"
 import { ToolSchemaProjection } from "./utils/tool-schema"
 import { ToolStream } from "./utils/tool-stream"

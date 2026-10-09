@@ -43,7 +43,12 @@ export const isReasoningEffort = (effort: unknown): effort is OpenAIReasoningEff
 const isTextVerbosity = (value: unknown): value is TextVerbosityValue =>
   typeof value === "string" && TEXT_VERBOSITY.has(value)
 
-const options = (request: LLMRequest) => request.providerOptions?.openai
+const options = (request: LLMRequest) => {
+  const isXai = String(request.model?.provider).toLowerCase().includes("xai")
+  const primary = isXai ? request.providerOptions?.xai : request.providerOptions?.openai
+  const fallback = isXai ? request.providerOptions?.openai : request.providerOptions?.xai
+  return { ...fallback, ...primary }
+}
 
 export const store = (request: LLMRequest): boolean | undefined => {
   const value = options(request)?.store

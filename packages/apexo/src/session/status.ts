@@ -38,13 +38,17 @@ const layer = Layer.effect(
 
     const set = Effect.fn("SessionStatus.set")(function* (sessionID: SessionID, status: Info) {
       const data = yield* InstanceState.get(state)
+      const current = data.get(sessionID)
+      if (status.type === "idle" && (!current || current.type === "idle")) {
+        return
+      }
+      // Commit the transition before publishing: listeners may read or change it.
+      if (status.type === "idle") data.delete(sessionID)
+      if (status.type !== "idle") data.set(sessionID, status)
       yield* events.publish(Event.Status, { sessionID, status })
       if (status.type === "idle") {
         yield* events.publish(Event.Idle, { sessionID })
-        data.delete(sessionID)
-        return
       }
-      data.set(sessionID, status)
     })
 
     return Service.of({ get, list, set })

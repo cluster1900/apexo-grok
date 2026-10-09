@@ -261,4 +261,52 @@ describe("Instruction.systemPaths global config", () => {
       }).pipe(provideInstance(projectTmp), provideInstruction({ home: globalTmp, config: globalTmp }))
     }),
   )
+
+  it.live("loads Global.Service config GROK.md before the home fallback", () =>
+    Effect.gen(function* () {
+      const globalTmp = yield* tmpWithFiles({
+        "GROK.md": "# Config Grok",
+        ".grok/GROK.md": "# Home Grok",
+      })
+      const projectTmp = yield* tmpdirScoped()
+
+      yield* Effect.gen(function* () {
+        const svc = yield* Instruction.Service
+        const paths = yield* svc.systemPaths()
+        expect(paths.has(path.join(globalTmp, "GROK.md"))).toBe(true)
+        expect(paths.has(path.join(globalTmp, ".grok", "GROK.md"))).toBe(false)
+        expect(yield* svc.system()).toEqual([`Instructions from: ${path.join(globalTmp, "GROK.md")}\n# Config Grok`])
+      }).pipe(provideInstance(projectTmp), provideInstruction({ home: globalTmp, config: globalTmp }))
+    }),
+  )
+
+  it.live("loads ~/.grok/GROK.md when the global config has no GROK.md", () =>
+    Effect.gen(function* () {
+      const globalTmp = yield* tmpWithFiles({ ".grok/GROK.md": "# Home Grok" })
+      const projectTmp = yield* tmpdirScoped()
+
+      yield* Effect.gen(function* () {
+        const svc = yield* Instruction.Service
+        const paths = yield* svc.systemPaths()
+        expect(paths.has(path.join(globalTmp, ".grok", "GROK.md"))).toBe(true)
+        expect(yield* svc.system()).toEqual([
+          `Instructions from: ${path.join(globalTmp, ".grok", "GROK.md")}\n# Home Grok`,
+        ])
+      }).pipe(provideInstance(projectTmp), provideInstruction({ home: globalTmp, config: globalTmp }))
+    }),
+  )
+
+  it.live("loads a project GROK.md alongside a global GROK.md", () =>
+    Effect.gen(function* () {
+      const globalTmp = yield* tmpWithFiles({ "GROK.md": "# Global Grok" })
+      const projectTmp = yield* tmpWithFiles({ "GROK.md": "# Project Grok" })
+
+      yield* Effect.gen(function* () {
+        const svc = yield* Instruction.Service
+        const paths = yield* svc.systemPaths()
+        expect(paths.has(path.join(globalTmp, "GROK.md"))).toBe(true)
+        expect(paths.has(path.join(projectTmp, "GROK.md"))).toBe(true)
+      }).pipe(provideInstance(projectTmp), provideInstruction({ home: globalTmp, config: globalTmp }))
+    }),
+  )
 })

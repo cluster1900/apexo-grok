@@ -22,9 +22,12 @@ import { Tools } from "./tools"
 export const name = "edit"
 
 export const Input = Schema.Struct({
-  path: Schema.String.annotate({
+  path: Schema.optional(Schema.String).annotate({
     description:
       "File path to edit. Relative paths resolve within the active Location. Absolute paths inside that Location are accepted; external absolute paths require external_directory approval.",
+  }),
+  filePath: Schema.optional(Schema.String).annotate({
+    description: "Alternative parameter name for path.",
   }),
   oldString: Schema.String.annotate({ description: "Exact text to replace" }),
   newString: Schema.String.annotate({ description: "Replacement text, which must differ from oldString" }),
@@ -114,7 +117,7 @@ const layer = Layer.effectDiscard(
                       ? new ToolFailure({
                           message: "File changed after permission approval. Read it again before editing.",
                         })
-                      : new ToolFailure({ message: `Unable to edit ${input.path}` }),
+                      : new ToolFailure({ message: `Unable to edit ${input.path ?? input.filePath}` }),
                   ),
                 )
 
@@ -135,7 +138,9 @@ const layer = Layer.effectDiscard(
                   })
                 }
 
-                const target = yield* unableToEdit(mutation.resolve({ path: input.path, kind: "file" }))
+                const path = input.path ?? input.filePath
+                if (!path) return yield* new ToolFailure({ message: "path or filePath is required" })
+                const target = yield* unableToEdit(mutation.resolve({ path, kind: "file" }))
                 const external = target.externalDirectory
                 if (external) {
                   yield* unableToEdit(

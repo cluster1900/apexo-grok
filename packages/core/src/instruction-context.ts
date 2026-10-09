@@ -48,14 +48,18 @@ const layer = Layer.effectDiscard(
           Flag.APEXO_DISABLE_PROJECT_CONFIG || !insideProject
             ? []
             : yield* fs.up({
-                targets: ["AGENTS.md"],
+                targets: ["AGENTS.md", "GROK.md"],
                 start,
                 stop,
               }),
           fs.resolve,
         ),
       )
-      const paths = Array.dedupe([yield* fs.resolve(join(global.config, "AGENTS.md")), ...discovered])
+      const paths = Array.dedupe([
+        yield* fs.resolve(join(global.config, "AGENTS.md")),
+        yield* fs.resolve(join(global.config, "GROK.md")),
+        ...discovered,
+      ])
       const files = yield* Effect.forEach(
         paths,
         (path) =>

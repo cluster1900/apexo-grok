@@ -349,6 +349,7 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | AppProcess.Service | C
         const patch = Effect.fnUntraced(function* (hash: string) {
           return yield* locked(
             Effect.gen(function* () {
+              if (!(yield* enabled())) return { hash, files: [] }
               yield* add()
               const result = yield* git(
                 [...quote, ...args(["diff", "--cached", "--no-ext-diff", "--name-only", hash, "--", "."])],
@@ -382,6 +383,7 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | AppProcess.Service | C
         const restore = Effect.fnUntraced(function* (snapshot: string) {
           return yield* locked(
             Effect.gen(function* () {
+              if (!(yield* enabled())) return
               yield* Effect.logInfo("restore", { commit: snapshot })
               const result = yield* git([...core, ...args(["read-tree", snapshot])], { cwd: state.worktree })
               if (result.code === 0) {
@@ -408,6 +410,7 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | AppProcess.Service | C
         const revert = Effect.fnUntraced(function* (patches: Patch[]) {
           return yield* locked(
             Effect.gen(function* () {
+              if (!(yield* enabled())) return
               const ops: { hash: string; file: string; rel: string }[] = []
               const seen = new Set<string>()
               for (const item of patches) {
@@ -438,8 +441,18 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | AppProcess.Service | C
                   })
                   return
                 }
-                yield* Effect.logInfo("file did not exist in snapshot, deleting", { file: op.file, hash: op.hash })
-                yield* remove(op.file)
+                if (tree.code === 0 && !tree.text.trim()) {
+                  yield* Effect.logInfo("file did not exist in snapshot, deleting", { file: op.file, hash: op.hash })
+                  yield* remove(op.file)
+                  return
+                }
+                yield* Effect.logWarning("checkout and ls-tree failed, keeping file to prevent data loss", {
+                  file: op.file,
+                  hash: op.hash,
+                  checkoutExitCode: result.code,
+                  treeExitCode: tree.code,
+                  stderr: tree.stderr,
+                })
               })
 
               const clash = (a: string, b: string) => a === b || a.startsWith(`${b}/`) || b.startsWith(`${a}/`)
@@ -526,6 +539,7 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | AppProcess.Service | C
         const diff = Effect.fnUntraced(function* (hash: string) {
           return yield* locked(
             Effect.gen(function* () {
+              if (!(yield* enabled())) return ""
               yield* add()
               const result = yield* git([...quote, ...args(["diff", "--cached", "--no-ext-diff", hash, "--", "."])], {
                 cwd: state.worktree,
@@ -546,6 +560,7 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | AppProcess.Service | C
         const diffFull = Effect.fnUntraced(function* (from: string, to: string) {
           return yield* locked(
             Effect.gen(function* () {
+              if (!(yield* enabled())) return []
               type Row = {
                 file: string
                 status: "added" | "deleted" | "modified"

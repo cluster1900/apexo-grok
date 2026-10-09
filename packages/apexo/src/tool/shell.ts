@@ -410,6 +410,30 @@ export const ShellTool = Tool.define(
         }
       }
 
+      // Only skip shell permission when the whole AST is comments or plain
+      // directory changes. A leading comment/cd can still precede executable
+      // declarations or redirects that are not represented as command nodes.
+      const directoryOnly = (node: Node | null): boolean => {
+        if (!node) return false
+        if (node.type === "comment") return true
+        if (["program", "statement_list", "pipeline", "pipeline_chain", "list"].includes(node.type)) {
+          return node.namedChildren.every(directoryOnly)
+        }
+        if (node.type !== "command") return false
+        const tokens = parts(node)
+        const name = ps || shellKind === "cmd" ? tokens[0]?.text.toLowerCase() : tokens[0]?.text
+        return (
+          !!name &&
+          CWD.has(name) &&
+          source(node) === node.text.trim() &&
+          tokens.every((item) => !dynamic(item.text, ps)) &&
+          node.descendantsOfType(["redirection", "file_redirect"]).length === 0
+        )
+      }
+      if (scan.patterns.size === 0 && (root.hasError || !directoryOnly(root))) {
+        scan.patterns.add(root.text.trim())
+        scan.always.add(root.text.trim())
+      }
       return scan
     })
 
