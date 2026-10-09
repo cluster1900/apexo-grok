@@ -3,6 +3,18 @@
 - Keep runtime dependencies directed from Schema to Core and Protocol, then from Core and Protocol to Server. Client runtime code may depend on Schema and Protocol but never Core or Server; `sdk-next` composes Client, Core, and Server.
 - The default branch in this repo is `main`; use `main` or `origin/main` for diffs.
 
+## CI Gate
+
+- Never commit or push directly to `main`, and never merge into `main`, unless the GitHub Actions `test` and `typecheck` checks pass.
+- Make every change on a branch and open a PR to `main`.
+- Branch protection on `main` enforces this: the `unit (linux)` (from `test.yml`) and `typecheck` checks are required, admins are included, and force pushes and branch deletion are blocked.
+- Wait until CI on the PR is green before merging. If a check fails, fix it on the branch and push again; do not merge around it.
+- Before pushing, run the same checks CI runs, from the repo root:
+  - `bun turbo typecheck --concurrency=2` (`typecheck.yml`)
+  - `GITHUB_ACTIONS=false bun turbo test --concurrency=2` (`test.yml`)
+  - `bun run check:generated` in `packages/client` (`test.yml`)
+  - `bun run test:httpapi` in `packages/apexo` (`test.yml`)
+
 ## Branch Names
 
 Use a short branch name of at most three words, separated by hyphens. Do not use slashes or type prefixes such as `feat/` or `fix/`.
@@ -142,6 +154,7 @@ const table = sqliteTable("session", {
 - Avoid mocks as much as possible, you shouldn't be using globalThis.\* at all unless it's the only option.
 - Test actual implementation, do not duplicate logic into tests
 - Tests cannot run from repo root (guard: `do-not-run-tests-from-root`); run from package dirs like `packages/apexo`.
+- On the pinned Bun 1.3.14, a POST body that the handler never reads, combined with an async reply, makes `node:http` `server.close()` hang. The test then stalls for about 20s and fails with `All fibers interrupted`. Send POST requests to endpoints that have no payload without a body, as the real clients do. See `docs/known-issues.md`.
 
 ## Type Checking
 

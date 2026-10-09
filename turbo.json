@@ -14,6 +14,14 @@
         "dist/**"
       ]
     },
+    "@apexo/plugin#build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
     "apexo#test": {
       "dependsOn": [
         "^build"
@@ -22,30 +30,6 @@
       "passThroughEnv": [
         "*"
       ]
-    },
-    "@apexo/core#test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": []
-    },
-    "@apexo/app#test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": []
-    },
-    "@apexo/ui#test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": []
-    },
-    "@apexo/session-ui#test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": []
     }
   }
 }

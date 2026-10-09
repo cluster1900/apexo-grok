@@ -158,8 +158,10 @@ describe("V2 HTTP end-to-end session execution", () => {
         )
         expect(queuedMessages.filter((message) => message.type === "user")).toHaveLength(2)
         expect(yield* llm.calls).toBe(2)
-        const idleInterrupt = yield* post(`${route}/interrupt`, {})
-        expect(idleInterrupt.status).toBe(204)
+        // Interrupt takes no payload, so send it without a body like the real clients do.
+        // See docs/known-issues.md for why an unread body hangs shutdown on Bun 1.3.14.
+        const interrupt = yield* HttpClient.execute(HttpClientRequest.post(`${route}/interrupt`))
+        expect(interrupt.status).toBe(204)
       }),
     { git: true },
     30000,
