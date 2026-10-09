@@ -214,7 +214,7 @@ export function usePromptInputV2Controller(props: PromptInputV2ControllerProps):
     },
     newSessionWorktree: () => props.newSessionWorktree,
     onNewSessionWorktreeReset: props.onNewSessionWorktreeReset,
-    shouldQueue: props.shouldQueue,
+    hasQueued: props.hasQueued,
     onQueue: props.onQueue,
     onAbort: props.onAbort,
     onSubmit: props.onSubmit,
@@ -403,9 +403,10 @@ export function usePromptInputV2Controller(props: PromptInputV2ControllerProps):
       submit: {
         stopping,
         working,
-        onSubmit: () => void submission.handleSubmit(new Event("submit")),
+        onSubmit: (event) => void submission.handleSubmit(event ?? new Event("submit")),
         onStop: () => void submission.abort(),
       },
+      onEditLatest: props.onEditLatest,
     },
   })
   Object.defineProperty(controller, "model", { get: () => props.controls.model })

@@ -351,6 +351,7 @@ export const dict = {
   "prompt.attachment.remove": "Hiq shtojcën",
   "prompt.action.send": "Dërgo",
   "prompt.action.stop": "Ndalo",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "Bashkëngjitje e pambështetur",
   "prompt.toast.pasteUnsupported.description":
     "Këtu mund të bashkëngjiten vetëm imazhe, skedarë PDF ose skedarë teksti.",

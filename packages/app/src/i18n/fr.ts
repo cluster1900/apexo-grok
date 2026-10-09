@@ -360,6 +360,7 @@ export const dict = {
   "prompt.attachment.remove": "Supprimer la pièce jointe",
   "prompt.action.send": "Envoyer",
   "prompt.action.stop": "Arrêter",
+  "prompt.queue.hint": "Entrée envoie maintenant. Alt+Entrée attend la fin de cette tâche.",
   "prompt.toast.pasteUnsupported.title": "Pièce jointe non prise en charge",
   "prompt.toast.attachmentDuplicate.title": "Ce fichier a déjà été téléversé",
   "prompt.toast.pasteUnsupported.description":

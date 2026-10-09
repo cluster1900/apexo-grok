@@ -8,9 +8,10 @@ import { getSessionHandoff, setSessionHandoff } from "@/pages/session/handoff"
 import type { SessionComposerController } from "./session-composer-state"
 
 export type SessionComposerFollowupDock = {
-  items: { id: string; text: string }[]
+  items: { id: string; text: string; queued?: boolean }[]
   sending?: string
   onSend: (id: string) => void
+  onQueue: (id: string) => void
   onEdit: (id: string) => void
 }
 
@@ -106,6 +107,11 @@ export function createSessionComposerRegionController(input: {
     const id = input.sessionID()
     return id ? sync().session.get(id)?.parentID : undefined
   })
+  const working = createMemo(() => {
+    const id = input.sessionID()
+    if (!id) return false
+    return sync().data.session_working(id)
+  })
   const open = createMemo(() => store.ready && input.state.dock() && !input.state.closing())
   const progress = useSpring(
     () => (open() ? 1 : 0),
@@ -130,6 +136,7 @@ export function createSessionComposerRegionController(input: {
     setPromptRef: input.setPromptRef,
     setDockRef: input.setDockRef,
     parentID,
+    working,
     child: () => !!parentID(),
     showComposer: () => !input.state.blocked() || !!parentID(),
     handoffPrompt: () => getSessionHandoff(input.sessionKey())?.prompt,

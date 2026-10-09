@@ -356,6 +356,7 @@ export const dict = {
   "prompt.attachment.remove": "منسلکہ ہٹا دیو",
   "prompt.action.send": "گھلو",
   "prompt.action.stop": "روکو",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "غیر تعاون یافتہ منسلکہ",
   "prompt.toast.pasteUnsupported.description":
     "ایتھے صرف تصویراں، پی ڈی ایف، یا ٹیکسٹ فائلاں منسلک کیتیاں جا سکدیاں نیں۔",

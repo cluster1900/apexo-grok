@@ -136,8 +136,14 @@ export function SessionComposerRegion(props: {
                   items={controller.followup()!.items}
                   sending={controller.followup()!.sending}
                   onSend={controller.followup()!.onSend}
+                  onQueue={controller.followup()!.onQueue}
                   onEdit={controller.followup()!.onEdit}
                 />
+              </Show>
+              <Show when={controller.working() && !controller.child() && !controller.followup()?.items.length}>
+                <p class="px-1 pb-1 text-13-regular text-text-weak">
+                  {language.t("settings.general.row.followup.description")}
+                </p>
               </Show>
               <Show
                 when={controller.child()}

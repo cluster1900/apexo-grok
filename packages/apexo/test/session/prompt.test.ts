@@ -311,7 +311,10 @@ const writeText = Effect.fn("test.writeText")(function* (file: string, text: str
 const writeConfig = Effect.fn("test.writeConfig")(function* (dir: string, config: Partial<ConfigV1.Info>) {
   yield* writeText(
     path.join(dir, "apexo.json"),
-    JSON.stringify({ $schema: "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json", ...config }),
+    JSON.stringify({
+      $schema: "https://raw.githubusercontent.com/cluster1900/apexo-grok/main/schemas/config.json",
+      ...config,
+    }),
   )
 })
 
@@ -819,6 +822,128 @@ it.instance("static loop consumes queued replies across turns", () =>
 
     expect(yield* llm.hits).toHaveLength(2)
     expect(yield* llm.pending).toBe(0)
+  }),
+)
+
+it.instance("Grok carries source inspection instructions and tool results through repeated Responses turns", () =>
+  Effect.gen(function* () {
+    const env = yield* Env.Service
+    yield* env.set("XAI_API_KEY", "test-key")
+    const { dir, llm } = yield* useServerConfig((url) => ({
+      enabled_providers: ["xai"],
+      provider: {
+        xai: {
+          name: "xAI",
+          npm: "@ai-sdk/xai",
+          models: {
+            "grok-4.7": {
+              ...cfg.provider.test.models["test-model"],
+              id: "grok-4.7",
+              reasoning: true,
+              variants: { xhigh: { reasoningEffort: "xhigh" } },
+            },
+          },
+          options: { apiKey: "test-key", baseURL: url },
+        },
+      },
+    }))
+    yield* writeText(
+      path.join(dir, "src/index.ts"),
+      'import { summarize } from "./summary"\nexport const run = summarize\n',
+    )
+    yield* writeText(path.join(dir, "src/summary.ts"), 'export const summarize = () => "source inspection completed"\n')
+    const prompt = yield* SessionPrompt.Service
+    const sessions = yield* Session.Service
+    const session = yield* sessions.create({
+      title: "Pinned",
+      permission: [{ permission: "*", pattern: "*", action: "allow" }],
+    })
+    const input = {
+      sessionID: session.id,
+      agent: "build",
+      model: { providerID: ProviderV2.ID.make("xai"), modelID: ModelV2.ID.make("grok-4.7") },
+      variant: "xhigh",
+      parts: [{ type: "text" as const, text: "Read the code and explain what this project does." }],
+    }
+    yield* llm.text("The README describes a summary tool.")
+    const previous = yield* prompt.prompt(input)
+    yield* llm.tool("read", { filePath: path.join(dir, "src/index.ts") })
+    yield* llm.tool("read", { filePath: path.join(dir, "src/summary.ts") })
+    yield* llm.text("The entry point exports summarize, which returns the source inspection result.")
+    const result = yield* prompt.prompt(input)
+    if (result.info.role === "assistant") expect(result.info.error).toBeUndefined()
+    const hits = yield* llm.hits
+    expect(hits).toHaveLength(4)
+    hits.forEach((hit) => {
+      expect(hit.url.pathname).toBe("/v1/responses")
+      expect(hit.body.reasoning).toMatchObject({ effort: "xhigh" })
+      expect(hit.body.tools).toContainEqual(expect.objectContaining({ type: "function", name: "read" }))
+    })
+    const request = JSON.stringify(hits[1]!.body.input)
+    expect(request).toContain("The README describes a summary tool.")
+    expect(request).toContain("Read relevant source implementations before drawing conclusions")
+    expect(request).not.toContain("fewer than 4 lines")
+    expect(request).not.toContain("One word answers are best")
+    expect(JSON.stringify(hits[2]!.body.input)).toContain("export const run = summarize")
+    expect(JSON.stringify(hits[3]!.body.input)).toContain("source inspection completed")
+    expect(previous.info.role).toBe("assistant")
+    expect(result.info.role).toBe("assistant")
+    if (previous.info.role !== "assistant" || result.info.role !== "assistant") return
+    expect(result.info.parentID).not.toBe(previous.info.parentID)
+    expect(result.info.finish).toBe("stop")
+    expect(result.info.error).toBeUndefined()
+    expect(
+      result.parts.some(
+        (part) =>
+          part.type === "text" &&
+          part.text === "The entry point exports summarize, which returns the source inspection result.",
+      ),
+    ).toBe(true)
+    const history = yield* sessions.messages({ sessionID: session.id })
+    const reads = history.flatMap((message) =>
+      message.parts.filter((part): part is SessionV1.ToolPart => part.type === "tool" && part.tool === "read"),
+    )
+    expect(reads).toHaveLength(2)
+    expect(reads.every((part) => part.state.status === "completed")).toBe(true)
+  }),
+)
+
+it.instance("steering after structured output does not reuse the previous result", () =>
+  Effect.gen(function* () {
+    const server = yield* useServerConfig(providerCfg)
+    const prompt = yield* SessionPrompt.Service
+    const sessions = yield* Session.Service
+    const session = yield* sessions.create({ title: "Pinned" })
+    const release = yield* Deferred.make<void>()
+    yield* prompt.prompt({
+      sessionID: session.id,
+      agent: "build",
+      noReply: true,
+      format: new SessionV1.OutputFormatJsonSchema({
+        type: "json_schema",
+        schema: { type: "object", properties: { value: { type: "string" } } },
+        retryCount: 2,
+      }),
+      parts: [{ type: "text", text: "return structured data" }],
+    })
+    yield* server.llm.push(reply().wait(deferredAsPromise(release)).tool("StructuredOutput", { value: "first" }))
+    yield* server.llm.text("follow-up answer")
+    const running = yield* prompt.loop({ sessionID: session.id }).pipe(Effect.forkChild)
+    yield* server.llm.wait(1)
+    const followup = yield* prompt.prompt({
+      sessionID: session.id,
+      agent: "build",
+      noReply: true,
+      parts: [{ type: "text", text: "now answer in plain text" }],
+    })
+    yield* Deferred.succeed(release, undefined)
+    const result = yield* Fiber.join(running).pipe(Effect.timeout("10 seconds"))
+    expect(yield* server.llm.calls).toBe(2)
+    expect(result.info.role).toBe("assistant")
+    if (result.info.role !== "assistant") return
+    expect(result.info.parentID).toBe(followup.info.id)
+    expect(result.info.structured).toBeUndefined()
+    expect(result.parts.some((part) => part.type === "text" && part.text === "follow-up answer")).toBe(true)
   }),
 )
 
@@ -1494,7 +1619,133 @@ it.instance("prompt submitted during an active run is included in the next LLM i
     expect(inputs).toHaveLength(2)
     const messages = inputs.at(-1)?.messages
     if (!Array.isArray(messages)) throw new Error("expected LLM messages")
-    expect(messages.at(-1)).toEqual({ role: "user", content: "second" })
+    expect(messages).toContainEqual({ role: "user", content: "second" })
+    expect(messages.at(-1)).toMatchObject({ role: "user", content: expect.stringContaining("<active-task-reminder>") })
+  }),
+)
+
+it.instance(
+  "steering preserves the original task through tool continuations without changing stored user messages",
+  () =>
+    Effect.gen(function* () {
+      const { dir, llm } = yield* useServerConfig(providerCfg)
+      yield* writeText(path.join(dir, "entry.ts"), 'export { summarize } from "./report"')
+      yield* writeText(path.join(dir, "skills.md"), "Available skill: code-review")
+      yield* writeText(path.join(dir, "report.ts"), 'export const summarize = () => "project report"')
+      const prompt = yield* SessionPrompt.Service
+      const sessions = yield* Session.Service
+      const chat = yield* sessions.create({
+        title: "Pinned",
+        permission: [{ permission: "*", pattern: "*", action: "allow" }],
+      })
+      const gate = yield* Deferred.make<void>()
+      const followupGate = yield* Deferred.make<void>()
+      yield* llm.push(
+        reply()
+          .wait(deferredAsPromise(gate))
+          .tool("read", { filePath: path.join(dir, "entry.ts") }),
+      )
+      yield* llm.push(
+        reply()
+          .wait(deferredAsPromise(followupGate))
+          .tool("read", { filePath: path.join(dir, "skills.md") }),
+      )
+      yield* llm.tool("read", { filePath: path.join(dir, "report.ts") })
+      yield* llm.text(
+        "The code-review skill is available. The entry exports summarize, which produces a project report.",
+      )
+      const running = yield* prompt
+        .prompt({
+          sessionID: chat.id,
+          agent: "build",
+          model: ref,
+          parts: [{ type: "text", text: "Read the implementation and summarize this project." }],
+        })
+        .pipe(Effect.forkChild)
+      yield* llm.wait(1)
+      yield* prompt.prompt({
+        sessionID: chat.id,
+        agent: "build",
+        model: ref,
+        noReply: true,
+        parts: [{ type: "text", text: "Which skills are available?" }],
+      })
+      yield* Deferred.succeed(gate, undefined)
+      yield* llm.wait(2)
+      yield* prompt.prompt({
+        sessionID: chat.id,
+        agent: "build",
+        model: ref,
+        noReply: true,
+        parts: [{ type: "text", text: "Keep the project summary concise." }],
+      })
+      yield* Deferred.succeed(followupGate, undefined)
+      const result = yield* Fiber.join(running).pipe(Effect.timeout("10 seconds"))
+      const inputs = yield* llm.inputs
+      expect(inputs).toHaveLength(4)
+      expect(JSON.stringify(inputs[0])).not.toContain("<active-task-reminder>")
+      inputs.slice(1).forEach((input) => {
+        if (!Array.isArray(input.messages)) throw new Error("expected model messages")
+        const reminder = input.messages.at(-1)
+        expect(reminder?.role).toBe("user")
+        expect(JSON.stringify(reminder?.content)).toContain("<active-task-reminder>")
+        expect(JSON.stringify(reminder?.content)).toContain("Read the implementation and summarize this project.")
+        expect(JSON.stringify(reminder?.content)).toContain("continue unfinished work")
+        expect(JSON.stringify(input.messages)).toContain("Which skills are available?")
+      })
+      expect(JSON.stringify(inputs[3])).toContain("project report")
+      expect(
+        result.parts.some((part) => part.type === "text" && part.text.includes("The entry exports summarize")),
+      ).toBe(true)
+      const history = yield* sessions.messages({ sessionID: chat.id })
+      const users = history.filter((message) => message.info.role === "user")
+      expect(users).toHaveLength(3)
+      expect(JSON.stringify(history)).not.toContain("<active-task-reminder>")
+
+      yield* llm.text("A separate question after the task finished.")
+      yield* prompt.prompt({
+        sessionID: chat.id,
+        agent: "build",
+        model: ref,
+        parts: [{ type: "text", text: "What is two plus two?" }],
+      })
+      expect(JSON.stringify((yield* llm.inputs).at(-1))).not.toContain("<active-task-reminder>")
+    }),
+)
+
+it.instance("an explicit task replacement during steering can finish without restarting the original work", () =>
+  Effect.gen(function* () {
+    const { llm } = yield* useServerConfig(providerCfg)
+    const prompt = yield* SessionPrompt.Service
+    const sessions = yield* Session.Service
+    const chat = yield* sessions.create({ title: "Pinned" })
+    const gate = yield* Deferred.make<void>()
+    yield* llm.hold("I am starting the project review.", deferredAsPromise(gate))
+    yield* llm.text("Stopped the review. Two plus two is four.")
+    const running = yield* prompt
+      .prompt({
+        sessionID: chat.id,
+        agent: "build",
+        model: ref,
+        parts: [{ type: "text", text: "Review the project." }],
+      })
+      .pipe(Effect.forkChild)
+    yield* llm.wait(1)
+    yield* prompt.prompt({
+      sessionID: chat.id,
+      agent: "build",
+      model: ref,
+      noReply: true,
+      parts: [{ type: "text", text: "Cancel that review. Only tell me what two plus two is." }],
+    })
+    yield* Deferred.succeed(gate, undefined)
+    yield* Fiber.join(running).pipe(Effect.timeout("10 seconds"))
+    const inputs = yield* llm.inputs
+    expect(inputs).toHaveLength(2)
+    expect(JSON.stringify(inputs[1])).toContain("Cancel that review. Only tell me what two plus two is.")
+    expect(JSON.stringify(inputs[1])).toContain("Do not resume cancelled work")
+    const status = yield* SessionStatus.Service
+    expect(yield* status.get(chat.id)).toEqual({ type: "idle" })
   }),
 )
 

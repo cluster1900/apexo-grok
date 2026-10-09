@@ -161,4 +161,34 @@ describe("prompt input v2 interaction machine", () => {
     expect(result.state.popover).toEqual({ type: "context", query: "", activeID: "first" })
     expect(result.handled).toBeTrue()
   })
+
+  test("alt+enter does not select active popover suggestion", () => {
+    const state = {
+      ...createPromptInputV2InteractionState(),
+      popover: { type: "context" as const, query: "", activeID: "first" },
+    }
+    const result = transitionPromptInputV2(
+      state,
+      { type: "key.down", key: "Enter", alt: true, ctrl: false, composing: false, ids: ["first", "second"] },
+      persisted(),
+    )
+
+    expect(result.handled).toBeFalsy()
+    expect(result.commands).toEqual([])
+  })
+
+  test("enter selects active popover suggestion", () => {
+    const state = {
+      ...createPromptInputV2InteractionState(),
+      popover: { type: "context" as const, query: "", activeID: "first" },
+    }
+    const result = transitionPromptInputV2(
+      state,
+      { type: "key.down", key: "Enter", alt: false, ctrl: false, composing: false, ids: ["first", "second"] },
+      persisted(),
+    )
+
+    expect(result.handled).toBeTrue()
+    expect(result.commands).toContainEqual({ type: "suggestion.select", id: "first" })
+  })
 })

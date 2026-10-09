@@ -376,6 +376,7 @@ export const dict = {
   "prompt.attachment.remove": "Ukloni prilog",
   "prompt.action.send": "Pošalji",
   "prompt.action.stop": "Zaustavi",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
 
   "prompt.toast.pasteUnsupported.title": "Nepodržan prilog",
   "prompt.toast.attachmentDuplicate.title": "Ova datoteka je već učitana",

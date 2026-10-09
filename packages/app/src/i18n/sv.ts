@@ -352,6 +352,7 @@ export const dict = {
   "prompt.attachment.remove": "Ta bort bilagan",
   "prompt.action.send": "Skicka",
   "prompt.action.stop": "Stoppa",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "Bilaga som inte stöds",
   "prompt.toast.pasteUnsupported.description": "Endast bilder, PDF-filer eller textfiler kan bifogas här.",
   "prompt.toast.attachmentDuplicate.title": "Den här filen har redan laddats upp",

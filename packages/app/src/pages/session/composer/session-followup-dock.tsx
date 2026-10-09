@@ -1,4 +1,4 @@
-import { For, Show, createMemo } from "solid-js"
+import { For, Show, createEffect, createMemo, on } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Button } from "@apexo/ui/button"
 import { DockTray } from "@apexo/ui/dock-surface"
@@ -6,15 +6,24 @@ import { IconButton } from "@apexo/ui/icon-button"
 import { useLanguage } from "@/context/language"
 
 export function SessionFollowupDock(props: {
-  items: { id: string; text: string }[]
+  items: { id: string; text: string; queued?: boolean }[]
   sending?: string
   onSend: (id: string) => void
+  onQueue: (id: string) => void
   onEdit: (id: string) => void
 }) {
   const language = useLanguage()
   const [store, setStore] = createStore({
     collapsed: false,
   })
+
+  createEffect(
+    on(
+      () => props.items.at(-1)?.id,
+      () => setStore("collapsed", false),
+      { defer: true },
+    ),
+  )
 
   const toggle = () => setStore("collapsed", (value) => !value)
   const total = createMemo(() => props.items.length)
@@ -72,10 +81,10 @@ export function SessionFollowupDock(props: {
       </Show>
 
       <Show when={!store.collapsed}>
-        <div class="px-3 pb-7 flex flex-col gap-1.5 max-h-42 overflow-y-auto no-scrollbar">
+        <div role="list" class="px-3 pb-7 flex flex-col gap-1.5 max-h-42 overflow-y-auto no-scrollbar">
           <For each={props.items}>
             {(item) => (
-              <div class="flex items-center gap-2 min-w-0 py-1">
+              <div role="listitem" class="flex items-center gap-2 min-w-0 py-1">
                 <span class="min-w-0 flex-1 truncate text-13-regular text-text-strong">{item.text}</span>
                 <Button
                   size="small"
@@ -85,6 +94,17 @@ export function SessionFollowupDock(props: {
                   onClick={() => props.onSend(item.id)}
                 >
                   {language.t("session.followupDock.sendNow")}
+                </Button>
+                <Button
+                  data-action="keep-queued"
+                  size="small"
+                  variant={item.queued ? "primary" : "secondary"}
+                  class="shrink-0"
+                  disabled={!!props.sending}
+                  aria-pressed={!!item.queued}
+                  onClick={() => props.onQueue(item.id)}
+                >
+                  {language.t("settings.general.row.followup.option.queue")}
                 </Button>
                 <Button
                   size="small"

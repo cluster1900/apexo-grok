@@ -285,6 +285,7 @@ export const dict = {
   "prompt.attachment.remove": "Fjern vedhæftning",
   "prompt.action.send": "Send",
   "prompt.action.stop": "Stop",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
 
   "prompt.toast.pasteUnsupported.title": "Ikke understøttet vedhæftning",
   "prompt.toast.attachmentDuplicate.title": "Denne fil er allerede uploadet",

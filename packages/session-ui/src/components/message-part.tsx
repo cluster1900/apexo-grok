@@ -177,6 +177,7 @@ export type SessionAction = (input: { sessionID: string; messageID: string }) =>
 
 export type UserActions = {
   fork?: SessionAction
+  edit?: SessionAction
   revert?: SessionAction
   openAttachment?: (file: FilePart) => void
 }
@@ -207,7 +208,7 @@ export interface MessagePartProps {
 
 function MessageActionButton(
   props: Pick<ComponentProps<"button">, "disabled" | "onMouseDown" | "onClick" | "aria-label"> & {
-    icon: "check" | "copy" | "reset"
+    icon: "check" | "copy" | "reset" | "edit"
     label: JSX.Element
     useV2?: boolean
   },
@@ -1247,8 +1248,9 @@ export function UserMessageDisplay(props: {
     }
   }
 
-  const revert = () => {
-    const act = props.actions?.revert
+  const editLabel = () => i18n.t(props.actions?.edit ? "ui.messagePart.title.edit" : "ui.message.revertMessage")
+  const edit = () => {
+    const act = props.actions?.edit ?? props.actions?.revert
     if (!act || busy()) return
     setState("busy", true)
     void Promise.resolve()
@@ -1358,18 +1360,18 @@ export function UserMessageDisplay(props: {
               </Show>
             </span>
           </Show>
-          <Show when={props.actions?.revert}>
+          <Show when={props.actions?.edit ?? props.actions?.revert}>
             <MessageActionButton
-              icon="reset"
-              label={i18n.t("ui.message.revertMessage")}
+              icon={props.actions?.edit ? "edit" : "reset"}
+              label={editLabel()}
               useV2={props.useV2Actions}
               disabled={!!busy()}
               onMouseDown={(event) => event.preventDefault()}
               onClick={(event) => {
                 event.stopPropagation()
-                revert()
+                edit()
               }}
-              aria-label={i18n.t("ui.message.revertMessage")}
+              aria-label={editLabel()}
             />
           </Show>
           <Show when={text()}>

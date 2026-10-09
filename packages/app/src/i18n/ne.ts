@@ -352,6 +352,7 @@ export const dict: Record<string, string> = {
   "prompt.attachment.remove": "संलग्नक हटाउनुहोस्",
   "prompt.action.send": "पठाउनुहोस्",
   "prompt.action.stop": "रोक्नुहोस्",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "असमर्थित संलग्नक",
   "prompt.toast.pasteUnsupported.description": "केवल छविहरू, PDF हरू, वा पाठ फाइलहरू यहाँ संलग्न गर्न सकिन्छ।",
   "prompt.toast.attachmentDuplicate.title": "यो फाइल पहिले नै अपलोड गरिएको छ",

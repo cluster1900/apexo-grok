@@ -139,6 +139,8 @@ function responseCreated(model: string) {
     sequence_number: 1,
     response: {
       id: "resp_test",
+      object: "response",
+      output: [],
       created_at: Math.floor(Date.now() / 1000),
       model,
       service_tier: null,
@@ -151,13 +153,16 @@ function responseCompleted(input: { seq: number; usage?: Usage }) {
     type: "response.completed",
     sequence_number: input.seq,
     response: {
+      object: "response",
+      output: [],
+      status: "completed",
       incomplete_details: null,
       service_tier: null,
       usage: {
         input_tokens: input.usage?.input ?? 0,
-        input_tokens_details: { cached_tokens: null },
+        input_tokens_details: { cached_tokens: 0 },
         output_tokens: input.usage?.output ?? 0,
-        output_tokens_details: { reasoning_tokens: null },
+        output_tokens_details: { reasoning_tokens: 0 },
       },
     },
   }
@@ -168,7 +173,7 @@ function responseMessage(id: string, seq: number) {
     type: "response.output_item.added",
     sequence_number: seq,
     output_index: 0,
-    item: { type: "message", id },
+    item: { type: "message", id, role: "assistant", content: [], status: "in_progress" },
   }
 }
 
@@ -177,8 +182,10 @@ function responseText(id: string, text: string, seq: number) {
     type: "response.output_text.delta",
     sequence_number: seq,
     item_id: id,
+    output_index: 0,
+    content_index: 0,
     delta: text,
-    logprobs: null,
+    logprobs: [],
   }
 }
 
@@ -187,7 +194,7 @@ function responseMessageDone(id: string, seq: number) {
     type: "response.output_item.done",
     sequence_number: seq,
     output_index: 0,
-    item: { type: "message", id },
+    item: { type: "message", id, role: "assistant", content: [], status: "completed" },
   }
 }
 

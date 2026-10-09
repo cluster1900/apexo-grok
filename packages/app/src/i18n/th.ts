@@ -374,6 +374,7 @@ export const dict = {
   "prompt.attachment.remove": "เอาไฟล์แนบออก",
   "prompt.action.send": "ส่ง",
   "prompt.action.stop": "หยุด",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
 
   "prompt.toast.pasteUnsupported.title": "ไฟล์แนบที่ไม่รองรับ",
   "prompt.toast.attachmentDuplicate.title": "ไฟล์นี้ถูกอัปโหลดแล้ว",

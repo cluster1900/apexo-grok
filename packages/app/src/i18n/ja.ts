@@ -355,6 +355,7 @@ export const dict = {
   "prompt.attachment.remove": "添付ファイルを削除",
   "prompt.action.send": "送信",
   "prompt.action.stop": "停止",
+  "prompt.queue.hint": "Enter で今すぐ送信。Alt+Enter でタスク完了まで待機。",
   "prompt.toast.pasteUnsupported.title": "サポートされていない添付ファイル",
   "prompt.toast.attachmentDuplicate.title": "このファイルはすでにアップロードされています",
   "prompt.toast.pasteUnsupported.description": "画像、PDF、またはテキストファイルのみ添付できます。",

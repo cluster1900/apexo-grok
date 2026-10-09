@@ -381,6 +381,7 @@ export const dict = {
   "prompt.attachment.remove": "Eki kaldır",
   "prompt.action.send": "Gönder",
   "prompt.action.stop": "Durdur",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
 
   "prompt.toast.pasteUnsupported.title": "Desteklenmeyen ek",
   "prompt.toast.attachmentDuplicate.title": "Bu dosya zaten yüklendi",

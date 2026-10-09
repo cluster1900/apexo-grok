@@ -350,6 +350,7 @@ export const dict = {
   "prompt.attachment.remove": "Odstrániť prílohu",
   "prompt.action.send": "Odoslať",
   "prompt.action.stop": "Zastaviť",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "Nepodporovaná príloha",
   "prompt.toast.pasteUnsupported.description": "Pripojiť možno len obrázky, PDF alebo textové súbory.",
   "prompt.toast.attachmentDuplicate.title": "Tento súbor už bol nahraný",

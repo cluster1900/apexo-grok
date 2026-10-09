@@ -367,6 +367,7 @@ export const dict = {
   "prompt.attachment.remove": "Fjern vedlegg",
   "prompt.action.send": "Send",
   "prompt.action.stop": "Stopp",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
 
   "prompt.toast.pasteUnsupported.title": "Ikke støttet vedlegg",
   "prompt.toast.attachmentDuplicate.title": "Denne filen er allerede lastet opp",

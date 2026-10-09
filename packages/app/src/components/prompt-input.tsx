@@ -1222,7 +1222,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
       },
       newSessionWorktree: () => props.newSessionWorktree,
       onNewSessionWorktreeReset: props.onNewSessionWorktreeReset,
-      shouldQueue: props.shouldQueue,
+      hasQueued: props.hasQueued,
       onQueue: props.onQueue,
       onAbort: props.onAbort,
       onSubmit: props.onSubmit,
@@ -1324,7 +1324,8 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
         event.preventDefault()
         return
       }
-      const nav = event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Enter"
+      const plainEnter = event.key === "Enter" && !event.altKey && !event.ctrlKey && !event.metaKey
+      const nav = event.key === "ArrowUp" || event.key === "ArrowDown" || plainEnter
       const ctrlNav = ctrl && (event.key === "n" || event.key === "p")
       if (nav || ctrlNav) {
         if (store.popover === "at") {
@@ -1354,6 +1355,25 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
         event.preventDefault()
       }
       return
+    }
+
+    if (
+      event.key === "ArrowUp" &&
+      event.altKey &&
+      !event.shiftKey &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      props.onEditLatest
+    ) {
+      const text = prompt
+        .current()
+        .map((part) => ("content" in part ? part.content : ""))
+        .join("")
+      if (!text.trim() && imageAttachments().length === 0 && commentCount() === 0) {
+        props.onEditLatest()
+        event.preventDefault()
+        return
+      }
     }
 
     if (event.key === "ArrowUp" || event.key === "ArrowDown") {

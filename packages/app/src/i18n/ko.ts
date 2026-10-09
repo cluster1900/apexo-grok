@@ -255,6 +255,7 @@ export const dict = {
   "prompt.attachment.remove": "첨부 파일 제거",
   "prompt.action.send": "전송",
   "prompt.action.stop": "중지",
+  "prompt.queue.hint": "Enter는 지금 전송. Alt+Enter는 작업이 끝날 때까지 대기.",
   "prompt.toast.pasteUnsupported.title": "지원되지 않는 첨부 파일",
   "prompt.toast.attachmentDuplicate.title": "이 파일은 이미 업로드되었습니다",
   "prompt.toast.pasteUnsupported.description": "이미지, PDF 또는 텍스트 파일만 첨부할 수 있습니다.",

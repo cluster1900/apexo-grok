@@ -270,6 +270,7 @@ export const dict = {
   "prompt.attachment.remove": "Rimuovi l'allegato",
   "prompt.action.send": "Invia",
   "prompt.action.stop": "Interrompi",
+  "prompt.queue.hint": "Invio invia ora. Alt+Invio attende il termine dell'attività.",
   "prompt.toast.pasteUnsupported.title": "Allegato non supportato",
   "prompt.toast.pasteUnsupported.description": "Qui è possibile allegare solo immagini, PDF o file di testo.",
   "prompt.toast.attachmentDuplicate.title": "Questo file è già stato caricato",

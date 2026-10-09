@@ -9,7 +9,7 @@ import {
   type Renderable,
 } from "@opentui/core"
 import type { CommandContext } from "@opentui/keymap"
-import { createEffect, createMemo, onMount, createSignal, onCleanup, on, Show, Switch, Match } from "solid-js"
+import { createEffect, createMemo, onMount, createSignal, onCleanup, on, For, Show, Switch, Match } from "solid-js"
 import { registerApexoSpinner } from "../register-spinner"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -32,6 +32,8 @@ import { promptOffsetWidth } from "../../prompt/display"
 import { createStore, produce, unwrap } from "solid-js/store"
 import { usePromptHistory, type PromptInfo } from "../../prompt/history"
 import { computePromptTraits } from "../../prompt/traits"
+import { deliverPrompt, shouldQueuePrompt, type PromptDraft } from "../../prompt/delivery"
+import { usePromptQueue } from "../../prompt/queue-context"
 import { expandPastedTextPlaceholders, expandTrackedPastedText } from "../../prompt/part"
 import { usePromptStash } from "../../prompt/stash"
 import { DialogStash } from "../dialog-stash"
@@ -163,8 +165,11 @@ export function Prompt(props: PromptProps) {
   const status = createMemo(() => sync.data.session_status?.[props.sessionID ?? ""] ?? { type: "idle" })
   const history = usePromptHistory()
   const stash = usePromptStash()
+  const queue = usePromptQueue()
   const keymap = useApexoKeymap()
   const agentShortcut = useCommandShortcut("agent.cycle")
+  const queueShortcut = useCommandShortcut("prompt.queue")
+  const queuePopShortcut = useCommandShortcut("prompt.queue.pop")
   const paletteShortcut = useCommandShortcut("command.palette.show")
   const renderer = useRenderer()
   const exit = useExit()
@@ -297,6 +302,7 @@ export function Prompt(props: PromptProps) {
     extmarkToPartIndex: new Map(),
     interrupt: 0,
   })
+  const queued = () => queue.list(props.sessionID ?? "").slice(queue.sending(props.sessionID ?? "") ? 1 : 0)
 
   createEffect(
     on(
@@ -412,6 +418,7 @@ export function Prompt(props: PromptProps) {
           }, 5000)
 
           if (store.interrupt >= 2) {
+            queue.pause(props.sessionID)
             void sdk.client.session.abort({
               sessionID: props.sessionID,
             })
@@ -928,7 +935,7 @@ export function Prompt(props: PromptProps) {
   })
 
   let submitting = false
-  async function submit() {
+  async function submit(delivery: "steer" | "queue" = "steer") {
     // Prevent overlapping invocations (e.g. a double-pressed Enter, or the
     // input's native onSubmit racing another dispatch). Without this guard,
     // a second call slips past the empty-input check before the first call
@@ -938,13 +945,70 @@ export function Prompt(props: PromptProps) {
     if (submitting) return false
     submitting = true
     try {
-      return await submitInner()
+      return await submitInner(delivery)
     } finally {
       submitting = false
     }
   }
 
-  async function submitInner() {
+  function deliver(draft: PromptDraft) {
+    move.startSubmit()
+    if (draft.mode === "shell") setStore("mode", "normal")
+    void deliverPrompt(sdk.client.session, sync.data.command, draft).catch((error) => {
+      toast.show({ title: "Failed to send prompt", message: errorMessage(error), variant: "error" })
+    })
+  }
+
+  useBindings(() => {
+    return {
+      target: inputTarget,
+      enabled: inputTarget() !== undefined && !props.disabled && !auto()?.visible,
+      commands: [
+        {
+          name: "prompt.queue",
+          title: "Queue prompt until the task finishes",
+          category: "Prompt",
+          hidden: true,
+          run: async () => {
+            if (!input?.focused) return
+            const handled = await submit("queue")
+            if (!handled) return
+            dialog.clear()
+          },
+        },
+      ],
+      bindings: tuiConfig.keybinds.get("prompt.queue"),
+    }
+  })
+
+  useBindings(() => {
+    return {
+      target: inputTarget,
+      enabled: inputTarget() !== undefined && !props.disabled && queued().length > 0 && store.prompt.input === "",
+      commands: [
+        {
+          name: "prompt.queue.pop",
+          title: "Return the latest queued prompt to the editor",
+          category: "Prompt",
+          hidden: true,
+          run() {
+            if (store.prompt.input !== "" || !input || !props.sessionID) return
+            const last = queue.pop(props.sessionID)
+            if (!last) return
+            if (last.editorSelection) editor.restoreSelection(last.editorSelection)
+            input.setText(last.historyPrompt.input)
+            setStore("prompt", last.historyPrompt)
+            setStore("mode", last.historyPrompt.mode ?? "normal")
+            restoreExtmarksFromParts(last.historyPrompt.parts)
+            input.cursorOffset = input.plainText.length
+          },
+        },
+      ],
+      bindings: tuiConfig.keybinds.get("prompt.queue.pop"),
+    }
+  })
+
+  async function submitInner(delivery: "steer" | "queue" = "steer") {
     workspace.clearNotice()
 
     // IME: double-defer may fire before onContentChange flushes the last
@@ -1039,11 +1103,11 @@ export function Prompt(props: PromptProps) {
     // Capture mode before it gets reset
     const currentMode = store.mode
     const editorSelection = editorContext()
-    const editorParts =
+    const editorParts: PromptDraft["editorParts"] =
       editorSelection && editor.labelState() === "pending"
         ? [
             {
-              type: "text" as const,
+              type: "text",
               text: formatEditorContext(editorSelection),
               synthetic: true,
               metadata: {
@@ -1055,74 +1119,47 @@ export function Prompt(props: PromptProps) {
             },
           ]
         : []
-
-    if (store.mode === "shell") {
-      move.startSubmit()
-      void sdk.client.session.shell({
-        sessionID,
-        agent: agent.name,
-        model: {
-          providerID: selectedModel.providerID,
-          modelID: selectedModel.modelID,
-        },
-        command: inputText,
-      })
-      setStore("mode", "normal")
-    } else if (
-      inputText.startsWith("/") &&
-      sync.data.command.some((x) => x.name === inputText.split("\n")[0].split(" ")[0].slice(1))
-    ) {
-      move.startSubmit()
-      // Parse command from first line, preserve multi-line content in arguments
-      const firstLineEnd = inputText.indexOf("\n")
-      const firstLine = firstLineEnd === -1 ? inputText : inputText.slice(0, firstLineEnd)
-      const [command, ...firstLineArgs] = firstLine.split(" ")
-      const restOfInput = firstLineEnd === -1 ? "" : inputText.slice(firstLineEnd + 1)
-      const args = firstLineArgs.join(" ") + (restOfInput ? "\n" + restOfInput : "")
-
-      void sdk.client.session.command({
-        sessionID,
-        command: command.slice(1),
-        arguments: args,
-        agent: agent.name,
-        model: `${selectedModel.providerID}/${selectedModel.modelID}`,
-        variant,
-        parts: nonTextParts.filter((x) => x.type === "file"),
-      })
-    } else {
-      move.startSubmit()
-      sdk.client.session
-        .prompt(
-          {
-            sessionID,
-            ...selectedModel,
-            agent: agent.name,
-            model: selectedModel,
-            variant,
-            parts: [
-              ...editorParts,
-              {
-                type: "text",
-                text: inputText,
-              },
-              ...nonTextParts,
-            ],
-          },
-          { throwOnError: true },
-        )
-        .catch((error) => {
-          toast.show({
-            title: "Failed to send prompt",
-            message: errorMessage(error),
-            variant: "error",
-          })
-        })
-      if (editorParts.length > 0) editor.markSelectionSent()
-    }
-    history.append({
-      ...store.prompt,
+    const draft: PromptDraft = {
+      sessionID,
+      agentName: agent.name,
+      model: selectedModel,
+      variant,
       mode: currentMode,
-    })
+      inputText,
+      nonTextParts,
+      editorParts,
+      editorSelection: editorParts.length > 0 ? editorSelection : undefined,
+      historyPrompt: {
+        input: store.prompt.input,
+        parts: store.prompt.parts,
+        mode: currentMode,
+      },
+    }
+
+    if (
+      shouldQueuePrompt({
+        delivery,
+        busy: status().type !== "idle",
+        pending: queue.list(props.sessionID ?? "").length > 0,
+        mode: currentMode,
+      })
+    ) {
+      if (editorParts.length > 0) editor.markSelectionSent()
+      queue.push(draft)
+      history.append(draft.historyPrompt)
+      input.extmarks.clear()
+      setStore("prompt", {
+        input: "",
+        parts: [],
+      })
+      setStore("extmarkToPartIndex", new Map())
+      input.clear()
+      return true
+    }
+
+    deliver(draft)
+    if (editorParts.length > 0) editor.markSelectionSent()
+    history.append(draft.historyPrompt)
     input.extmarks.clear()
     setStore("prompt", {
       input: "",
@@ -1366,6 +1403,23 @@ export function Prompt(props: PromptProps) {
             flexGrow={1}
             width="100%"
           >
+            <Show when={queued().length > 0}>
+              <box flexDirection="column" paddingBottom={1} gap={0}>
+                <For each={queued()}>
+                  {(item) => (
+                    <text fg={theme.textMuted}>
+                      <span style={{ bg: theme.warning, fg: theme.background, bold: true }}>
+                        {queue.paused(props.sessionID ?? "") ? " PAUSED " : " QUEUED "}
+                      </span>{" "}
+                      {Locale.truncateMiddle(item.historyPrompt.input.replaceAll("\n", " "), 72)}
+                    </text>
+                  )}
+                </For>
+                <Show when={queuePopShortcut() && store.prompt.input === ""}>
+                  <text fg={theme.textMuted}>{queuePopShortcut()} edit</text>
+                </Show>
+              </box>
+            </Show>
             <box flexDirection="row" width="100%">
             {/* Input-mode marker: ">" for chat, "!" for shell mode. */}
             <text flexShrink={0} fg={store.mode === "shell" ? theme.warning : theme.primary} selectable={false}>
@@ -1590,6 +1644,10 @@ export function Prompt(props: PromptProps) {
                     })()}
                   </box>
                 </box>
+                <text fg={theme.text}>
+                  {queueShortcut()}{" "}
+                  <span style={{ fg: theme.textMuted }}>{queued().length > 0 ? `queue ${queued().length}` : "queue"}</span>
+                </text>
                 <text fg={store.interrupt > 0 ? theme.primary : theme.text}>
                   esc{" "}
                   <span style={{ fg: store.interrupt > 0 ? theme.primary : theme.textMuted }}>

@@ -84,6 +84,20 @@ const it = testEffect(
 )
 
 describe("session.system", () => {
+  test.each([
+    ["xai", "grok-4.7"],
+    ["openrouter", "x-ai/grok-4.7"],
+    ["custom", "Grok-Code-Fast-1"],
+    ["xai", "custom-model"],
+  ])("selects the Grok prompt for %s/%s", (providerID, id) => {
+    const prompt = SystemPrompt.provider({ providerID, api: { id } } as Provider.Model)[0]
+    expect(prompt).toContain("<source_inspection>")
+    expect(prompt).toContain("Keep every explicit requirement")
+    expect(prompt).not.toContain("fewer than 4 lines")
+    expect(prompt).not.toContain("${{")
+    expect(prompt).not.toContain("${%")
+  })
+
   test("selects the Meta prompt for Muse Spark model IDs", () => {
     for (const id of ["meta/muse-spark-preview", "muse-spark-1.1", "muse-spark-1.2"]) {
       const prompt = SystemPrompt.provider({ api: { id } } as Provider.Model)[0]

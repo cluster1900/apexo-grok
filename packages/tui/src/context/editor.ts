@@ -340,6 +340,10 @@ export const { use: useEditorContext, provider: EditorContextProvider } = create
         if (!store.selection) return
         setStore("selectionSent", true)
       },
+      restoreSelection(selection: EditorSelection) {
+        setSelection(selection)
+        setStore("selectionSent", false)
+      },
       labelState(): EditorLabelState {
         if (!store.selection) return "none"
         return store.selectionSent ? "sent" : "pending"

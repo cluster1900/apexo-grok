@@ -375,6 +375,7 @@ export const dict = {
   "prompt.attachment.remove": "Удалить вложение",
   "prompt.action.send": "Отправить",
   "prompt.action.stop": "Остановить",
+  "prompt.queue.hint": "Enter отправляет сейчас. Alt+Enter ждет завершения этой задачи.",
 
   "prompt.toast.pasteUnsupported.title": "Неподдерживаемое вложение",
   "prompt.toast.attachmentDuplicate.title": "Этот файл уже загружен",

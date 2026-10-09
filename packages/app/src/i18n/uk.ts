@@ -378,6 +378,7 @@ export const dict = {
   "prompt.attachment.remove": "Видалити вкладення",
   "prompt.action.send": "Надіслати",
   "prompt.action.stop": "Зупинити",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
 
   "prompt.toast.pasteUnsupported.title": "Непідтримуване вкладення",
   "prompt.toast.attachmentDuplicate.title": "Цей файл уже завантажено",

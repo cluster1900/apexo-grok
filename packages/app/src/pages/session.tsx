@@ -103,7 +103,7 @@ import { legacySessionHref, requireServerKey, sessionHref } from "@/utils/sessio
 import { createSessionOwnership } from "./session/session-ownership"
 import { createSessionLineage } from "./session/session-lineage"
 
-type FollowupItem = FollowupDraft & { id: string }
+type FollowupItem = FollowupDraft & { id: string; queued?: boolean }
 type FollowupEdit = Pick<FollowupItem, "id" | "prompt" | "context">
 const emptyFollowups: FollowupItem[] = []
 
@@ -1719,6 +1719,7 @@ export default function Page() {
       const item = (followup.items[input.sessionID] ?? []).find((entry) => entry.id === input.id)
       if (!item) return
 
+      const paused = followup.paused[input.sessionID]
       if (input.manual) setFollowup("paused", input.sessionID, undefined)
       setFollowup("failed", input.sessionID, undefined)
 
@@ -1733,7 +1734,10 @@ export default function Page() {
         fail(err)
         return false
       })
-      if (!ok) return
+      if (!ok) {
+        if (input.manual && paused) setFollowup("paused", input.sessionID, true)
+        return
+      }
 
       setFollowup("items", input.sessionID, (items) => (items ?? []).filter((entry) => entry.id !== input.id))
       if (input.manual) owner.run(resumeScroll)
@@ -1748,12 +1752,6 @@ export default function Page() {
     if (!id) return
     if (!followupBusy(id)) return
     return followupMutation.variables?.id
-  })
-
-  const queueEnabled = createMemo(() => {
-    const id = params.id
-    if (!id) return false
-    return settings.general.followup() === "queue" && busy(id) && !composer.blocked() && !isChildSession()
   })
 
   const followupText = (item: FollowupDraft) => {
@@ -1776,13 +1774,19 @@ export default function Page() {
   const queueFollowup = (draft: FollowupDraft) => {
     setFollowup("items", draft.sessionID, (items) => [
       ...(items ?? []),
-      { id: Identifier.ascending("message"), ...draft },
+      { id: Identifier.ascending("message"), ...draft, queued: false },
     ])
-    setFollowup("failed", draft.sessionID, undefined)
-    setFollowup("paused", draft.sessionID, undefined)
   }
 
-  const followupDock = createMemo(() => queuedFollowups().map((item) => ({ id: item.id, text: followupText(item) })))
+  const followupDock = createMemo(() =>
+    queuedFollowups().map((item) => ({ id: item.id, text: followupText(item), queued: item.queued })),
+  )
+
+  const keepFollowupQueued = (id: string) => {
+    const sessionID = params.id
+    if (!sessionID || followupBusy(sessionID)) return
+    setFollowup("items", sessionID, (item) => item.id === id, "queued", true)
+  }
 
   const sendFollowup = (sessionID: string, id: string, opts?: { manual?: boolean }) => {
     if (sync().session.get(sessionID)?.parentID) return Promise.resolve()
@@ -1823,25 +1827,11 @@ export default function Page() {
           .catch(() => {})
       : Promise.resolve()
 
-  const revertMutation = useMutation(() => ({
-    mutationFn: async (input: { sessionID: string; messageID: string }) => {
-      const session = sdk().api.session
-      const target = sync()
-      const last = target.session.get(input.sessionID)?.revert
-      const value = draft(input.messageID)
-      await runPromptRollbackMutation({
-        capturePrompt: prompt.capture,
-        optimistic: (prompt) => {
-          roll(input.sessionID, { messageID: input.messageID }, target)
-          prompt.set(value)
-        },
-        request: () => halt(input.sessionID).then(() => session.revert.stage(input)),
-        complete: () => undefined,
-        rollback: () => roll(input.sessionID, last, target),
-        fail,
-      })
-    },
-  }))
+  const editMessage = (input: { sessionID: string; messageID: string }) => {
+    if (input.sessionID !== params.id) return
+    prompt.set(draft(input.messageID))
+    inputRef?.focus()
+  }
 
   const restoreMutation = useMutation(() => ({
     mutationFn: async (id: string) => {
@@ -1876,13 +1866,8 @@ export default function Page() {
     },
   }))
 
-  const reverting = createMemo(() => revertMutation.isPending || restoreMutation.isPending)
+  const reverting = createMemo(() => restoreMutation.isPending)
   const restoring = createMemo(() => (restoreMutation.isPending ? restoreMutation.variables : undefined))
-
-  const revert = (input: { sessionID: string; messageID: string }) => {
-    if (reverting()) return
-    return revertMutation.mutateAsync(input)
-  }
 
   const restore = (id: string) => {
     if (!params.id || reverting()) return
@@ -1922,19 +1907,20 @@ export default function Page() {
     download()
   }
 
-  const actions = { revert, openAttachment }
+  const actions = { edit: editMessage, openAttachment }
 
   createEffect(() => {
     const sessionID = params.id
     if (!sessionID) return
 
     const item = queuedFollowups()[0]
-    if (!item) return
+    if (!item?.queued) return
     if (followupBusy(sessionID)) return
     if (followup.failed[sessionID] === item.id) return
     if (followup.paused[sessionID]) return
     if (isChildSession()) return
     if (composer.blocked()) return
+    if (reverting()) return
     if (busy(sessionID)) return
 
     void sendFollowup(sessionID, item.id)
@@ -2010,7 +1996,6 @@ export default function Page() {
     if (scrollStateFrame !== undefined) cancelAnimationFrame(scrollStateFrame)
     if (fillFrame !== undefined) cancelAnimationFrame(fillFrame)
   })
-
 
   const mobileTabs = (compact = false, bottom = false) => (
     <Tabs value={store.mobileTab} class="h-auto">
@@ -2145,6 +2130,7 @@ export default function Page() {
                     items: followupDock(),
                     sending: sendingFollowup(),
                     onSend: (id) => void sendFollowup(params.id!, id, { manual: true }),
+                    onQueue: keepFollowupQueued,
                     onEdit: editFollowup,
                   }
                 : undefined,
@@ -2194,8 +2180,13 @@ export default function Page() {
                       }}
                       edit={editingFollowup()}
                       onEditLoaded={clearFollowupEdit}
-                      shouldQueue={queueEnabled}
+                      hasQueued={() => queuedFollowups().length > 0}
                       onQueue={queueFollowup}
+                      onEditLatest={() => {
+                        const last = queuedFollowups().at(-1)
+                        if (!last) return
+                        editFollowup(last.id)
+                      }}
                       onAbort={() => {
                         const id = params.id
                         if (!id) return
@@ -2224,8 +2215,13 @@ export default function Page() {
                         return editingFollowup()
                       },
                       onEditLoaded: clearFollowupEdit,
-                      shouldQueue: queueEnabled,
+                      hasQueued: () => queuedFollowups().length > 0,
                       onQueue: queueFollowup,
+                      onEditLatest: () => {
+                        const last = queuedFollowups().at(-1)
+                        if (!last) return
+                        editFollowup(last.id)
+                      },
                       onAbort: () => {
                         const id = params.id
                         if (!id) return

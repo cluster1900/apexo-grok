@@ -37,9 +37,10 @@ export type PromptInputV2ViewConfig = {
   submit: {
     stopping: Accessor<boolean>
     working?: Accessor<boolean>
-    onSubmit: () => void
+    onSubmit: (event?: Event) => void
     onStop: () => void
   }
+  onEditLatest?: () => void
   shell?: {
     onOpen: () => void
     onClose: () => void
@@ -186,6 +187,7 @@ export function createPromptInputV2Controller(input: {
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
+    if (event.isComposing) return false
     if (
       state.mode === "normal" &&
       (event.metaKey || event.ctrlKey) &&
@@ -200,6 +202,7 @@ export function createPromptInputV2Controller(input: {
     const handled = dispatch({
       type: "key.down",
       key: event.key,
+      alt: event.altKey,
       ctrl: event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey,
       composing: event.isComposing,
       ids: suggestions().map((item) => item.id),
@@ -213,6 +216,23 @@ export function createPromptInputV2Controller(input: {
       )
     }
     if (handled) return true
+    if (
+      event.altKey &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.shiftKey &&
+      event.key === "ArrowUp" &&
+      input.view.onEditLatest &&
+      !draft.state.prompt.some(
+        (part) =>
+          ("content" in part && part.content.trim().length > 0) || part.type === "image" || part.type === "file",
+      ) &&
+      draft.state.context.items.length === 0
+    ) {
+      event.preventDefault()
+      input.view.onEditLatest()
+      return true
+    }
     const stop =
       input.view.submit.working?.() &&
       ((event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "g") ||
@@ -357,8 +377,8 @@ export function createPromptInputV2Controller(input: {
     closeShell() {
       dispatch({ type: "mode.normal" })
     },
-    submit() {
-      input.view.submit.onSubmit()
+    submit(event?: Event) {
+      input.view.submit.onSubmit(event)
       dispatch({ type: "popover.close" })
     },
     stop() {

@@ -7,6 +7,7 @@ import PROMPT_ANTHROPIC from "./prompt/anthropic.txt"
 import PROMPT_DEFAULT from "./prompt/default.txt"
 import PROMPT_BEAST from "./prompt/beast.txt"
 import PROMPT_GEMINI from "./prompt/gemini.txt"
+import PROMPT_GROK from "./prompt/grok.txt"
 import PROMPT_GPT from "./prompt/gpt.txt"
 import PROMPT_ASTRA from "./prompt/gpt-astra.txt"
 import PROMPT_KIMI from "./prompt/kimi.txt"
@@ -26,6 +27,7 @@ import { MCP } from "@/mcp"
 import { PermissionV1 } from "@apexo/core/v1/permission"
 
 export function provider(model: Provider.Model) {
+  if (model.api.id.toLowerCase().includes("grok") || model.providerID === "xai") return [PROMPT_GROK]
   if (model.api.id.includes("muse")) {
     const name = model.api.id.includes("muse-glimmer") ? "Muse Glimmer" : "Muse Spark"
     return [PROMPT_META.replaceAll("{{MODEL_NAME}}", name)]

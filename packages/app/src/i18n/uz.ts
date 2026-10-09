@@ -353,6 +353,7 @@ export const dict = {
   "prompt.attachment.remove": "Qo'shimchani olib tashlang",
   "prompt.action.send": "Yuborish",
   "prompt.action.stop": "To'xtang",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "Qoʻllab-quvvatlanmaydigan biriktirma",
   "prompt.toast.pasteUnsupported.description": "Bu yerda faqat rasmlar, PDF yoki matnli fayllar biriktirilishi mumkin.",
   "prompt.toast.attachmentDuplicate.title": "Bu fayl allaqachon yuklangan",

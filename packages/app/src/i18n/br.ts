@@ -357,6 +357,7 @@ export const dict = {
   "prompt.attachment.remove": "Remover anexo",
   "prompt.action.send": "Enviar",
   "prompt.action.stop": "Parar",
+  "prompt.queue.hint": "Enter envia agora. Alt+Enter aguarda a conclusão da tarefa.",
   "prompt.toast.pasteUnsupported.title": "Anexo não suportado",
   "prompt.toast.attachmentDuplicate.title": "Este arquivo já foi enviado",
   "prompt.toast.pasteUnsupported.description": "Apenas imagens, PDFs ou arquivos de texto podem ser anexados aqui.",

@@ -1081,11 +1081,24 @@ const layer = Layer.effect(
     const runLoop: (sessionID: SessionID) => Effect.Effect<SessionV1.WithParts> = Effect.fn("SessionPrompt.run")(
       function* (sessionID: SessionID) {
         const ctx = yield* InstanceState.context
-        let structured: unknown
         let step = 0
+        // Keep the original request across steers and compaction, only for this active run.
+        let initialUser: SessionV1.WithParts | undefined
+        let steered = false
         const session = yield* sessions.get(sessionID).pipe(Effect.orDie)
 
+        const hasPendingUser = Effect.fnUntraced(function* (userID: string) {
+          const fresh = yield* MessageV2.filterCompactedEffect(sessionID).pipe(
+            Effect.provideService(Database.Service, database),
+          )
+          const user = MessageV2.latest(fresh).user
+          // A steer can land after this iteration already decided to stop.
+          // Continue so that message is not left without a provider turn.
+          return user !== undefined && user.id !== userID
+        })
+
         while (true) {
+          let structured: unknown
           yield* status.set(sessionID, { type: "busy" })
           yield* Effect.logInfo("loop", { "session.id": sessionID, step })
 
@@ -1096,6 +1109,14 @@ const layer = Layer.effect(
           const { user: lastUser, assistant: lastAssistant, finished: lastFinished, tasks } = MessageV2.latest(msgs)
 
           if (!lastUser) throw new Error("No user message found in stream. This should never happen.")
+
+          const userMessage = msgs.find((message) => message.info.id === lastUser.id)!
+          initialUser ??= userMessage
+          steered ||=
+            initialUser.info.id !== lastUser.id &&
+            userMessage.parts.some(
+              (part) => part.type === "file" || (part.type === "text" && !part.synthetic && !part.ignored),
+            )
 
           const lastAssistantMsg = msgs.findLast(
             (msg) => msg.info.role === "assistant" && msg.info.id === lastAssistant?.id,
@@ -1125,6 +1146,7 @@ const layer = Layer.effect(
                 callID: orphan.callID,
               })
             }
+            if (yield* hasPendingUser(lastUser.id)) continue
             yield* Effect.logInfo("exiting loop", { "session.id": sessionID })
             break
           }
@@ -1154,7 +1176,10 @@ const layer = Layer.effect(
               auto: task.auto,
               overflow: task.overflow,
             })
-            if (result === "stop") break
+            if (result === "stop") {
+              if (yield* hasPendingUser(lastUser.id)) continue
+              break
+            }
             continue
           }
 
@@ -1278,6 +1303,9 @@ const layer = Layer.effect(
               system,
               messages: [
                 ...modelMsgs,
+                ...(steered && initialUser
+                  ? [{ role: "user" as const, content: SessionReminders.steering(initialUser) }]
+                  : []),
                 ...(isLastStep ? [{ role: "assistant" as const, content: MAX_STEPS_PROMPT }] : []),
               ],
               tools,
@@ -1331,7 +1359,10 @@ const layer = Layer.effect(
             Effect.ensuring(instruction.clear(handle.message.id)),
             Effect.onInterrupt(() => finalizeInterruptedAssistant),
           )
-          if (outcome === "break") break
+          if (outcome === "break") {
+            if (yield* hasPendingUser(lastUser.id)) continue
+            break
+          }
           continue
         }
 

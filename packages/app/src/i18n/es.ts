@@ -377,6 +377,7 @@ export const dict = {
   "prompt.attachment.remove": "Eliminar adjunto",
   "prompt.action.send": "Enviar",
   "prompt.action.stop": "Detener",
+  "prompt.queue.hint": "Enter envía ahora. Alt+Enter espera a que termine esta tarea.",
 
   "prompt.toast.pasteUnsupported.title": "Adjunto no compatible",
   "prompt.toast.attachmentDuplicate.title": "Este archivo ya se ha subido",

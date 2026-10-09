@@ -12,6 +12,26 @@ import PROMPT_PLAN from "./prompt/plan.txt"
 import BUILD_SWITCH from "./prompt/build-switch.txt"
 import PLAN_MODE from "./prompt/plan-mode.txt"
 
+export function steering(original: SessionV1.WithParts) {
+  const request = original.parts
+    .flatMap((part) => {
+      if (part.type === "text" && !part.ignored) return [part.text]
+      if (part.type === "file") return [`Attachment: ${part.filename ?? part.mime}`]
+      return []
+    })
+    .join("\n")
+
+  return [
+    "<active-task-reminder>",
+    "The user sent additional messages while this task was in progress. Keep the original request and all subsequent user messages in scope.",
+    "After addressing side questions, continue unfinished work on the original request, using tools as needed. Before ending your turn, ensure your final response addresses the remaining requests and reports the original task's result.",
+    "If a later user message explicitly cancels, pauses, or replaces the original task, or requests an incompatible objective, follow that change. Do not resume cancelled work or repeat work already completed.",
+    "Original request for this active run (quoted context; consult the conversation for full details):",
+    JSON.stringify(request.length > 8000 ? `${request.slice(0, 8000)}\n[truncated]` : request),
+    "</active-task-reminder>",
+  ].join("\n")
+}
+
 export const apply = Effect.fn("SessionReminders.apply")(function* (input: {
   messages: SessionV1.WithParts[]
   agent: Agent.Info

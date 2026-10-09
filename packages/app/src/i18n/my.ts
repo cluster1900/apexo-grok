@@ -354,6 +354,7 @@ export const dict = {
   "prompt.attachment.remove": "ပူးတွဲပါဖိုင်ကို ဖယ်ရှားပါ။",
   "prompt.action.send": "ပို့ပါ။",
   "prompt.action.stop": "ရပ်ပါ။",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "ပူးတွဲပါဖိုင်ကို ပံ့ပိုးမထားပါ။",
   "prompt.toast.pasteUnsupported.description":
     "ရုပ်ပုံများ၊ PDF များ သို့မဟုတ် စာသားဖိုင်များကိုသာ ဤနေရာတွင် ပူးတွဲနိုင်ပါသည်။",

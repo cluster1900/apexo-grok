@@ -358,6 +358,7 @@ export const dict = {
   "prompt.attachment.remove": "अनुलग्नक हटाएँ",
   "prompt.action.send": "भेजें",
   "prompt.action.stop": "रोकें",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "असमर्थित अनुलग्नक",
   "prompt.toast.pasteUnsupported.description": "यहां केवल छवियां, PDFs, या टेक्स्ट फ़ाइलें संलग्न की जा सकती हैं।",
   "prompt.toast.attachmentDuplicate.title": "यह फ़ाइल पहले ही अपलोड की जा चुकी है",

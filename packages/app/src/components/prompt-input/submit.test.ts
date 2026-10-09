@@ -135,6 +135,7 @@ beforeAll(async () => {
   mock.module("@apexo/ui/toast", () => ({
     Toast: { Region: () => null },
     showToast: () => 0,
+    toaster: { dismiss: () => undefined },
   }))
 
   mock.module("@apexo/core/util/encode", () => ({
@@ -594,5 +595,70 @@ describe("prompt submit worktree selection", () => {
     expect(storedSessions["/repo/worktree-a"]).toHaveLength(1)
     expect(storedSessions["/repo/worktree-a"]?.[0]).toMatchObject({ id: "session-1", title: "New session 1" })
     expect(optimisticSeeded).toEqual([true])
+  })
+
+  test("enter, alt+enter, and the send button stage busy follow-ups without a request", async () => {
+    params = { id: "session-1" }
+    const queued: string[] = []
+    const submit = createPromptSubmit({
+      prompt,
+      info: () => ({ id: "session-1" }),
+      imageAttachments: () => [],
+      commentCount: () => 0,
+      autoAccept: () => false,
+      mode: () => "normal",
+      working: () => true,
+      hasQueued: () => false,
+      onQueue: (draft) => {
+        queued.push(draft.prompt.map((part) => ("content" in part ? part.content : "")).join(""))
+      },
+      editor: () => undefined,
+      queueScroll: () => undefined,
+      promptLength: (value) => value.reduce((sum, part) => sum + ("content" in part ? part.content.length : 0), 0),
+      addToHistory: () => undefined,
+      resetHistoryNavigation: () => undefined,
+      setMode: () => undefined,
+      setPopover: () => undefined,
+      onSubmit: () => undefined,
+    })
+
+    await submit.handleSubmit(new KeyboardEvent("keydown", { key: "Enter", altKey: true }))
+    expect(queued).toEqual(["ls"])
+    expect(promptInputs).toEqual([])
+
+    await submit.handleSubmit(new KeyboardEvent("keydown", { key: "Enter" }))
+    await submit.handleSubmit(new Event("submit"))
+    expect(queued).toEqual(["ls", "ls", "ls"])
+    expect(promptInputs).toEqual([])
+  })
+
+  test("empty keyboard submissions do not interrupt a busy session", async () => {
+    params = { id: "session-1" }
+    promptValue = []
+    let aborted = 0
+    const submit = createPromptSubmit({
+      prompt,
+      info: () => ({ id: "session-1" }),
+      imageAttachments: () => [],
+      commentCount: () => 0,
+      autoAccept: () => false,
+      mode: () => "normal",
+      working: () => true,
+      editor: () => undefined,
+      queueScroll: () => undefined,
+      promptLength: () => 0,
+      addToHistory: () => undefined,
+      resetHistoryNavigation: () => undefined,
+      setMode: () => undefined,
+      setPopover: () => undefined,
+      onAbort: () => {
+        aborted++
+      },
+    })
+
+    await submit.handleSubmit(new KeyboardEvent("keydown", { key: "Enter", altKey: true }))
+    await submit.handleSubmit(new KeyboardEvent("keydown", { key: "Enter" }))
+    expect(aborted).toBe(0)
+    expect(promptInputs).toEqual([])
   })
 })

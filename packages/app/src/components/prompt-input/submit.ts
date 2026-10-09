@@ -23,6 +23,7 @@ import { createPromptSubmissionState } from "./submission-state"
 import { normalizeSessionInfo } from "@/utils/session"
 import { Event } from "@apexo/schema/event"
 import { blobDataUrl } from "@/utils/draft-store"
+import { shouldQueueFollowup } from "./followup-delivery"
 
 type PendingPrompt = {
   abort: AbortController
@@ -224,7 +225,7 @@ type PromptSubmitInput = {
   setPopover: (popover: "at" | "slash" | null) => void
   newSessionWorktree?: Accessor<string | undefined>
   onNewSessionWorktreeReset?: () => void
-  shouldQueue?: Accessor<boolean>
+  hasQueued?: Accessor<boolean>
   onQueue?: (draft: FollowupDraft) => void
   onAbort?: () => void
   onSubmit?: () => void
@@ -331,7 +332,7 @@ export function createPromptSubmit(input: PromptSubmitInput) {
     const mode = input.mode()
 
     if (text.trim().length === 0 && images.length === 0 && input.commentCount() === 0) {
-      if (input.working()) void abort()
+      if (input.working() && !(event instanceof KeyboardEvent)) void abort()
       return
     }
 
@@ -479,8 +480,16 @@ export function createPromptSubmit(input: PromptSubmitInput) {
       return true
     }
 
-    if (!isNewSession && mode === "normal" && input.shouldQueue?.()) {
-      input.onQueue?.(draft)
+    if (
+      input.onQueue &&
+      shouldQueueFollowup({
+        busy: input.working(),
+        pending: input.hasQueued?.() ?? false,
+        mode,
+        newSession: isNewSession,
+      })
+    ) {
+      input.onQueue(draft)
       clearContext(submission.target())
       clearInput()
       return

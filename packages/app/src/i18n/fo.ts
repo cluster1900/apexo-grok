@@ -350,6 +350,7 @@ export const dict = {
   "prompt.attachment.remove": "Strika viðheftið",
   "prompt.action.send": "Send",
   "prompt.action.stop": "Steðga",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "Óstuðlað viðhefti",
   "prompt.toast.pasteUnsupported.description": "Bert myndir, PDFs, ella tekstfílur kunnu viðheftast her.",
   "prompt.toast.attachmentDuplicate.title": "Hendan fílan er longu løgd upp.",

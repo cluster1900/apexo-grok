@@ -23,7 +23,7 @@ export type PromptInputV2InteractionEvent =
   | { type: "popover.active"; id: string }
   | { type: "popover.close" }
   | { type: "popover.select"; item: PromptInputV2Suggestion }
-  | { type: "key.down"; key: string; ctrl: boolean; composing: boolean; ids: string[]; empty?: boolean }
+  | { type: "key.down"; key: string; ctrl: boolean; composing: boolean; ids: string[]; empty?: boolean; alt?: boolean }
   | { type: "mode.shell" }
   | { type: "mode.normal" }
   | { type: "drag.enter" }
@@ -206,7 +206,7 @@ function keyDown(
   if (event.key === "Escape") {
     return changed({ ...state, popover: { type: "closed" }, focus: "editor" }, [{ type: "focus.editor" }], true)
   }
-  if (event.key === "Tab" || (event.key === "Enter" && !event.composing)) {
+  if (event.key === "Tab" || (event.key === "Enter" && !event.composing && !event.alt)) {
     if (!state.popover.activeID) return unchanged(state, true)
     return unchanged(state, true, [{ type: "suggestion.select", id: state.popover.activeID }])
   }

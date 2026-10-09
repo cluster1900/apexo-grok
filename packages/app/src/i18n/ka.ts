@@ -351,6 +351,7 @@ export const dict = {
   "prompt.attachment.remove": "დანართის წაშლა",
   "prompt.action.send": "გაგზავნა",
   "prompt.action.stop": "შეჩერება",
+  "prompt.queue.hint": "Enter sends now. Alt+Enter waits until this task finishes.",
   "prompt.toast.pasteUnsupported.title": "მხარდაუჭერელი დანართი",
   "prompt.toast.pasteUnsupported.description": "აქ შეიძლება დაერთოს მხოლოდ სურათები, PDF ან ტექსტური ფაილები.",
   "prompt.toast.attachmentDuplicate.title": "ეს ფაილი უკვე ატვირთულია",
